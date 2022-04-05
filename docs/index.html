@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
 
-<p><em>Last modified: 2022-04-04 22:00 PT</em></p>
+<p><em>Last modified: 2022-04-05 14:15 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin, Netflix, Inc.</p>
@@ -94,6 +94,7 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
       <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
       <li><a href="#metadata-syntax" id="markdown-toc-metadata-syntax">Metadata syntax</a>        <ul>
           <li><a href="#metadata-itut-t35-syntax" id="markdown-toc-metadata-itut-t35-syntax">Metadata ITUT T35 syntax</a></li>
+          <li><a href="#aomedia-itut-t35-payload" id="markdown-toc-aomedia-itut-t35-payload">AOMedia ITUT T35 payload</a></li>
           <li><a href="#film-grain-params-syntax" id="markdown-toc-film-grain-params-syntax">Film grain params syntax</a></li>
         </ul>
       </li>
@@ -101,8 +102,9 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
   </li>
   <li><a href="#syntax-structures-semantics" id="markdown-toc-syntax-structures-semantics">Syntax structures semantics</a>    <ul>
       <li><a href="#general-3" id="markdown-toc-general-3">General</a></li>
-      <li><a href="#obu-semantics" id="markdown-toc-obu-semantics">OBU semantics</a>        <ul>
+      <li><a href="#metadata-semantics" id="markdown-toc-metadata-semantics">Metadata semantics</a>        <ul>
           <li><a href="#metadata-itut-t35-semantics" id="markdown-toc-metadata-itut-t35-semantics">Metadata ITUT T35 semantics</a></li>
+          <li><a href="#aomedia-itut-t35-payload-1" id="markdown-toc-aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</a></li>
           <li><a href="#film-grain-params-semantics" id="markdown-toc-film-grain-params-semantics">Film grain params semantics</a></li>
         </ul>
       </li>
@@ -1322,19 +1324,23 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td>f(8)</td>
     </tr>
     <tr>
-      <td>    if ( itu_t_t35_country_code == 0xFF ) {</td>
+      <td>    if ( itu_t_t35_country_code == 0xB5 ) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">itu_t_t35_country_code_extension_byte</b></td>
-      <td>f(8)</td>
+      <td>        <b class="syntax-element">itu_t_t35_terminal_provider_code</b></td>
+      <td>f(16)</td>
+    </tr>
+    <tr>
+      <td>        if ( itu_t_t35_terminal_provider_code == 0x5890 ) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>            aom_itu_t_t35_payload()</td>
+      <td> </td>
     </tr>
     <tr>
       <td>    }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">itu_t_t35_payload_bytes</b></td>
       <td> </td>
     </tr>
     <tr>
@@ -1344,23 +1350,57 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
   </tbody>
 </table>
 
-<p class="alert alert-info"><strong>Note:</strong>  The exact syntax of itu_t_t35_payload_bytes is not defined
-in this specification. External
-specifications can define the syntax.
-Decoders should ignore the entire OBU if they do not understand it.
-The last byte of the valid content of the data is
+<p class="alert alert-info"><strong>Note:</strong> The last byte of the valid content of the data is
 considered to be the last byte that is not equal to zero. This rule is to
 prevent the dropping of valid bytes by systems that interpret trailing zero
-bytes as a padding continuation of the trailing bits in an OBU.
-This implies that when any payload data is present for this OBU type,
+bytes as a padding continuation of the trailing bits.
+This implies that when any payload data is present,
 at least one byte of the payload data (including the trailing bit) shall not be equal to 0.</p>
+
+<h4 id="aomedia-itut-t35-payload">AOMedia ITUT T35 payload</h4>
+
+<table class="syntax">
+  <tbody>
+    <tr>
+      <td>aom_itu_t_t35_payload( ) {</td>
+      <td><strong>Type</strong></td>
+    </tr>
+    <tr>
+      <td>    <b class="syntax-element">itu_t_t35_terminal_provider_oriented_code</b></td>
+      <td>f(16)</td>
+    </tr>
+    <tr>
+      <td>    if ( itu_t_t35_terminal_provider_oriented_code == 0x0001 ) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        av1_film_grain_params( )</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    }</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>}</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="alert alert-info"><strong>Note:</strong> This specification only provides the value of the
+itu_t_t35_terminal_provider_oriented_code that
+identifies the av1 film grain parameters metadata.
+The complete syntax of aom_itu_t_t35_payload( ) and the list of values for
+AOMedia itu_t_t35_terminal_provider_oriented_code are defined
+in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.</p>
 
 <h4 id="film-grain-params-syntax">Film grain params syntax</h4>
 
 <table class="syntax">
   <tbody>
     <tr>
-      <td>film_grain_params( ) {</td>
+      <td>av1_film_grain_params( ) {</td>
       <td><strong>Type</strong></td>
     </tr>
     <tr>
@@ -1707,26 +1747,28 @@ structures.</p>
 
 <p>Important variables and function calls are also described.</p>
 
-<h3 id="obu-semantics">OBU semantics</h3>
+<h3 id="metadata-semantics">Metadata semantics</h3>
 
 <h4 id="metadata-itut-t35-semantics">Metadata ITUT T35 semantics</h4>
 
 <p><strong>itu_t_t35_country_code</strong> shall be a byte having a value specified as a country code by Annex A
-of Recommendation ITU-T T.35.</p>
+of Recommendation ITU-T T.35. itu_t_t35_country_code equal to 0xB5 indicates that the
+itu_t_t35_terminal_provider_code is registered in the United States.</p>
 
-<p><strong>itu_t_t35_country_code_extension_byte</strong> shall be a byte having a value specified as a country
-code by Annex B of Recommendation ITU-T T.35.</p>
+<p><strong>itu_t_t35_terminal_provider_code</strong> are two bytes having values specified as a terminal
+provider code in
+<a href="https://cdn.cta.tech/cta/media/media/resources/standards/pdfs/manucode_2020-2.pdf">reference name required</a>.
+itu_t_t35_terminal_provider_code equal to 0x5890 indicates that the ITU-T T.35 payload is
+specified by AOMedia.</p>
 
-<p><strong>itu_t_t35_payload_bytes</strong> shall be bytes containing data registered as specified in
-Recommendation ITU-T T.35.</p>
+<h4 id="aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</h4>
+<p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
+ITU-T T3.5 terminal provider oriented code that is defined
+in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.
+itu_t_t35_terminal_provider_oriented_code equal to 0x0001 indicates that the ITU-T T.35 payload
+contains AV1 film grain parameters, as defined by this specification.</p>
 
-<p>The ITU-T T.35 terminal provider code and terminal provider oriented code shall be contained in
-the first one or more bytes of the itu_t_t35_payload_bytes, in the format specified by the
-Administration that issued the terminal provider code. Any remaining bytes in
-itu_t_t35_payload_bytes data shall be data having syntax and semantics as specified by the
-entity identified by the ITU-T T.35 country code and terminal provider code.</p>
-
-<h4 id="film-grain-params-semantics">Film grain params semantics</h4>
+<h4 class="alert alert-info" id="film-grain-params-semantics">Film grain params semantics</h4>
 
 <p><strong>apply_grain</strong> equal to 1 specifies that film grain should be added to this frame.
 apply_grain equal to 0 specifies that film grain should not be added.</p>
