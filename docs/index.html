@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
 
-<p><em>Last modified: 2022-04-05 14:15 PT</em></p>
+<p><em>Last modified: 2022-04-05 19:17 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin, Netflix, Inc.</p>
@@ -95,7 +95,7 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
       <li><a href="#metadata-syntax" id="markdown-toc-metadata-syntax">Metadata syntax</a>        <ul>
           <li><a href="#metadata-itut-t35-syntax" id="markdown-toc-metadata-itut-t35-syntax">Metadata ITUT T35 syntax</a></li>
           <li><a href="#aomedia-itut-t35-payload" id="markdown-toc-aomedia-itut-t35-payload">AOMedia ITUT T35 payload</a></li>
-          <li><a href="#film-grain-params-syntax" id="markdown-toc-film-grain-params-syntax">Film grain params syntax</a></li>
+          <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
         </ul>
       </li>
     </ul>
@@ -105,17 +105,16 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
       <li><a href="#metadata-semantics" id="markdown-toc-metadata-semantics">Metadata semantics</a>        <ul>
           <li><a href="#metadata-itut-t35-semantics" id="markdown-toc-metadata-itut-t35-semantics">Metadata ITUT T35 semantics</a></li>
           <li><a href="#aomedia-itut-t35-payload-1" id="markdown-toc-aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</a></li>
-          <li><a href="#film-grain-params-semantics" id="markdown-toc-film-grain-params-semantics">Film grain params semantics</a></li>
+          <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
         </ul>
       </li>
     </ul>
   </li>
   <li><a href="#decoding-process" id="markdown-toc-decoding-process">Decoding process</a>    <ul>
-      <li><a href="#general-decoding-process" id="markdown-toc-general-decoding-process">General decoding process</a></li>
-      <li><a href="#output-process" id="markdown-toc-output-process">Output process</a>        <ul>
+      <li><a href="#conformance-requirements" id="markdown-toc-conformance-requirements">Conformance requirements</a></li>
+      <li><a href="#film-grain-synthesis-process" id="markdown-toc-film-grain-synthesis-process">Film grain synthesis process</a>        <ul>
           <li><a href="#general-4" id="markdown-toc-general-4">General</a></li>
-          <li><a href="#intermediate-output-preparation-process" id="markdown-toc-intermediate-output-preparation-process">Intermediate output preparation process</a></li>
-          <li><a href="#film-grain-synthesis-process" id="markdown-toc-film-grain-synthesis-process">Film grain synthesis process</a>            <ul>
+          <li><a href="#film-grain-synthesis-process-1" id="markdown-toc-film-grain-synthesis-process-1">Film grain synthesis process</a>            <ul>
               <li><a href="#general-5" id="markdown-toc-general-5">General</a></li>
               <li><a href="#random-number-process" id="markdown-toc-random-number-process">Random number process</a></li>
               <li><a href="#generate-grain-process" id="markdown-toc-generate-grain-process">Generate grain process</a></li>
@@ -125,7 +124,6 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
           </li>
         </ul>
       </li>
-      <li><a href="#motion-field-motion-vector-storage-process" id="markdown-toc-motion-field-motion-vector-storage-process">Motion field motion vector storage process</a></li>
     </ul>
   </li>
   <li><a href="#parsing-process" id="markdown-toc-parsing-process">Parsing process</a>    <ul>
@@ -1395,33 +1393,13 @@ The complete syntax of aom_itu_t_t35_payload( ) and the list of values for
 AOMedia itu_t_t35_terminal_provider_oriented_code are defined
 in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.</p>
 
-<h4 id="film-grain-params-syntax">Film grain params syntax</h4>
+<h4 id="film-grain-parameters-syntax">Film grain parameters syntax</h4>
 
 <table class="syntax">
   <tbody>
     <tr>
       <td>av1_film_grain_params( ) {</td>
       <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    if ( !film_grain_params_present ||</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>         (!show_frame &amp;&amp; !showable_frame) ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        reset_grain_params()</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        return</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    }</td>
-      <td> </td>
     </tr>
     <tr>
       <td>    <b class="syntax-element">apply_grain</b></td>
@@ -1444,39 +1422,27 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">film_grain_model_persistence_flag</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">grain_seed</b></td>
       <td>f(16)</td>
     </tr>
     <tr>
-      <td>    if ( frame_type == INTER_FRAME )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">update_grain</b></td>
+      <td>    <b class="syntax-element">update_grain</b></td>
       <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>    else</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        update_grain = 1</td>
-      <td> </td>
     </tr>
     <tr>
       <td>    if ( !update_grain ) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">film_grain_params_ref_idx</b></td>
-      <td>f(3)</td>
-    </tr>
-    <tr>
       <td>        tempGrainSeed = grain_seed</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        load_grain_params( film_grain_params_ref_idx )</td>
+      <td>        load_grain_params( )</td>
       <td> </td>
     </tr>
     <tr>
@@ -1512,39 +1478,15 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( mono_chrome ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        chroma_scaling_from_luma = 0</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    } else {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">chroma_scaling_from_luma</b></td>
+      <td>    <b class="syntax-element">chroma_scaling_from_luma</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    }</td>
+      <td>    if ( chroma_scaling_from_luma )</td>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( mono_chrome || chroma_scaling_from_luma ||</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>         ( subsampling_x == 1 &amp;&amp; subsampling_y == 1 &amp;&amp;</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>           num_y_points == 0 )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>       ) {</td>
+      <td>    {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1768,28 +1710,44 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
 itu_t_t35_terminal_provider_oriented_code equal to 0x0001 indicates that the ITU-T T.35 payload
 contains AV1 film grain parameters, as defined by this specification.</p>
 
-<h4 class="alert alert-info" id="film-grain-params-semantics">Film grain params semantics</h4>
+<h4 id="film-grain-parameters-semantics">Film grain parameters semantics</h4>
+
+<p>This metadata provides the decoder or post-processing module with a model for parameterized film grain
+synthesis. The film grain process is applied to pictures output by a video decoder or
+a video post-processing module. The film grain synthesis shall be applied at the decoder output resolution.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> An encoder may use this film grain metadata to characterize film grain that was present in the
+original source video material and was removed by pre-processing filtering techniques. The specified
+film grain parameters and the post-processing algorithm are equivalent to the AV1 film grain synthesis
+at the frame level.</p>
 
 <p><strong>apply_grain</strong> equal to 1 specifies that film grain should be added to this frame.
 apply_grain equal to 0 specifies that film grain should not be added.</p>
 
-<p><strong>reset_grain_params()</strong> is a function call that indicates that all the syntax elements read in film_grain_params should be set equal to 0.</p>
+<p><strong>reset_grain_params( )</strong> is a function call that indicates that all the syntax elements read in film_grain_params should be set equal to 0.</p>
+
+<p><strong>film_grain_model_persistence_flag</strong> specifies the persistence of the AV1 film grain characteristics model for the current reconstruted
+video sequence.
+film_grain_model_persistence_flag equal to 0 specifies that the model specified in AV1 film grain characteristics SEI message applies to the current decoded frame only.</p>
+
+<p>Let frame FrameA be the current frame. film_grain_model_persistence_flag equal to 1 specifies that the AV1 film grain characteristics metadata model persists for the current coded video sequence in output order until any of the following conditions are true:</p>
+<ul>
+  <li>A new coded video sequence begins.</li>
+  <li>The bitstream ends.</li>
+  <li>A frame FrameB in an access unit containing AV1 film grain characteristics metadata that is applicable to the coded video sequence is output for which output picture order identifier is greater than output picture order identifier for frameA.</li>
+</ul>
 
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
-<p><strong>update_grain</strong> equal to 1 means that a new set of parameters should be sent.
-update_grain equal to 0 means that the previous set of parameters should be used.</p>
+<p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
+update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.
+It is a requirement of the bitstream conformance that if the associated frame belongs to a so-called Random Access Point (RAP), the value of update_grain shall be equal to 1.</p>
 
-<p><strong>film_grain_params_ref_idx</strong> indicates which reference frame contains the film grain parameters to be used for this frame.</p>
+<p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters can only be infered from previously signaled parameters in the cases
+when the film grain model parameters have been signaled for previous frames in the coding order of the current coded video sequence.</p>
 
-<p>It is a requirement of bitstream conformance that film_grain_params_ref_idx is equal to ref_frame_idx[ j ]
-for some value of j in the range 0 to REFS_PER_FRAME - 1.</p>
-
-<p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain can only be predicted from the frames that the current frame
-is using as reference frames.</p>
-
-<p><strong>load_grain_params(idx)</strong> is a function call that indicates that all the syntax elements
-read in film_grain_params should be set equal to the values stored in an area of memory indexed by idx.</p>
+<p><strong>load_grain_params( )</strong> is a function call that indicates that all the syntax elements
+read in film_grain_params should be set equal to the values stored in an area of memory used by the previous film grain model parameters.</p>
 
 <p><strong>tempGrainSeed</strong> is a temporary variable that is used to avoid losing the value of grain_seed when load_grain_params is called.
 When update_grain is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
@@ -1817,6 +1775,8 @@ scaling function of the cb component.</p>
 
 <p>It is a requirement of bitstream conformance that num_cb_points is less than or equal to 10.</p>
 
+<p>When reconstructed video is monochrome, it is a requirement of bitstream conformance that num_cb_points is equal to 0.</p>
+
 <p class="alert alert-info"><strong>Note:</strong> When chroma_scaling_from_luma is equal to 1, it is still allowed for num_y_points to take values up to 14.
 This means that the chroma scaling also needs to support up to 14 points.</p>
 
@@ -1833,10 +1793,12 @@ scaling function of the cr component.</p>
 
 <p>It is a requirement of bitstream conformance that num_cr_points is less than or equal to 10.</p>
 
-<p>If subsampling_x is equal to 1 and subsampling_y is equal to 1 and num_cb_points is equal to 0,
+<p>When reconstructed video is monochrome, it is a requirement of bitstream conformance that num_cr_points is equal to 0.</p>
+
+<p>If subX is equal to 1 and subY is equal to 1 and num_cb_points is equal to 0,
 it is a requirement of bitstream conformance that num_cr_points is equal to 0.</p>
 
-<p>If subsampling_x is equal to 1 and subsampling_y is equal to 1 and num_cb_points is not equal to 0,
+<p>If subX is equal to 1 and subY is equal to 1 and num_cb_points is not equal to 0,
 it is a requirement of bitstream conformance that num_cr_points is not equal to 0.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> These requirements ensure that for 4:2:0 chroma subsampling, film grain noise will be applied to both chroma components, or to neither.
@@ -1899,175 +1861,70 @@ applied to the sample values after adding the film grain.</p>
 
 <h2 id="decoding-process">Decoding process</h2>
 
-<h3 id="general-decoding-process">General decoding process</h3>
+<h3 id="conformance-requirements">Conformance requirements</h3>
 
-<p>When film_grain_params_present is equal to 0, decoders shall produce output frames that are identical in all respects
-and have the same output order as those produced by the decoding process specified herein.</p>
+<p>When AV1 film grain metadata are not prosent in the bitstream, decoders shall produce output frames that are identical in all respects
+and have the same output order as without the AV1 film grain synthesis module.</p>
 
-<p>When film_grain_params_present is equal to 1, a decoder shall implement a film grain synthesis process that
+<p>When AV1 film grain metadata is present in the bitstream, a decoder shall implement a film grain synthesis process that
 modifies the output arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
 
-<p>When film_grain_params_present is equal to 1, a conformant decoder shall satisfy at least one of the following two options:</p>
+<p>When film_grain_params_present is equal to 1, a conformant AV1 film grain synthesis module shall satisfy at least one of the
+following two options:</p>
 
 <ol>
   <li>
-    <p>A conformant decoder shall produce output frames that are identical in all respects and have the same output order as
-  those produced by the decoding process specified herein including applying the exact film grain synthesis process
-  as specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
+    <p>A conformant AV1 film grain synthesis module shall produce output frames that are identical in all respects and have the same output order as those produced by the AV1 film grain synthesis process specified herein including applying the exact film grain synthesis process as specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
   </li>
   <li>
-    <p>A conformant decoder shall produce intermediate frames that are identical in all respects and have the same order as the
-  frames produced by the process specified in <a href="#intermediate-output-preparation-process">section 7.18.2</a>.
-  In addition to that, a conformant decoder shall produce output frames that are in the same order and do not have perceptually
+    <p>A conformant AV1 film grain synthesis module shall produce output frames that are in the same order and do not have perceptually
   significant differences with the frames produced by the reference film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>
   when applied to the input frames of the film grain synthesis process with the film grain parameters signaled for these frames.
-  The decoder may also include optional processing steps which are applied to the intermediate frames produced by the
-  process specified in <a href="#intermediate-output-preparation-process">section 7.18.2</a> and before the film grain synthesis process, resulting in the input frames of
-  the film grain synthesis process. Such optional processing steps are
-  beyond the scope of this specification. Otherwise, the intermediate frames are the input frames of the film grain synthesis process.
   The definition of “perceptually significant differences” is beyond the scope of this specification and may be specified,
   for example, by a service provider as part of their accreditation program.
-  The film grain synthesis process applied by a conformant decoder should be feature complete with regards to
+  The film grain synthesis process applied by a conformant AV1 film grain synthesis module should be feature complete with regards to
   the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 7.18.3</a> including scaling strength of the film grain
   as a function of intensity according to the signaled parameters, same maximum AR lag, and similar
   modeling of correlation between luma and chroma and smoothing of transitions between blocks of grain when applicable.</p>
   </li>
 </ol>
 
-<p class="alert alert-info"><strong>Note:</strong> To ensure conformance, decoder manufacturers are advised to implement the film grain synthesis
+<p class="alert alert-info"><strong>Note:</strong> To ensure conformance, film grain module manufacturers are advised to implement the film grain synthesis
 process as specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>.
 One reason to choose the second conformance option is implementation of optional processing steps
-between the output of <a href="#intermediate-output-preparation-process">section 7.18.2</a> and the film grain synthesis process, in which case there could be minor differences in the output with the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 7.18.3</a>. Examples of these optional processing steps are algorithms improving output picture quality, such as de-banding filtering and coding artefacts removal.</p>
+before input or after the output of <a href="#intermediate-output-preparation-process">section 7.18.2</a> and the film grain synthesis process, in which case there could be minor differences in the output with the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 7.18.3</a>. Examples of these optional processing steps are algorithms improving output picture quality, such as de-banding filtering and coding artefacts removal.</p>
 
 <p class="alert alert-info"><strong>Note:</strong>
-Some applications, such as transcoding from AV1 to AV1, may use intermediate output frames of <a href="#intermediate-output-preparation-process">section 7.18.2</a> for transcoding. In such cases, the original film grain synthesis information may be adapted and inserted in the transcoded bitstream.</p>
+Some applications, such as transcoding from or to another video coding standard, may use intermediate output frames for transcoding. In such cases, the film grain synthesis information may be adapted and inserted in the transcoded bitstream.</p>
 
-<p>The input to this process is a sequence of open bitstream units (OBUs).</p>
+<p>The input to this process is a sequence of the reconstructed video frames and a sequence of AV1 film grain metadata messages.</p>
 
-<p>The output from this process is a sequence of decoded frames.</p>
+<p>The output from this process is a sequence of updated frames.</p>
 
-<p>For each OBU in turn the syntax elements are extracted as specified in <a href="#obu-syntax">section 5.3</a>.</p>
+<p>For each AV1 film grain metadata message, in turn the syntax elements are extracted as specified in <a href="#obu-syntax">section 5.3</a>.</p>
 
 <p>The syntax tables include function calls indicating when the remaining decode processes are triggered.</p>
 
-<h3 id="output-process">Output process</h3>
+<h3 id="film-grain-synthesis-process">Film grain synthesis process</h3>
 
 <h4 id="general-4">General</h4>
 
-<p>This process is invoked to prepare output frames.</p>
+<p>This process is invoked to process video frames.</p>
 
-<p>If scalability is being used (OperatingPointIdc not equal to 0),
-an application-specific function is called to decide whether this frame will be output.
-If this function returns a value equal to 0, then this process terminates immediately.</p>
-
-<p class="alert alert-info"><strong>Note:</strong> Applications that are displaying the decoded video are expected to only display
-one frame from each temporal unit within the selected operating point.
-This frame should be the highest spatial layer that is both within the operating point and present
-within the temporal unit.
-Other applications
-may set their own policy about which frames are output.</p>
-
-<p>The intermediate output preparation process specified in <a href="#intermediate-output-preparation-process">section 7.18.2</a> is invoked to prepare arrays OutY, OutU, and OutV, and the outputs are assigned to w, h, subX, and subY.</p>
-
-<p>If film_grain_params_present is equal to 1 and apply_grain is equal to 1, then
+<p>If apply_grain is equal to 1, then
 the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 7.18.3</a> is invoked with inputs of w, h, subX, and subY.
-(This process modifies the output arrays OutY, OutU, OutV).</p>
+This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
+intermediate values of video frames from the previous post-processing modules.</p>
 
-<p>Finally, the frame to be output is defined to be the arrays OutY, OutU, OutV where the bit depth for each sample is BitDepth.</p>
+<p>Finally, the frame to be processed is defined to be the arrays OutY, OutU, OutV where the bit depth for each sample is BitDepth.</p>
 
-<p>This frame to be output is the overall output of the decoding process and further processing (such as color conversion) is outside the scope of this specification.</p>
+<p>This frame is the overall output and further processing (such as color conversion) is outside the scope of this specification.</p>
 
 <p>For example, a real implementation might use these arrays to display the frame to the user, or a test system might save the arrays so the output can be verified.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> If NumPlanes is equal to 1, then the U and V planes should be ignored.</p>
 
-<h4 id="intermediate-output-preparation-process">Intermediate output preparation process</h4>
-
-<p>The output of this process are the variables w, h, subX, and subY describing the format of the data in arrays OutY, OutU,
-and OutV.</p>
-
-<p>If show_existing_frame is equal to 1, then the decoder should copy OutY, OutU, and OutV from a previously decoded frame as follows:</p>
-
-<ul>
-  <li>
-    <p>The variable w is set equal to RefUpscaledWidth[ frame_to_show_map_idx ].</p>
-  </li>
-  <li>
-    <p>The variable h is set equal to RefFrameHeight[ frame_to_show_map_idx ].</p>
-  </li>
-  <li>
-    <p>The variable subX is set equal to RefSubsamplingX[ frame_to_show_map_idx ].</p>
-  </li>
-  <li>
-    <p>The variable subY is set equal to RefSubsamplingY[ frame_to_show_map_idx ].</p>
-  </li>
-  <li>
-    <p>The array OutY is w samples across by h samples down and the sample at
-location x samples across and y samples down is given by
-OutY[ y ][ x ] = FrameStore[ frame_to_show_map_idx ][ 0 ][ y ][ x ] with x = 0..w - 1
-and y = 0..h - 1.</p>
-  </li>
-  <li>
-    <p>The array OutU is (w + subX) &gt;&gt; subX samples across by (h + subY) &gt;&gt; subY
-samples down and the sample at location x samples across and y samples
-down is given by OutU[ y ][ x ] = FrameStore[ frame_to_show_map_idx ][ 1 ][ y ][ x ]
-with x = 0..((w + subX) &gt;&gt; subX) - 1 and y = 0..((h + subY) &gt;&gt; subY) - 1.</p>
-  </li>
-  <li>
-    <p>The array OutV is (w + subX) &gt;&gt; subX samples across by (h + subY) &gt;&gt; subY
-samples down and the sample at location x samples across and y samples
-down is given by OutV[ y ][ x ] = FrameStore[ frame_to_show_map_idx ][ 2 ][ x ][ y ]
-with x = 0..((w + subX) &gt;&gt; subX) - 1 and y = 0..((h + subY) &gt;&gt; subY) - 1.</p>
-  </li>
-  <li>
-    <p>The variable BitDepth is set equal to RefBitDepth[ frame_to_show_map_idx ].</p>
-  </li>
-  <li>
-    <p>The bit depth for each sample is BitDepth.</p>
-  </li>
-</ul>
-
-<p>Otherwise (show_existing_frame is equal to 0), then the decoder should copy the
-current frame as follows:</p>
-
-<ul>
-  <li>
-    <p>The variable w is set equal to UpscaledWidth.</p>
-  </li>
-  <li>
-    <p>The variable h is set equal to FrameHeight.</p>
-  </li>
-  <li>
-    <p>The variable subX is set equal to subsampling_x.</p>
-  </li>
-  <li>
-    <p>The variable subY is set equal to subsampling_y.</p>
-  </li>
-  <li>
-    <p>The array OutY is w samples across by h samples down and the sample at
-location x samples across and y samples down is given by
-OutY[ y ][ x ] = LrFrame[ 0 ][ y ][ x ] with x = 0..w - 1 and y = 0..h - 1.</p>
-  </li>
-  <li>
-    <p>The array OutU is (w + subX) &gt;&gt; subX samples across by (h + subY) &gt;&gt; subY
-samples down and the sample at location x samples across and y samples
-down is given by OutU[ y ][ x ] = LrFrame[ 1 ][ y ][ x ]
-with x = 0..((w + subX) &gt;&gt; subX) - 1 and y = 0..((h + subY) &gt;&gt; subY) - 1.</p>
-  </li>
-  <li>
-    <p>The array OutV is (w + subX) &gt;&gt; subX samples across by (h + subY) &gt;&gt; subY
-samples down and the sample at location x samples across and y samples
-down is given by OutV[ y ][ x ] = LrFrame[ 2 ][ y ][ x ]
-with x = 0..((w + subX) &gt;&gt; subX) - 1 and y = 0..((h + subY) &gt;&gt; subY) - 1.</p>
-  </li>
-  <li>
-    <p>The bit depth for each sample is BitDepth.</p>
-  </li>
-</ul>
-
-<p>The output of this process are the variables w, h, subX, and subY.</p>
-
-<h4 id="film-grain-synthesis-process">Film grain synthesis process</h4>
+<h4 id="film-grain-synthesis-process-1">Film grain synthesis process</h4>
 
 <h5 id="general-5">General</h5>
 
@@ -2078,9 +1935,20 @@ with x = 0..((w + subX) &gt;&gt; subX) - 1 and y = 0..((h + subY) &gt;&gt; subY)
     <p>variables w and h specifying the width and height of the frame,</p>
   </li>
   <li>
-    <p>variables subX and subY specifying the subsampling parameters of the frame.</p>
+    <p>variables subX and subY specifying the subsampling parameters of the frame,</p>
+  </li>
+  <li>
+    <p>arrays OutY, OutU, OutV,</p>
+  </li>
+  <li>
+    <p>variable BitDepth specifying the bit depth of the video frame samples.</p>
   </li>
 </ul>
+
+<p>subX equal to 0 means that the chroma components have the same horizontal resolution as the luma component.
+subX equal to 1 means that the chroma components as subsampled by a factor of 2 in the horizontal direction.
+subY equal to 0 means that the chroma components have the same vertical resolution as the luma component.
+subY equal to 1 means that the chroma components as subsampled by a factor of 2 in the vertica direction.</p>
 
 <p>The process modifies the arrays OutY, OutU, OutV to add film grain noise as follows:</p>
 
@@ -2173,9 +2041,9 @@ with x = 0..((w + subX) &gt;&gt; subX) - 1 and y = 0..((h + subY) &gt;&gt; subY)
 <p>If mono_chrome is equal to 0,
 the chroma grain is generated in a similar way, except the filtering includes a coefficient that introduces a correlation with the luma grain.</p>
 
-<p>The variable chromaW (representing the width of the chroma noise array) is set equal to (subsampling_x ? 44 : 82).</p>
+<p>The variable chromaW (representing the width of the chroma noise array) is set equal to (subX ? 44 : 82).</p>
 
-<p>The variable chromaH (representing the height of the chroma noise array) is set equal to (subsampling_y ? 38 : 73).</p>
+<p>The variable chromaH (representing the height of the chroma noise array) is set equal to (subY ? 38 : 73).</p>
 
 <p>White noise arrays CbGrain and CrGrain chromaW samples wide and chromaH samples high are generated as follows:</p>
 
@@ -2219,12 +2087,12 @@ the chroma grain is generated in a similar way, except the filtering includes a 
         <span class="k">if</span> <span class="p">(</span> <span class="n">deltaRow</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">deltaCol</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span> <span class="n">num_y_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
             <span class="n">luma</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">lumaX</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">subsampling_x</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
-            <span class="n">lumaY</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">subsampling_y</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">subsampling_y</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-              <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">subsampling_x</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
+            <span class="n">lumaX</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">subX</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+            <span class="n">lumaY</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">subY</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+            <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">subY</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+              <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">subX</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
                 <span class="n">luma</span> <span class="o">+=</span> <span class="n">LumaGrain</span><span class="p">[</span> <span class="n">lumaY</span> <span class="o">+</span> <span class="n">i</span> <span class="p">][</span> <span class="n">lumaX</span> <span class="o">+</span> <span class="n">j</span> <span class="p">]</span>
-            <span class="n">luma</span> <span class="o">=</span> <span class="n">Round2</span><span class="p">(</span> <span class="n">luma</span><span class="p">,</span> <span class="n">subsampling_x</span> <span class="o">+</span> <span class="n">subsampling_y</span> <span class="p">)</span>
+            <span class="n">luma</span> <span class="o">=</span> <span class="n">Round2</span><span class="p">(</span> <span class="n">luma</span><span class="p">,</span> <span class="n">subX</span> <span class="o">+</span> <span class="n">subY</span> <span class="p">)</span>
             <span class="n">s0</span> <span class="o">+=</span> <span class="n">luma</span> <span class="o">*</span> <span class="n">c0</span>
             <span class="n">s1</span> <span class="o">+=</span> <span class="n">luma</span> <span class="o">*</span> <span class="n">c1</span>
           <span class="p">}</span>
@@ -2493,36 +2361,6 @@ The scale_lut function is specified as follows:</p>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-
-<h3 id="motion-field-motion-vector-storage-process">Motion field motion vector storage process</h3>
-
-<p>This process applies some filtering and reordering to the motion vectors to prepare them
-for storage as part of the reference frame update process.</p>
-
-<p>The following applies for row = 0..MiRows-1, for col = 0..MiCols-1:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">MfRefFrames</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">]</span> <span class="o">=</span> <span class="n">NONE</span>
-    <span class="n">MfMvs</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">MfMvs</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">list</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">list</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">list</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">RefFrames</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="n">list</span> <span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">INTRA_FRAME</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="n">refIdx</span> <span class="o">=</span> <span class="n">ref_frame_idx</span><span class="p">[</span> <span class="n">r</span> <span class="o">-</span> <span class="n">LAST_FRAME</span> <span class="p">]</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="n">get_relative_dist</span><span class="p">(</span> <span class="n">RefOrderHint</span><span class="p">[</span> <span class="n">refIdx</span> <span class="p">],</span> <span class="n">OrderHint</span> <span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="n">mvRow</span> <span class="o">=</span> <span class="n">Mvs</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="n">list</span> <span class="p">][</span> <span class="mi">0</span> <span class="p">]</span>
-                <span class="n">mvCol</span> <span class="o">=</span> <span class="n">Mvs</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="n">list</span> <span class="p">][</span> <span class="mi">1</span> <span class="p">]</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="n">Abs</span><span class="p">(</span> <span class="n">mvRow</span> <span class="p">)</span> <span class="o">&lt;=</span> <span class="n">REFMVS_LIMIT</span> <span class="o">&amp;&amp;</span> <span class="n">Abs</span><span class="p">(</span> <span class="n">mvCol</span> <span class="p">)</span> <span class="o">&lt;=</span> <span class="n">REFMVS_LIMIT</span> <span class="p">)</span> <span class="p">{</span>
-                    <span class="n">MfRefFrames</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
-                    <span class="n">MfMvs</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">=</span> <span class="n">mvRow</span>
-                    <span class="n">MfMvs</span><span class="p">[</span> <span class="n">row</span> <span class="p">][</span> <span class="n">col</span> <span class="p">][</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="n">mvCol</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p class="alert alert-info"><strong>Note:</strong> Although this process stores all the motion vectors into MfMvs, only the values where row and col are both odd will affect the decoding process.</p>
 
 <h2 id="parsing-process">Parsing process</h2>
 
