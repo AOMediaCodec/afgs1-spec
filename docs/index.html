@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
 
-<p><em>Last modified: 2022-04-05 19:17 PT</em></p>
+<p><em>Last modified: 2022-04-05 20:04 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin, Netflix, Inc.</p>
@@ -1422,10 +1422,6 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">film_grain_model_persistence_flag</b></td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
       <td>    <b class="syntax-element">grain_seed</b></td>
       <td>f(16)</td>
     </tr>
@@ -1721,27 +1717,26 @@ original source video material and was removed by pre-processing filtering techn
 film grain parameters and the post-processing algorithm are equivalent to the AV1 film grain synthesis
 at the frame level.</p>
 
+<p>The film grain parameters signaled in this metadata message are applied to the output video frame that
+is associated with the coded video frame that follows the current metadata message in the
+encoded video bitstream. The film grain processing is applied to the output video frames in the display order.
+Even though the film grain metadata is associated with a particular picture in the coded frame order,
+the persistence of the film grain parameters shall be considered in the display order.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> In case of the update_grain equal to 0, the film grain synthesis module should use the parameters
+from the previous frame in the output / display order and not the coding order of the video frames.</p>
+
 <p><strong>apply_grain</strong> equal to 1 specifies that film grain should be added to this frame.
 apply_grain equal to 0 specifies that film grain should not be added.</p>
 
 <p><strong>reset_grain_params( )</strong> is a function call that indicates that all the syntax elements read in film_grain_params should be set equal to 0.</p>
 
-<p><strong>film_grain_model_persistence_flag</strong> specifies the persistence of the AV1 film grain characteristics model for the current reconstruted
-video sequence.
-film_grain_model_persistence_flag equal to 0 specifies that the model specified in AV1 film grain characteristics SEI message applies to the current decoded frame only.</p>
-
-<p>Let frame FrameA be the current frame. film_grain_model_persistence_flag equal to 1 specifies that the AV1 film grain characteristics metadata model persists for the current coded video sequence in output order until any of the following conditions are true:</p>
-<ul>
-  <li>A new coded video sequence begins.</li>
-  <li>The bitstream ends.</li>
-  <li>A frame FrameB in an access unit containing AV1 film grain characteristics metadata that is applicable to the coded video sequence is output for which output picture order identifier is greater than output picture order identifier for frameA.</li>
-</ul>
-
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
 <p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
 update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.
-It is a requirement of the bitstream conformance that if the associated frame belongs to a so-called Random Access Point (RAP), the value of update_grain shall be equal to 1.</p>
+If the frame associated with the current AV1 film grain metadata belongs to a so-called Random Access Point (RAP), it is a requirement
+of the bitstream conformance that the value of update_grain shall be equal to 1.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters can only be infered from previously signaled parameters in the cases
 when the film grain model parameters have been signaled for previous frames in the coding order of the current coded video sequence.</p>
@@ -1863,11 +1858,11 @@ applied to the sample values after adding the film grain.</p>
 
 <h3 id="conformance-requirements">Conformance requirements</h3>
 
-<p>When AV1 film grain metadata are not prosent in the bitstream, decoders shall produce output frames that are identical in all respects
-and have the same output order as without the AV1 film grain synthesis module.</p>
+<p>When AV1 film grain metadata are not present in the bitstream, the AV1 film grain synthesis module shall produce output frames that are identical in all respects
+and have the same output order as the input frames to the AV1 film grain synthesis module.</p>
 
 <p>When AV1 film grain metadata is present in the bitstream, a decoder shall implement a film grain synthesis process that
-modifies the output arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
+modifies the its input arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
 
 <p>When film_grain_params_present is equal to 1, a conformant AV1 film grain synthesis module shall satisfy at least one of the
 following two options:</p>
