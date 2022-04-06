@@ -25,9 +25,9 @@ version_date: Released 2017-xx-xx
 <div style="page-break-before: always"></div>
 {% include_relative 03.symbols.md %}
 <div style="page-break-before: always"></div>
-{% include_relative _tmp/04.conventions.md %}
+{% include_relative 04.conventions.md %}
 <div style="page-break-before: always"></div>
-{% include_relative _tmp/06.bitstream.syntax.md %}
+{% include_relative 06.bitstream.syntax.md %}
 <div style="page-break-before: always"></div>
 {% include_relative 07.bitstream.semantics.md %}
 <div style="page-break-before: always"></div>
@@ -48,5 +48,5 @@ version_date: Released 2017-xx-xx
 </div>
 
 {% comment %}
-{% include_relative _tmp/98.testing.md %}
+{% include_relative 98.testing.md %}
 {% endcomment %}
