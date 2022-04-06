@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
 
-<p><em>Last modified: 2022-04-05 21:47 PT</em></p>
+<p><em>Last modified: 2022-04-06 14:51 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -979,6 +979,10 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(16)</td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">film_grain_param_set_idx</b></td>
+      <td>f(3)</td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">update_grain</b></td>
       <td>f(1)</td>
     </tr>
@@ -991,7 +995,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>        load_grain_params( )</td>
+      <td>        load_grain_params( film_grain_param_set_idx )</td>
       <td> </td>
     </tr>
     <tr>
@@ -1223,6 +1227,10 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(1)</td>
     </tr>
     <tr>
+      <td>    save_grain_params( film_grain_param_set_idx )</td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>}</td>
       <td> </td>
     </tr>
@@ -1285,17 +1293,26 @@ apply_grain equal to 0 specifies that film grain should not be added.</p>
 
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
+<p><strong>film_grain_param_set_idx</strong> is an index of the film grain parameter set. Up to 8 separate film grain parameter
+sets may be simultaneously stored by the film grain processing module.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.
+For example, in the case of varying output frame resolutions, an encoder may assign different film_grain_param_set_idx to
+film grain parameters that are used with frames with different output resolutions.</p>
+
 <p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
 update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
 
-<p>It is a requirement of the bitstream conformance that the first frame in the display order in a coded video
-sequence with apply_grain equal to 1 have update_grain equal to 1.</p>
+<p>It is a requirement of the bitstream conformance that for every distinct value of film_grain_param_set_idx used in a coded video
+sequence, the first frame in the display order with that value of film_grain_param_set_idx that has apply_grain flag equal to 1
+have update_grain equal to 1.</p>
 
-<p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters can only be infered from previously signaled parameters in the cases
-when the film grain model parameters have been signaled for previous frames in the coding order of the current coded video sequence.</p>
+<p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with a particular film_grain_param_set_idx value can only
+be infered from previously signaled parameters in the display order with the same value of film_grain_param_set_idx
+in the current coded video sequence.</p>
 
-<p><strong>load_grain_params( )</strong> is a function call that indicates that all the syntax elements
-read in film_grain_params should be set equal to the values stored in an area of memory used by the previous film grain model parameters.</p>
+<p><strong>load_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
+in av1_film_grain_params should be set equal to the values stored in an area of memory used by the idx.</p>
 
 <p><strong>tempGrainSeed</strong> is a temporary variable that is used to avoid losing the value of grain_seed when load_grain_params is called.
 When update_grain is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
@@ -1406,6 +1423,9 @@ not be applied.</p>
 range shall be applied to the sample values after adding the film grain (see the semantics for color_range for an explanation of studio swing).
 clip_to_restricted_range equal to 0 indicates that clipping to the full range shall be
 applied to the sample values after adding the film grain.</p>
+
+<p><strong>save_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
+in the area of memory used by the idx should be set equal to the values read in av1_film_grain_params.</p>
 
 <h2 id="conformance-requirements">Conformance requirements</h2>
 
