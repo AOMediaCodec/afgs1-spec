@@ -38,10 +38,10 @@
 
 <h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
 
-<p><em>Last modified: 2022-04-05 20:04 PT</em></p>
+<p><em>Last modified: 2022-04-05 21:11 PT</em></p>
 
 <p><strong>Editor</strong><br />
-Andrey Norkin, Netflix, Inc.</p>
+Andrey Norkin (Netflix)</p>
 
 <div id="draft-legend" class="alert alert-danger">
 
@@ -76,52 +76,34 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
       <li><a href="#method-of-describing-bitstream-syntax" id="markdown-toc-method-of-describing-bitstream-syntax">Method of describing bitstream syntax</a></li>
       <li><a href="#functions" id="markdown-toc-functions">Functions</a></li>
       <li><a href="#descriptors" id="markdown-toc-descriptors">Descriptors</a>        <ul>
-          <li><a href="#general-1" id="markdown-toc-general-1">General</a></li>
           <li><a href="#fn" id="markdown-toc-fn">f(n)</a></li>
-          <li><a href="#uvlc" id="markdown-toc-uvlc">uvlc()</a></li>
-          <li><a href="#len" id="markdown-toc-len">le(n)</a></li>
-          <li><a href="#leb128" id="markdown-toc-leb128">leb128()</a></li>
-          <li><a href="#sun" id="markdown-toc-sun">su(n)</a></li>
-          <li><a href="#nsn" id="markdown-toc-nsn">ns(n)</a></li>
-          <li><a href="#ln" id="markdown-toc-ln">L(n)</a></li>
-          <li><a href="#s" id="markdown-toc-s">S()</a></li>
-          <li><a href="#nsn-1" id="markdown-toc-nsn-1">NS(n)</a></li>
         </ul>
       </li>
     </ul>
   </li>
   <li><a href="#syntax-structures" id="markdown-toc-syntax-structures">Syntax structures</a>    <ul>
-      <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
-      <li><a href="#metadata-syntax" id="markdown-toc-metadata-syntax">Metadata syntax</a>        <ul>
-          <li><a href="#metadata-itut-t35-syntax" id="markdown-toc-metadata-itut-t35-syntax">Metadata ITUT T35 syntax</a></li>
-          <li><a href="#aomedia-itut-t35-payload" id="markdown-toc-aomedia-itut-t35-payload">AOMedia ITUT T35 payload</a></li>
-          <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
-        </ul>
-      </li>
+      <li><a href="#general-1" id="markdown-toc-general-1">General</a></li>
+      <li><a href="#metadata-itut-t35-syntax" id="markdown-toc-metadata-itut-t35-syntax">Metadata ITUT T35 syntax</a></li>
+      <li><a href="#aomedia-itut-t35-payload" id="markdown-toc-aomedia-itut-t35-payload">AOMedia ITUT T35 payload</a></li>
+      <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
     </ul>
   </li>
   <li><a href="#syntax-structures-semantics" id="markdown-toc-syntax-structures-semantics">Syntax structures semantics</a>    <ul>
-      <li><a href="#general-3" id="markdown-toc-general-3">General</a></li>
-      <li><a href="#metadata-semantics" id="markdown-toc-metadata-semantics">Metadata semantics</a>        <ul>
-          <li><a href="#metadata-itut-t35-semantics" id="markdown-toc-metadata-itut-t35-semantics">Metadata ITUT T35 semantics</a></li>
-          <li><a href="#aomedia-itut-t35-payload-1" id="markdown-toc-aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</a></li>
-          <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
-        </ul>
-      </li>
+      <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
+      <li><a href="#metadata-itut-t35-semantics" id="markdown-toc-metadata-itut-t35-semantics">Metadata ITUT T35 semantics</a></li>
+      <li><a href="#aomedia-itut-t35-payload-1" id="markdown-toc-aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</a></li>
+      <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
     </ul>
   </li>
+  <li><a href="#conformance-requirements" id="markdown-toc-conformance-requirements">Conformance requirements</a></li>
   <li><a href="#decoding-process" id="markdown-toc-decoding-process">Decoding process</a>    <ul>
-      <li><a href="#conformance-requirements" id="markdown-toc-conformance-requirements">Conformance requirements</a></li>
+      <li><a href="#general-3" id="markdown-toc-general-3">General</a></li>
       <li><a href="#film-grain-synthesis-process" id="markdown-toc-film-grain-synthesis-process">Film grain synthesis process</a>        <ul>
           <li><a href="#general-4" id="markdown-toc-general-4">General</a></li>
-          <li><a href="#film-grain-synthesis-process-1" id="markdown-toc-film-grain-synthesis-process-1">Film grain synthesis process</a>            <ul>
-              <li><a href="#general-5" id="markdown-toc-general-5">General</a></li>
-              <li><a href="#random-number-process" id="markdown-toc-random-number-process">Random number process</a></li>
-              <li><a href="#generate-grain-process" id="markdown-toc-generate-grain-process">Generate grain process</a></li>
-              <li><a href="#scaling-lookup-initialization-process" id="markdown-toc-scaling-lookup-initialization-process">Scaling lookup initialization process</a></li>
-              <li><a href="#add-noise-synthesis-process" id="markdown-toc-add-noise-synthesis-process">Add noise synthesis process</a></li>
-            </ul>
-          </li>
+          <li><a href="#random-number-process" id="markdown-toc-random-number-process">Random number process</a></li>
+          <li><a href="#generate-grain-process" id="markdown-toc-generate-grain-process">Generate grain process</a></li>
+          <li><a href="#scaling-lookup-initialization-process" id="markdown-toc-scaling-lookup-initialization-process">Scaling lookup initialization process</a></li>
+          <li><a href="#add-noise-synthesis-process" id="markdown-toc-add-noise-synthesis-process">Add noise synthesis process</a></li>
         </ul>
       </li>
     </ul>
@@ -130,11 +112,8 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
       <li><a href="#parsing-process-for-fn" id="markdown-toc-parsing-process-for-fn">Parsing process for f(n)</a></li>
     </ul>
   </li>
-  <li><a href="#additional-tables" id="markdown-toc-additional-tables">Additional tables</a>    <ul>
-      <li><a href="#general-6" id="markdown-toc-general-6">General</a></li>
-    </ul>
-  </li>
-  <li><a href="#annex-a-conformance-to-video-decoders-profiles-and-levels" id="markdown-toc-annex-a-conformance-to-video-decoders-profiles-and-levels">Annex A: Conformance to video decoders’ profiles and levels</a>    <ul>
+  <li><a href="#additional-tables" id="markdown-toc-additional-tables">Additional tables</a></li>
+  <li><a href="#annex-a-matching-video-decoder-profiles-and-levels" id="markdown-toc-annex-a-matching-video-decoder-profiles-and-levels">Annex A: Matching video decoder profiles and levels</a>    <ul>
       <li><a href="#general" id="markdown-toc-general">General</a></li>
       <li><a href="#conformance" id="markdown-toc-conformance">Conformance</a></li>
     </ul>
@@ -154,10 +133,6 @@ The metadata is signaled using the ITU-T T.35 user defined format.</p>
 <p>For the purposes of this document, the following terms and definitions apply:</p>
 
 <dl>
-  <dt>Base layer</dt>
-  <dd>
-    <p>The layer with spatial_id and temporal_id values equal to 0.</p>
-  </dd>
   <dt>Bitstream</dt>
   <dd>
     <p>The sequence of bits generated by encoding a sequence of frames.</p>
@@ -187,6 +162,13 @@ difference signals.</p>
   <dd>
     <p>The representation of one frame before the decoding process.</p>
   </dd>
+  <dt>Coded video sequence</dt>
+  <dd>
+    <p>Coded video sequence is a sequence of access units or temporal units that
+consists of a random access point which is followed by zero or more access
+units or temporal units up to but not including the subsequent random access
+point.</p>
+  </dd>
   <dt>Component</dt>
   <dd>
     <p>One of the three sample value matrices (one luma matrix and two chroma
@@ -214,10 +196,6 @@ steps used prior to and for the film grain synthesis process.</p>
     <p>A process not specified in this Specification that generates the bitstream
 that conforms to the description provided in this document.</p>
   </dd>
-  <dt>Enhancement layer</dt>
-  <dd>
-    <p>A layer with either spatial_id greater than 0 or temporal_id greater than 0.</p>
-  </dd>
   <dt>Flag</dt>
   <dd>
     <p>A binary variable - some variables and syntax elements (e.g.
@@ -233,11 +211,6 @@ luma sample matrix (Y) and two chroma sample matrices (U and V).</p>
   <dd>
     <p>An Intra frame which resets the decoding process when it is shown.</p>
   </dd>
-  <dt>Layer</dt>
-  <dd>
-    <p>A set of tile group OBUs with identical spatial_id and identical temporal_id
-values.</p>
-  </dd>
   <dt>Level</dt>
   <dd>
     <p>A defined set of constraints on the values for the syntax elements and
@@ -249,12 +222,6 @@ variables.</p>
 signal related to the primary colors.</p>
 
     <p class="alert alert-info"><strong>Note:</strong> The symbol representing luma is Y.</p>
-  </dd>
-  <dt>OBU</dt>
-  <dd>
-    <p>All structures are packetized in “Open Bitstream Units” or OBUs. Each OBU has
-a header, which provides identifying information for the contained data
-(payload).</p>
   </dd>
   <dt>Parse</dt>
   <dd>
@@ -270,6 +237,10 @@ a header, which provides identifying information for the contained data
 which the entry of the one dimensional raster starts from the first row of the
 two dimensional raster, and the scanning then goes through the second row and
 the third row, and so on. Each raster row is scanned in left to right order.</p>
+  </dd>
+  <dt>Random Access Point (RAP)</dt>
+  <dd>
+    <p>A frame, ar which a decoder may start decoding a coded video sequence.</p>
   </dd>
   <dt>Reconstruction</dt>
   <dd>
@@ -876,26 +847,7 @@ section is called syntax if it causes syntax elements to be read from the
 bitstream, either directly or indirectly through subprocesses. The remaining
 sections are called functions.</p>
 
-<p>The specification of these functions makes use of a bitstream position
-indicator. This bitstream position indicator locates the position of the bit
-that is going to be read next.</p>
-
-<p><strong>get_position( ):</strong> Return the value of the bitstream position indicator.</p>
-
-<p><strong>init_symbol( sz ):</strong> Initialize the arithmetic decode process for the Symbol
-decoder with a size of sz bytes as specified in <a href="#initialization-process-for-symbol-decoder">section 8.2.2</a>.</p>
-
-<p><strong>exit_symbol( ):</strong> Exit the arithmetic decode process as described in
-<a href="#exit-process-for-symbol-decoder">section 8.2.4</a> (this includes reading trailing bits).</p>
-
 <h3 id="descriptors">Descriptors</h3>
-
-<h4 id="general-1">General</h4>
-
-<p>The following descriptors specify the parsing of syntax elements. Lower case
-descriptors specify syntax elements that are represented by an integer
-number of bits in the bitstream; upper case descriptors specify syntax elements
-that are represented by arithmetic coding.</p>
 
 <h4 id="fn">f(n)</h4>
 
@@ -903,413 +855,14 @@ that are represented by arithmetic coding.</p>
 from high to low order.  The parsing process specified in <a href="#parsing-process-for-fn">section 8.1</a> is
 invoked and the syntax element is set equal to the return value.</p>
 
-<h4 id="uvlc">uvlc()</h4>
-
-<p>Variable length unsigned number appearing directly in the bitstream.
-The parsing process for this descriptor is specified below:</p>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>uvlc() {</td>
-      <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    leadingZeros = 0</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    while ( 1 ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">done</b></td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>        if ( done )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>            break</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        leadingZeros++</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    if ( leadingZeros &gt;= 32 ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        return ( 1 &lt;&lt; 32 ) - 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">value</b></td>
-      <td>f(leadingZeros)</td>
-    </tr>
-    <tr>
-      <td>    return value + ( 1 &lt;&lt; leadingZeros ) - 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="len">le(n)</h4>
-
-<p>Unsigned little-endian n-byte number appearing directly in the bitstream.
-The parsing process for this descriptor is specified below:</p>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>le(n) {</td>
-      <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    t = 0</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    for ( i = 0; i &lt; n; i++) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">byte</b></td>
-      <td>f(8)</td>
-    </tr>
-    <tr>
-      <td>        t += ( byte &lt;&lt; ( i * 8 ) )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    return t</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<p class="alert alert-info"><strong>Note:</strong> This syntax element will only be present when the bitstream position
-is byte aligned.</p>
-
-<h4 id="leb128">leb128()</h4>
-
-<p>Unsigned integer represented by a variable number of little-endian bytes.</p>
-
-<p class="alert alert-info"><strong>Note:</strong> This syntax element will only be present when the bitstream position
-is byte aligned.</p>
-
-<p>In this encoding, the most significant bit of each byte is equal to 1 to signal
-that more bytes should be read, or equal to 0 to signal the end of the encoding.</p>
-
-<p>A variable Leb128Bytes is set equal to the number of bytes read during this
-process.</p>
-
-<p>The parsing process for this descriptor is specified below:</p>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>leb128() {</td>
-      <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    value = 0</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    Leb128Bytes = 0</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    for ( i = 0; i &lt; 8; i++ ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">leb128_byte</b></td>
-      <td>f(8)</td>
-    </tr>
-    <tr>
-      <td>        value |= ( (leb128_byte &amp; 0x7f) &lt;&lt; (i*7) )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        Leb128Bytes += 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        if ( !(leb128_byte &amp; 0x80) ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>            break</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    return value</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<p>It is a requirement of bitstream conformance that the value returned from the
-leb128 parsing process is less than or equal to (1 &lt;&lt; 32) - 1.</p>
-
-<p><strong>leb128_byte</strong> contains 8 bits read from the bitstream.  The bottom 7 bits are
-used to compute the variable value. The most significant bit is used to indicate
-that there are more bytes to be read.</p>
-
-<p>It is a requirement of bitstream conformance that the most significant bit of
-leb128_byte is equal to 0 if i is equal to 7. (This ensures that this syntax
-descriptor never uses more than 8 bytes.)</p>
-
-<p class="alert alert-info"><strong>Note:</strong> There are multiple ways of encoding the same value depending on how
-many leading zero bits are encoded. There is no requirement that this syntax
-descriptor uses the most compressed representation. This can be useful for
-encoder implementations by allowing a fixed amount of space to be filled in
-later when the value becomes known.</p>
-
-<h4 id="sun">su(n)</h4>
-
-<p>Signed integer converted from an n bits unsigned integer in the bitstream.
-(The unsigned integer corresponds to the bottom n bits of the signed integer.)
-The parsing process for this descriptor is specified below:</p>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>su(n) {</td>
-      <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">value</b></td>
-      <td>f(n)</td>
-    </tr>
-    <tr>
-      <td>    signMask = 1 &lt;&lt; (n - 1)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    if ( value &amp; signMask )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        value = value - 2 * signMask</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    return value</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="nsn">ns(n)</h4>
-
-<p>Unsigned encoded integer with maximum number of values n (i.e. output in range
-0..n-1).</p>
-
-<p>This descriptor is similar to f(CeilLog2(n)), but reduces wastage incurred
-when encoding non-power of two value ranges by encoding 1 fewer bits for the
-lower part of the value range. For example, when n is equal to 5, the encodings
-are as follows (full binary encodings are also presented for comparison):</p>
-
-<table class="table table-sm table-bordered table-striped">
-  <thead>
-    <tr>
-      <th style="text-align: center">Value</th>
-      <th style="text-align: center">Full binary encoding</th>
-      <th style="text-align: center">ns(n) encoding</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">    0</td>
-      <td style="text-align: center">000</td>
-      <td style="text-align: center">00</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">    1</td>
-      <td style="text-align: center">001</td>
-      <td style="text-align: center">01</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">    2</td>
-      <td style="text-align: center">010</td>
-      <td style="text-align: center">10</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">    3</td>
-      <td style="text-align: center">011</td>
-      <td style="text-align: center">110</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">    4</td>
-      <td style="text-align: center">100</td>
-      <td style="text-align: center">111</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>The parsing process for this descriptor is specified as:</p>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>ns( n ) {</td>
-      <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    w = FloorLog2(n) + 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    m = (1 &lt;&lt; w) - n</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">v</b></td>
-      <td>f(w - 1)</td>
-    </tr>
-    <tr>
-      <td>    if ( v &lt; m )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        return v</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">extra_bit</b></td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>    return (v &lt;&lt; 1) - m + extra_bit</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<p>The abbreviation ns stands for non-symmetric. This encoding is non-symmetric
-because the values are not all coded with the same number of bits.</p>
-
-<h4 id="ln">L(n)</h4>
-
-<p>Unsigned arithmetic encoded n-bit number encoded as n flags (a “literal”). The
-flags are read from high to low order.  The syntax element is set equal to the
-return value of read_literal( n ) (see <a href="#parsing-process-for-read_literal">section 8.2.5</a> for a specification of
-this process).</p>
-
-<h4 id="s">S()</h4>
-
-<p>An arithmetic encoded symbol coded from a small alphabet of at most 16 entries.</p>
-
-<p>The symbol is decoded based on a context sensitive CDF (see <a href="#parsing-process-for-cdf-encoded-syntax-elements">section 8.3</a> for
-the specification of this process).</p>
-
-<h4 id="nsn-1">NS(n)</h4>
-
-<p>Unsigned arithmetic encoded integer with maximum number of values n (i.e. output
-in range 0..n-1).</p>
-
-<p>This descriptor is the same as ns(n) except the underlying bits are coded
-arithmetically.</p>
-
-<p>The parsing process for this descriptor is specified as:</p>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>NS( n ) {</td>
-      <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-      <td>    w = FloorLog2(n) + 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    m = (1 &lt;&lt; w) - n</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">v</b></td>
-      <td>L(w - 1)</td>
-    </tr>
-    <tr>
-      <td>    if ( v &lt; m )</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        return v</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">extra_bit</b></td>
-      <td>L(1)</td>
-    </tr>
-    <tr>
-      <td>    return (v &lt;&lt; 1) - m + extra_bit</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
 <h2 id="syntax-structures">Syntax structures</h2>
 
-<h3 id="general-2">General</h3>
+<h3 id="general-1">General</h3>
 
 <p>This section presents the syntax structures in a tabular form. The meaning of
 each of the syntax elements is presented in <a href="#syntax-structures-semantics">Section 6</a>.</p>
 
-<h3 id="metadata-syntax">Metadata syntax</h3>
-
-<h4 id="metadata-itut-t35-syntax">Metadata ITUT T35 syntax</h4>
+<h3 id="metadata-itut-t35-syntax">Metadata ITUT T35 syntax</h3>
 
 <table class="syntax">
   <tbody>
@@ -1355,7 +908,7 @@ bytes as a padding continuation of the trailing bits.
 This implies that when any payload data is present,
 at least one byte of the payload data (including the trailing bit) shall not be equal to 0.</p>
 
-<h4 id="aomedia-itut-t35-payload">AOMedia ITUT T35 payload</h4>
+<h3 id="aomedia-itut-t35-payload">AOMedia ITUT T35 payload</h3>
 
 <table class="syntax">
   <tbody>
@@ -1393,7 +946,7 @@ The complete syntax of aom_itu_t_t35_payload( ) and the list of values for
 AOMedia itu_t_t35_terminal_provider_oriented_code are defined
 in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.</p>
 
-<h4 id="film-grain-parameters-syntax">Film grain parameters syntax</h4>
+<h3 id="film-grain-parameters-syntax">Film grain parameters syntax</h3>
 
 <table class="syntax">
   <tbody>
@@ -1678,16 +1231,14 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
 
 <h2 id="syntax-structures-semantics">Syntax structures semantics</h2>
 
-<h3 id="general-3">General</h3>
+<h3 id="general-2">General</h3>
 
 <p>This section specifies the meaning of the syntax elements read in the syntax
 structures.</p>
 
 <p>Important variables and function calls are also described.</p>
 
-<h3 id="metadata-semantics">Metadata semantics</h3>
-
-<h4 id="metadata-itut-t35-semantics">Metadata ITUT T35 semantics</h4>
+<h3 id="metadata-itut-t35-semantics">Metadata ITUT T35 semantics</h3>
 
 <p><strong>itu_t_t35_country_code</strong> shall be a byte having a value specified as a country code by Annex A
 of Recommendation ITU-T T.35. itu_t_t35_country_code equal to 0xB5 indicates that the
@@ -1699,17 +1250,17 @@ provider code in
 itu_t_t35_terminal_provider_code equal to 0x5890 indicates that the ITU-T T.35 payload is
 specified by AOMedia.</p>
 
-<h4 id="aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</h4>
+<h3 id="aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</h3>
 <p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
 ITU-T T3.5 terminal provider oriented code that is defined
 in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.
 itu_t_t35_terminal_provider_oriented_code equal to 0x0001 indicates that the ITU-T T.35 payload
 contains AV1 film grain parameters, as defined by this specification.</p>
 
-<h4 id="film-grain-parameters-semantics">Film grain parameters semantics</h4>
+<h3 id="film-grain-parameters-semantics">Film grain parameters semantics</h3>
 
-<p>This metadata provides the decoder or post-processing module with a model for parameterized film grain
-synthesis. The film grain process is applied to pictures output by a video decoder or
+<p>This metadata provides the post-processing module with a model for parameterized film grain
+synthesis. The film grain process is applied to frames output by a video decoder or
 a video post-processing module. The film grain synthesis shall be applied at the decoder output resolution.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use this film grain metadata to characterize film grain that was present in the
@@ -1724,7 +1275,7 @@ Even though the film grain metadata is associated with a particular picture in t
 the persistence of the film grain parameters shall be considered in the display order.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> In case of the update_grain equal to 0, the film grain synthesis module should use the parameters
-from the previous frame in the output / display order and not the coding order of the video frames.</p>
+from the previous frame in the display order and not the coding order.</p>
 
 <p><strong>apply_grain</strong> equal to 1 specifies that film grain should be added to this frame.
 apply_grain equal to 0 specifies that film grain should not be added.</p>
@@ -1734,9 +1285,10 @@ apply_grain equal to 0 specifies that film grain should not be added.</p>
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
 <p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
-update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.
-If the frame associated with the current AV1 film grain metadata belongs to a so-called Random Access Point (RAP), it is a requirement
-of the bitstream conformance that the value of update_grain shall be equal to 1.</p>
+update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
+
+<p>It is a requirement of the bitstream conformance that the first frame in the display order in a coded video
+sequence with apply_grain equal to 1 have update_grain equal to 1.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters can only be infered from previously signaled parameters in the cases
 when the film grain model parameters have been signaled for previous frames in the coding order of the current coded video sequence.</p>
@@ -1854,9 +1406,7 @@ range shall be applied to the sample values after adding the film grain (see the
 clip_to_restricted_range equal to 0 indicates that clipping to the full range shall be
 applied to the sample values after adding the film grain.</p>
 
-<h2 id="decoding-process">Decoding process</h2>
-
-<h3 id="conformance-requirements">Conformance requirements</h3>
+<h2 id="conformance-requirements">Conformance requirements</h2>
 
 <p>When AV1 film grain metadata are not present in the bitstream, the AV1 film grain synthesis module shall produce output frames that are identical in all respects
 and have the same output order as the input frames to the AV1 film grain synthesis module.</p>
@@ -1900,9 +1450,9 @@ Some applications, such as transcoding from or to another video coding standard,
 
 <p>The syntax tables include function calls indicating when the remaining decode processes are triggered.</p>
 
-<h3 id="film-grain-synthesis-process">Film grain synthesis process</h3>
+<h2 id="decoding-process">Decoding process</h2>
 
-<h4 id="general-4">General</h4>
+<h3 id="general-3">General</h3>
 
 <p>This process is invoked to process video frames.</p>
 
@@ -1919,9 +1469,9 @@ intermediate values of video frames from the previous post-processing modules.</
 
 <p class="alert alert-info"><strong>Note:</strong> If NumPlanes is equal to 1, then the U and V planes should be ignored.</p>
 
-<h4 id="film-grain-synthesis-process-1">Film grain synthesis process</h4>
+<h3 id="film-grain-synthesis-process">Film grain synthesis process</h3>
 
-<h5 id="general-5">General</h5>
+<h4 id="general-4">General</h4>
 
 <p>The inputs to this process are:</p>
 
@@ -1971,7 +1521,7 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
   </li>
 </ol>
 
-<h5 id="random-number-process">Random number process</h5>
+<h4 id="random-number-process">Random number process</h4>
 
 <p>The input to this process is a variable bits specifying the number of random bits to return.</p>
 
@@ -1991,7 +1541,7 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
 
 <p>The output of this process is the variable result.</p>
 
-<h5 id="generate-grain-process">Generate grain process</h5>
+<h4 id="generate-grain-process">Generate grain process</h4>
 
 <p>This process generates noise via an auto-regressive filter.</p>
 
@@ -2108,7 +1658,7 @@ the chroma grain is generated in a similar way, except the filtering includes a 
 However, LumaGrain will never be read in this case so it does not matter what values are constucted.
 Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_from_luma is equal to 0, the CbGrain/CrGrain arrays will never be read.</p>
 
-<h5 id="scaling-lookup-initialization-process">Scaling lookup initialization process</h5>
+<h4 id="scaling-lookup-initialization-process">Scaling lookup initialization process</h4>
 
 <p>This process computes 3 lookup tables for the different color components.</p>
 
@@ -2166,7 +1716,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h5 id="add-noise-synthesis-process">Add noise synthesis process</h5>
+<h4 id="add-noise-synthesis-process">Add noise synthesis process</h4>
 
 <p>The inputs to this process are:</p>
 
@@ -2382,8 +1932,6 @@ first bit is given by the most significant bit of the first byte.</p>
 
 <h2 id="additional-tables">Additional tables</h2>
 
-<h3 id="general-6">General</h3>
-
 <p>This section contains tables that do not naturally fit in the main sections of
 the Specification.</p>
 
@@ -2582,7 +2130,7 @@ with zero mean and standard deviation of about 512 clipped to the range of [-204
 </code></pre></div></div>
 
 <div class="annex">
-  <h2 class="no_count" id="annex-a-conformance-to-video-decoders-profiles-and-levels">Annex A: Conformance to video decoders’ profiles and levels</h2>
+  <h2 class="no_count" id="annex-a-matching-video-decoder-profiles-and-levels">Annex A: Matching video decoder profiles and levels</h2>
 
   <h3 id="general">General</h3>
 
@@ -2605,8 +2153,9 @@ the display schedule if such is indicated by the bitstream.</p>
 <h2 class="no_count" id="bibliography">Bibliography</h2>
 
 <ol>
-  <li>AV1 Bitstream &amp; Decoding Process Specification, Version 1.0.0 with Errata 1,   2019-01-08</li>
+  <li>AV1 Bitstream &amp; Decoding Process Specification, Version 1.0.0 with Errata 1, 2019-01-08</li>
   <li>Rec. ITU-T T.35:2000, Procedure for the allocation of ITU-T defined codes for non standard facilities.</li>
+  <li>AOM Metadata Registry, Pre-Draft, 2022-02-14, https://aomediacodec.github.io/metadata/</li>
 </ol>
 
 

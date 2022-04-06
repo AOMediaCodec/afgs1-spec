@@ -1,4 +1,4 @@
-## Annex A: Conformance to video decoders' profiles and levels
+## Annex A: Matching video decoder profiles and levels
 {:.no_count}
 
 ### General

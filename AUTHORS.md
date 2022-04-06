@@ -1,4 +1,3 @@
 
 **Editor**  
-Andrey Norkin, Netflix, Inc.  
-
+Andrey Norkin (Netflix)
