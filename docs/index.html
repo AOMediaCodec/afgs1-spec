@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
 
-<p><em>Last modified: 2022-04-05 21:11 PT</em></p>
+<p><em>Last modified: 2022-04-05 21:47 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -84,14 +84,14 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
   <li><a href="#syntax-structures" id="markdown-toc-syntax-structures">Syntax structures</a>    <ul>
       <li><a href="#general-1" id="markdown-toc-general-1">General</a></li>
       <li><a href="#metadata-itut-t35-syntax" id="markdown-toc-metadata-itut-t35-syntax">Metadata ITUT T35 syntax</a></li>
-      <li><a href="#aomedia-itut-t35-payload" id="markdown-toc-aomedia-itut-t35-payload">AOMedia ITUT T35 payload</a></li>
+      <li><a href="#aomedia-itut-t35-payload-syntax" id="markdown-toc-aomedia-itut-t35-payload-syntax">AOMedia ITUT T35 payload syntax</a></li>
       <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
     </ul>
   </li>
   <li><a href="#syntax-structures-semantics" id="markdown-toc-syntax-structures-semantics">Syntax structures semantics</a>    <ul>
       <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
       <li><a href="#metadata-itut-t35-semantics" id="markdown-toc-metadata-itut-t35-semantics">Metadata ITUT T35 semantics</a></li>
-      <li><a href="#aomedia-itut-t35-payload-1" id="markdown-toc-aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</a></li>
+      <li><a href="#aomedia-itut-t35-payload-semantics" id="markdown-toc-aomedia-itut-t35-payload-semantics">AOMedia ITUT T35 payload semantics</a></li>
       <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
     </ul>
   </li>
@@ -852,7 +852,7 @@ sections are called functions.</p>
 <h4 id="fn">f(n)</h4>
 
 <p>Unsigned n-bit number appearing directly in the bitstream. The bits are read
-from high to low order.  The parsing process specified in <a href="#parsing-process-for-fn">section 8.1</a> is
+from high to low order.  The parsing process specified in <a href="#general-4">section 8.1</a> is
 invoked and the syntax element is set equal to the return value.</p>
 
 <h2 id="syntax-structures">Syntax structures</h2>
@@ -908,7 +908,7 @@ bytes as a padding continuation of the trailing bits.
 This implies that when any payload data is present,
 at least one byte of the payload data (including the trailing bit) shall not be equal to 0.</p>
 
-<h3 id="aomedia-itut-t35-payload">AOMedia ITUT T35 payload</h3>
+<h3 id="aomedia-itut-t35-payload-syntax">AOMedia ITUT T35 payload syntax</h3>
 
 <table class="syntax">
   <tbody>
@@ -1250,7 +1250,8 @@ provider code in
 itu_t_t35_terminal_provider_code equal to 0x5890 indicates that the ITU-T T.35 payload is
 specified by AOMedia.</p>
 
-<h3 id="aomedia-itut-t35-payload-1">AOMedia ITUT T35 payload</h3>
+<h3 id="aomedia-itut-t35-payload-semantics">AOMedia ITUT T35 payload semantics</h3>
+
 <p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
 ITU-T T3.5 terminal provider oriented code that is defined
 in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.
@@ -1412,32 +1413,32 @@ applied to the sample values after adding the film grain.</p>
 and have the same output order as the input frames to the AV1 film grain synthesis module.</p>
 
 <p>When AV1 film grain metadata is present in the bitstream, a decoder shall implement a film grain synthesis process that
-modifies the its input arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
+modifies the its input arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 8.2</a>.</p>
 
 <p>When film_grain_params_present is equal to 1, a conformant AV1 film grain synthesis module shall satisfy at least one of the
 following two options:</p>
 
 <ol>
   <li>
-    <p>A conformant AV1 film grain synthesis module shall produce output frames that are identical in all respects and have the same output order as those produced by the AV1 film grain synthesis process specified herein including applying the exact film grain synthesis process as specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>.</p>
+    <p>A conformant AV1 film grain synthesis module shall produce output frames that are identical in all respects and have the same output order as those produced by the AV1 film grain synthesis process specified herein including applying the exact film grain synthesis process as specified in <a href="#film-grain-synthesis-process">section 8.2</a>.</p>
   </li>
   <li>
     <p>A conformant AV1 film grain synthesis module shall produce output frames that are in the same order and do not have perceptually
-  significant differences with the frames produced by the reference film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>
+  significant differences with the frames produced by the reference film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a>
   when applied to the input frames of the film grain synthesis process with the film grain parameters signaled for these frames.
   The definition of “perceptually significant differences” is beyond the scope of this specification and may be specified,
   for example, by a service provider as part of their accreditation program.
   The film grain synthesis process applied by a conformant AV1 film grain synthesis module should be feature complete with regards to
-  the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 7.18.3</a> including scaling strength of the film grain
+  the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 8.2</a> including scaling strength of the film grain
   as a function of intensity according to the signaled parameters, same maximum AR lag, and similar
   modeling of correlation between luma and chroma and smoothing of transitions between blocks of grain when applicable.</p>
   </li>
 </ol>
 
 <p class="alert alert-info"><strong>Note:</strong> To ensure conformance, film grain module manufacturers are advised to implement the film grain synthesis
-process as specified in <a href="#film-grain-synthesis-process">section 7.18.3</a>.
+process as specified in <a href="#film-grain-synthesis-process">section 8.2</a>.
 One reason to choose the second conformance option is implementation of optional processing steps
-before input or after the output of <a href="#intermediate-output-preparation-process">section 7.18.2</a> and the film grain synthesis process, in which case there could be minor differences in the output with the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 7.18.3</a>. Examples of these optional processing steps are algorithms improving output picture quality, such as de-banding filtering and coding artefacts removal.</p>
+before input or after the output of [section 7.18.2][] and the film grain synthesis process, in which case there could be minor differences in the output with the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 8.2</a>. Examples of these optional processing steps are algorithms improving output picture quality, such as de-banding filtering and coding artefacts removal.</p>
 
 <p class="alert alert-info"><strong>Note:</strong>
 Some applications, such as transcoding from or to another video coding standard, may use intermediate output frames for transcoding. In such cases, the film grain synthesis information may be adapted and inserted in the transcoded bitstream.</p>
@@ -1446,7 +1447,7 @@ Some applications, such as transcoding from or to another video coding standard,
 
 <p>The output from this process is a sequence of updated frames.</p>
 
-<p>For each AV1 film grain metadata message, in turn the syntax elements are extracted as specified in <a href="#obu-syntax">section 5.3</a>.</p>
+<p>For each AV1 film grain metadata message, in turn the syntax elements are extracted as specified in <a href="#syntax-structures">section 5</a>.</p>
 
 <p>The syntax tables include function calls indicating when the remaining decode processes are triggered.</p>
 
@@ -1457,7 +1458,7 @@ Some applications, such as transcoding from or to another video coding standard,
 <p>This process is invoked to process video frames.</p>
 
 <p>If apply_grain is equal to 1, then
-the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 7.18.3</a> is invoked with inputs of w, h, subX, and subY.
+the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a> is invoked with inputs of w, h, subX, and subY.
 This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
 intermediate values of video frames from the previous post-processing modules.</p>
 
@@ -1511,13 +1512,13 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
     <p>The variable GrainMax is set equal to (256 &lt;&lt; (BitDepth - 8)) - 1 - GrainCenter.</p>
   </li>
   <li>
-    <p>The generate grain process specified in <a href="#generate-grain-process">section 7.18.3.3</a> is invoked.</p>
+    <p>The generate grain process specified in <a href="#generate-grain-process">section 8.2.3</a> is invoked.</p>
   </li>
   <li>
-    <p>The scaling lookup initialization process specified in <a href="#scaling-lookup-initialization-process">section 7.18.3.4</a> is invoked.</p>
+    <p>The scaling lookup initialization process specified in <a href="#scaling-lookup-initialization-process">section 8.2.4</a> is invoked.</p>
   </li>
   <li>
-    <p>The add noise process specified in <a href="#add-noise-synthesis-process">section 7.18.3.5</a> is invoked with w, h, subX, and subY as inputs.</p>
+    <p>The add noise process specified in <a href="#add-noise-synthesis-process">section 8.2.5</a> is invoked with w, h, subX, and subY as inputs.</p>
   </li>
 </ol>
 
@@ -1560,7 +1561,7 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>where the function call get_random_number invokes the random number process specified in <a href="#random-number-process">section 7.18.3.2</a>.</p>
+<p>where the function call get_random_number invokes the random number process specified in <a href="#random-number-process">section 8.2.2</a>.</p>
 
 <p>Then an auto-regressive filter is applied to the white noise as follows:</p>
 
