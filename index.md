@@ -14,8 +14,8 @@ version_date: Released 2022-xx-xx
 {% include_relative 01.scope.md %}
 {% include_relative 02.terms.md %}
 {% include_relative 03.symbols.md %}
-{% include_relative _tmp/04.conventions.md %}
-{% include_relative _tmp/06.bitstream.syntax.md %}
+{% include_relative 04.conventions.md %}
+{% include_relative 06.bitstream.syntax.md %}
 {% include_relative 07.bitstream.semantics.md %}
 {% include_relative 08.decoding.process.md %}
 {% include_relative 09.parsing.process.md %}
@@ -31,6 +31,6 @@ version_date: Released 2022-xx-xx
 {% include_relative bibliography.md %}
 
 {% comment %}
-{% include_relative _tmp/98.testing.md %}
+{% include_relative 98.testing.md %}
 {% include_relative 99.function-reference-links.md %}
 {% endcomment %}
