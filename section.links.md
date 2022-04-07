@@ -18,13 +18,13 @@
 [section 4.9]: #functions
 [section 5]: #syntax-structures
 [section 5.1]: #general-2
-[section 5.2]: #metadata-itut-t35-syntax
-[section 5.3]: #aomedia-itut-t35-payload-syntax
+[section 5.2]: #metadata-itu-t-t.35-syntax
+[section 5.3]: #aomedia-itu-t-t.35-payload-syntax
 [section 5.4]: #film-grain-parameters-syntax
 [section 6]: #syntax-structures-semantics
 [section 6.1]: #general-3
-[section 6.2]: #metadata-itut-t35-semantics
-[section 6.3]: #aomedia-itut-t35-payload-semantics
+[section 6.2]: #metadata-itu-t-t.35-semantics
+[section 6.3]: #aomedia-itu-t-t.35-payload-semantics
 [section 6.4]: #film-grain-parameters-semantics
 [section 7]: #conformance-requirements
 [section 8]: #decoding-process

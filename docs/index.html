@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>AV1 Film Grain Specification</title>
+  <title>Film Grain Synthesis Specification (draft)</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/av1-spec.css">
   <link rel="stylesheet" href="assets/css/syntax-tango.css">
@@ -36,9 +36,9 @@
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
 
-<h1 class="no_toc" id="av1-film-grain-specification">AV1 Film Grain Specification</h1>
+<h1 class="no_toc" id="film-grain-synthesis-specification-draft">Film Grain Synthesis Specification (draft)</h1>
 
-<p><em>Last modified: 2022-04-06 14:51 PT</em></p>
+<p><em>Last modified: 2022-04-06 20:37 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -48,8 +48,7 @@ Andrey Norkin (Netflix)</p>
   <p class="no_toc no_count text-center" style="font-size: 2rem"><strong>Notice</strong></p>
 
   <p>This is an internal AOMedia working document and <strong>not an approved version</strong> of
-the AV1 Film Grain Synthesis specification. The approved AV1 Film Grain Synthesis specification can be found
-here: <a href="https://aomediacodec.github.io/av1-FilmGrain/av1-FilmGrain.pdf">https://aomediacodec.github.io/av1-FilmGrain/av1-FilmGrain.pdf</a></p>
+the Film grain synthesis specification.</p>
 
 </div>
 
@@ -83,15 +82,15 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
   </li>
   <li><a href="#syntax-structures" id="markdown-toc-syntax-structures">Syntax structures</a>    <ul>
       <li><a href="#general-1" id="markdown-toc-general-1">General</a></li>
-      <li><a href="#metadata-itut-t35-syntax" id="markdown-toc-metadata-itut-t35-syntax">Metadata ITUT T35 syntax</a></li>
-      <li><a href="#aomedia-itut-t35-payload-syntax" id="markdown-toc-aomedia-itut-t35-payload-syntax">AOMedia ITUT T35 payload syntax</a></li>
+      <li><a href="#metadata-itu-t-t35-syntax" id="markdown-toc-metadata-itu-t-t35-syntax">Metadata ITU-T T.35 syntax</a></li>
+      <li><a href="#aomedia-itu-t-t35-payload-syntax" id="markdown-toc-aomedia-itu-t-t35-payload-syntax">AOMedia ITU-T T.35 payload syntax</a></li>
       <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
     </ul>
   </li>
   <li><a href="#syntax-structures-semantics" id="markdown-toc-syntax-structures-semantics">Syntax structures semantics</a>    <ul>
       <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
-      <li><a href="#metadata-itut-t35-semantics" id="markdown-toc-metadata-itut-t35-semantics">Metadata ITUT T35 semantics</a></li>
-      <li><a href="#aomedia-itut-t35-payload-semantics" id="markdown-toc-aomedia-itut-t35-payload-semantics">AOMedia ITUT T35 payload semantics</a></li>
+      <li><a href="#metadata-itu-t-t35-semantics" id="markdown-toc-metadata-itu-t-t35-semantics">Metadata ITU-T T.35 semantics</a></li>
+      <li><a href="#aomedia-itu-t-t35-payload-semantics" id="markdown-toc-aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</a></li>
       <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
     </ul>
   </li>
@@ -862,7 +861,7 @@ invoked and the syntax element is set equal to the return value.</p>
 <p>This section presents the syntax structures in a tabular form. The meaning of
 each of the syntax elements is presented in <a href="#syntax-structures-semantics">Section 6</a>.</p>
 
-<h3 id="metadata-itut-t35-syntax">Metadata ITUT T35 syntax</h3>
+<h3 id="metadata-itu-t-t35-syntax">Metadata ITU-T T.35 syntax</h3>
 
 <table class="syntax">
   <tbody>
@@ -908,7 +907,7 @@ bytes as a padding continuation of the trailing bits.
 This implies that when any payload data is present,
 at least one byte of the payload data (including the trailing bit) shall not be equal to 0.</p>
 
-<h3 id="aomedia-itut-t35-payload-syntax">AOMedia ITUT T35 payload syntax</h3>
+<h3 id="aomedia-itu-t-t35-payload-syntax">AOMedia ITU-T T.35 payload syntax</h3>
 
 <table class="syntax">
   <tbody>
@@ -1246,7 +1245,7 @@ structures.</p>
 
 <p>Important variables and function calls are also described.</p>
 
-<h3 id="metadata-itut-t35-semantics">Metadata ITUT T35 semantics</h3>
+<h3 id="metadata-itu-t-t35-semantics">Metadata ITU-T T.35 semantics</h3>
 
 <p><strong>itu_t_t35_country_code</strong> shall be a byte having a value specified as a country code by Annex A
 of Recommendation ITU-T T.35. itu_t_t35_country_code equal to 0xB5 indicates that the
@@ -1258,7 +1257,7 @@ provider code in
 itu_t_t35_terminal_provider_code equal to 0x5890 indicates that the ITU-T T.35 payload is
 specified by AOMedia.</p>
 
-<h3 id="aomedia-itut-t35-payload-semantics">AOMedia ITUT T35 payload semantics</h3>
+<h3 id="aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</h3>
 
 <p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
 ITU-T T3.5 terminal provider oriented code that is defined
@@ -1293,7 +1292,7 @@ apply_grain equal to 0 specifies that film grain should not be added.</p>
 
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
-<p><strong>film_grain_param_set_idx</strong> is an index of the film grain parameter set. Up to 8 separate film grain parameter
+<p><strong>film_grain_param_set_idx</strong> is an index of a film grain parameter set. Up to 8 separate film grain parameter
 sets may be simultaneously stored by the film grain processing module.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.
@@ -1335,12 +1334,14 @@ linear scaling function for luma component.</p>
 
 <p><strong>chroma_scaling_from_luma</strong> specifies that the chroma scaling is inferred from the luma scaling.</p>
 
+<p>It is a requirement of bitstream conformance that chroma_scaling_from_luma is equal to 0 when the reconstructed video is monochrome.</p>
+
 <p><strong>num_cb_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the cb component.</p>
 
 <p>It is a requirement of bitstream conformance that num_cb_points is less than or equal to 10.</p>
 
-<p>When reconstructed video is monochrome, it is a requirement of bitstream conformance that num_cb_points is equal to 0.</p>
+<p>It is a requirement of bitstream conformance that num_cb_points is equal to 0 when the reconstructed video is monochrome.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> When chroma_scaling_from_luma is equal to 1, it is still allowed for num_y_points to take values up to 14.
 This means that the chroma scaling also needs to support up to 14 points.</p>
