@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Film Grain Synthesis Specification (draft)</title>
+  <title>AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/av1-spec.css">
   <link rel="stylesheet" href="assets/css/syntax-tango.css">
@@ -36,9 +36,9 @@
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
 
-<h1 class="no_toc" id="film-grain-synthesis-specification-draft">Film Grain Synthesis Specification (draft)</h1>
+<h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2022-04-06 21:12 PT</em></p>
+<p><em>Last modified: 2022-04-12 15:42 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -82,15 +82,15 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
   </li>
   <li><a href="#syntax-structures" id="markdown-toc-syntax-structures">Syntax structures</a>    <ul>
       <li><a href="#general-1" id="markdown-toc-general-1">General</a></li>
-      <li><a href="#metadata-itu-t-t35-syntax" id="markdown-toc-metadata-itu-t-t35-syntax">Metadata ITU-T T.35 syntax</a></li>
+      <li><a href="#aomedia-itu-t-t35-metadata-syntax" id="markdown-toc-aomedia-itu-t-t35-metadata-syntax">AOMedia ITU-T T.35 metadata syntax</a></li>
       <li><a href="#aomedia-itu-t-t35-payload-syntax" id="markdown-toc-aomedia-itu-t-t35-payload-syntax">AOMedia ITU-T T.35 payload syntax</a></li>
       <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
     </ul>
   </li>
   <li><a href="#syntax-structures-semantics" id="markdown-toc-syntax-structures-semantics">Syntax structures semantics</a>    <ul>
       <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
-      <li><a href="#metadata-itu-t-t35-semantics" id="markdown-toc-metadata-itu-t-t35-semantics">Metadata ITU-T T.35 semantics</a></li>
-      <li><a href="#aomedia-itu-t-t----35-payload-semantics" id="markdown-toc-aomedia-itu-t-t----35-payload-semantics">AOMedia ITU-T T.    35 payload semantics</a></li>
+      <li><a href="#aomedia-itu-t-t35-metadata-semantics" id="markdown-toc-aomedia-itu-t-t35-metadata-semantics">AOMedia ITU-T T.35 metadata semantics</a></li>
+      <li><a href="#aomedia-itu-t-t35-payload-semantics" id="markdown-toc-aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</a></li>
       <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
     </ul>
   </li>
@@ -861,7 +861,7 @@ invoked and the syntax element is set equal to the return value.</p>
 <p>This section presents the syntax structures in a tabular form. The meaning of
 each of the syntax elements is presented in <a href="#syntax-structures-semantics">Section 6</a>.</p>
 
-<h3 id="metadata-itu-t-t35-syntax">Metadata ITU-T T.35 syntax</h3>
+<h3 id="aomedia-itu-t-t35-metadata-syntax">AOMedia ITU-T T.35 metadata syntax</h3>
 
 <table class="syntax">
   <tbody>
@@ -899,6 +899,9 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     </tr>
   </tbody>
 </table>
+
+<p class="alert alert-info"><strong>Note:</strong> The syntax above represents signaling of ITU-T T.35 metadata
+reserved for AOMedia and not general ITU-T T.35 syntax.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> The last byte of the valid content of the data is
 considered to be the last byte that is not equal to zero. This rule is to
@@ -1261,7 +1264,7 @@ structures.</p>
 
 <p>Important variables and function calls are also described.</p>
 
-<h3 id="metadata-itu-t-t35-semantics">Metadata ITU-T T.35 semantics</h3>
+<h3 id="aomedia-itu-t-t35-metadata-semantics">AOMedia ITU-T T.35 metadata semantics</h3>
 
 <p><strong>itu_t_t35_country_code</strong> shall be a byte having a value specified as a country code by Annex A
 of Recommendation ITU-T T.35. itu_t_t35_country_code equal to 0xB5 indicates that the
@@ -1273,7 +1276,7 @@ provider code in
 itu_t_t35_terminal_provider_code equal to 0x5890 indicates that the ITU-T T.35 payload is
 specified by AOMedia.</p>
 
-<h3 id="aomedia-itu-t-t----35-payload-semantics">AOMedia ITU-T T.    35 payload semantics</h3>
+<h3 id="aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</h3>
 
 <p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
 ITU-T T3.5 terminal provider oriented code that is defined
