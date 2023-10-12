@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-10-11 19:27 PT</em></p>
+<p><em>Last modified: 2023-10-12 14:40 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -138,8 +138,8 @@ it permits the same model to be applied on other video coding specifications usi
   </dd>
   <dt>Bit string</dt>
   <dd>
-    <p>An ordered string with limited number of bits. The left most bit is the most
-significant bit (MSB), the right most bit is the least significant bit (LSB).</p>
+    <p>An ordered string with a limited number of bits. The left most bit is the most
+significant bit (MSB) and the right most bit is the least significant bit (LSB).</p>
   </dd>
   <dt>Byte</dt>
   <dd>
@@ -147,7 +147,7 @@ significant bit (MSB), the right most bit is the least significant bit (LSB).</p
   </dd>
   <dt>Byte alignment</dt>
   <dd>
-    <p>One bit is byte aligned if the position of the bit is an integer multiple of
+    <p>One bit, byte, or syntax element is byte aligned if the position of the bit, byte, or syntax element, respectively in the bitstream is an integer multiple of
 eight from the position of the first bit in the bitstream.</p>
   </dd>
   <dt>Chroma</dt>
@@ -163,8 +163,8 @@ difference signals.</p>
   </dd>
   <dt>Coded video sequence</dt>
   <dd>
-    <p>Coded video sequence is a sequence of access units or temporal units that
-consists of a random access point which is followed by zero or more access
+    <p>A coded video sequence is a sequence of access units or temporal units that
+consists of a random access point, which is followed by zero or more access
 units or temporal units up to but not including the subsequent random access
 point.</p>
   </dd>
@@ -177,15 +177,27 @@ matrices) or its single sample value.</p>
   <dd>
     <p>The frame reconstructed out of the bitstream by the decoder.</p>
   </dd>
-  <dt>Decoder</dt>
+  <dt>Video decoder</dt>
   <dd>
-    <p>One embodiment of the decoding process.</p>
+    <p>One embodiment of the video decoding process.</p>
   </dd>
-  <dt>Decoding process</dt>
+  <dt>Video decoding process</dt>
   <dd>
     <p>The process that derives decoded frames from syntax elements, including any processing 
-steps used prior to and for the film grain synthesis process.</p>
+steps used prior to and generating decoded video frames.</p>
   </dd>
+  <dt>Film grain decoding process</dt>
+  <dd>
+    <p>The process that derives film grain parameters from syntax elements, including any processing 
+steps used  for the film grain synthesis process.</p>
+  </dd>
+</dl>
+
+<p>Film grain synthesis module</p>
+
+<p><a href="# The conformance requirements need further discussion.">ToDo</a> Add a definition of the fgs decoding process and module and adjust the specification text accordingly.</p>
+
+<dl>
   <dt>Encoder</dt>
   <dd>
     <p>One embodiment of the encoding process.</p>
@@ -194,11 +206,13 @@ steps used prior to and for the film grain synthesis process.</p>
   <dd>
     <p>A process not specified in this Specification that generates the bitstream
 that conforms to the description provided in this document.</p>
+
+    <p><a href="# The conformance requirements need further discussion.">ToDo</a> Adjust the definition of the encoding process and its usage in the specification (e.g. a film grain analyzer).</p>
   </dd>
   <dt>Flag</dt>
   <dd>
     <p>A binary variable - some variables and syntax elements (e.g.
-obu_extension_flag) are described using the word flag to highlight that the
+luma_only_grain) are described using the word flag to highlight that the
 syntax element can only be equal to 0 or equal to 1.</p>
   </dd>
   <dt>Frame</dt>
@@ -245,6 +259,9 @@ the third row, and so on. Each raster row is scanned in left to right order.</p>
   <dd>
     <p>Obtaining the addition of the decoded residual and the corresponding
 prediction values.</p>
+
+    <p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (I would assume that here we reconstruct noise and we add it on the images. There is no residual. Correct? We likely need to redefine this term for this document assuming it is needed. Same for other terms in this document, such as “reference”)
+<a href="# The conformance requirements need further discussion.">ToDo</a> Clean-up the reconstruction usage in this specification.</p>
   </dd>
   <dt>Reference</dt>
   <dd>
@@ -261,10 +278,13 @@ future.</p>
   </dd>
   <dt>Sample value</dt>
   <dd>
-    <p>The value of a sample. This is an integer from 0 to 255 (inclusive) for 8-bit
-frames, from 0 to 1023 (inclusive) for 10-bit frames, and from 0 to 4095
-(inclusive) for 12-bit frames.</p>
+    <p>The value of a sample. This is an number in the range from the minimum sample value to the maximum sample value.</p>
   </dd>
+</dl>
+
+<p><a href="# The conformance requirements need further discussion.">ToDo</a> Check if the reference synthesis process supports the bit depths outside of the 8 to 12 bit range.</p>
+
+<dl>
   <dt>Sequence</dt>
   <dd>
     <p>The highest level syntax structure of coding bitstream, including one or
@@ -273,16 +293,6 @@ several consecutive coded frames.</p>
   <dt>Syntax element</dt>
   <dd>
     <p>An element of data represented in the bitstream.</p>
-  </dd>
-  <dt>Temporal group</dt>
-  <dd>
-    <p>A set of frames whose temporal prediction structure is used periodically in a
-video sequence.</p>
-  </dd>
-  <dt>Tier</dt>
-  <dd>
-    <p>A specified category of level constraints imposed on the values of the syntax elements
-in the bitstream.</p>
   </dd>
 </dl>
 
@@ -1012,6 +1022,58 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(12)</td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">video_frame_characteristics_flag</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>    if (video_frame_characteristics_flag)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        <b class="syntax-element">bit_depth</b></td>
+      <td>f(3)</td>
+    </tr>
+    <tr>
+      <td>        BitDepth = bit_depth + 8</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        <b class="syntax-element">mono_chrome</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>        SubX = SubY = 0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        if ( !mono_chrome ) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>            subsampling_x</td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>            SubX = subsampling_x</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>            subsampling_y</td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>            SubY = subsampling_y</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        }</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    }</td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">num_y_points</b></td>
       <td>f(4)</td>
     </tr>
@@ -1265,8 +1327,7 @@ structures.</p>
 
 <h3 id="aomedia-itu-t-t35-metadata-semantics">AOMedia ITU-T T.35 metadata semantics</h3>
 
-<p><strong>itu_t_t35_country_code</strong> shall be a byte having a value specified as a country code by Annex A
-of Recommendation ITU-T T.35. itu_t_t35_country_code equal to 0xB5 indicates that the
+<p><strong>itu_t_t35_country_code</strong> is a syntax element that corresponds to the syntax element itu_t_t35_terminal_provider_code in an ITU-T T.35 user registered metadata syntax. Its value shall be equal to 0xB5, which indicates that the
 itu_t_t35_terminal_provider_code is registered in the United States.</p>
 
 <p><strong>itu_t_t35_terminal_provider_code</strong> are two bytes having values specified as a terminal
@@ -1278,10 +1339,10 @@ specified by AOMedia.</p>
 <h3 id="aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</h3>
 
 <p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
-ITU-T T3.5 terminal provider oriented code that is defined
+ITU-T T.35 terminal provider oriented code that is defined
 in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.
 itu_t_t35_terminal_provider_oriented_code equal to 0x0001 indicates that the ITU-T T.35 payload
-contains AV1 film grain parameters, as defined by this specification.</p>
+contains AOMedia film grain parameters, as defined by this specification.</p>
 
 <h3 id="film-grain-parameters-semantics">Film grain parameters semantics</h3>
 
@@ -1296,9 +1357,11 @@ at the frame level.</p>
 
 <p>The film grain parameters signaled in this metadata message are applied to the output video frame that
 is associated with the coded video frame that follows the current metadata message in the
-encoded video bitstream. The film grain processing is applied to the output video frames in the display order.
-Even though the film grain metadata is associated with a particular picture in the coded frame order,
-the persistence of the film grain parameters shall be considered in the display order.</p>
+encoded video bitstream.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> When coding the film grain parameters in this metadata message, the encoder should consider the 
+scalability layers structure of the bitstream. In particular, the metadata assosiated with lower scalability layers
+should not refer to the film grain parameters associated with higher scalability layers.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> In case of the update_grain equal to 0, the film grain synthesis module should use the parameters
 from the previous frame in the display order and not the coding order.</p>
@@ -1320,7 +1383,7 @@ film grain parameters that are used with frames with different output resolution
 <p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
 update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
 
-<p>It is a requirement of the bitstream conformance that for every distinct value of film_grain_param_set_idx used in a coded video
+<p>It is a requirement of bitstream conformance that for every distinct value of film_grain_param_set_idx used in a coded video
 sequence, the first frame in the display order with that value of film_grain_param_set_idx that has apply_grain flag equal to 1
 have update_grain equal to 1.</p>
 
@@ -1342,10 +1405,59 @@ When update_grain is equal to 0, a previous set of parameters should be used for
 
 <p>[Ed.note. It is intended to recommend for the encoders to put the FGS parameters corresponding to the decoded picture resolution into the metadata.]</p>
 
-<p class="alert alert-info"><strong>num_y_points</strong> specifies the number of points for the piece-wise linear
+<p class="alert alert-info"><strong>video_frame_characteristics_flag</strong> equal to 1 indicates that the syntax elements bit_depth, mono_chrome, subsampling_x, subsampling_y are signaled in this metadata message.
+video_frame_characteristics_flag equal to 0 indicates that the syntax elements bit_depth, mono_chrome, subsampling_x, subsampling_y are not signal in this metadata message.
+If video_frame_characteristics_flag equal to 0, variables BitDepth, mono_chrome, SubX, and SubY are derived from the decoded video frame, to which this metadata message
+belongs.</p>
+
+<p><strong>bit_depth</strong> is a syntax element which determines bit depth of the decoded video sequence or a decoded video frame, to which this metadata belongs to.</p>
+
+<p><strong>mono_chrome</strong> equal to 1 indicates that the video does not contain U and V color planes. mono_chrome equal to 0 indicates that the video contains Y, U, and V color planes.</p>
+
+<p><strong>subsampling_x</strong>, <strong>subsampling_y</strong> specify the chroma subsampling format:</p>
+
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr>
+      <th>subsampling_x</th>
+      <th>subsampling_y</th>
+      <th>mono_chrome</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>YUV 4:4:4</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>YUV 4:2:2</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>YUV 4:2:0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Monochrome 4:0:0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>num_y_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the luma component.</p>
 
-<p>It is a requirement of bitstream conformance that num_y_points is less than or equal to 14.</p>
+<p>It is a requirement of bitstream conformance that num_y_points is less than or equal to 14.
+<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Why need to talk about conformance? Why also restrict the value to up to 14? Same for chroma)</p>
 
 <p><strong>point_y_value[ i ]</strong> represents the x (luma value) coordinate for the i-th point of the piecewise
 linear scaling function for luma component. The values are signaled on the scale of
@@ -1361,7 +1473,8 @@ linear scaling function for luma component.</p>
 <p><strong>luma_only_grain</strong> equal to 1 indicates that the film grain synthesis process is only applied to the luma component.
 luma_only_grain equal to 0 indicates that the film grain synthesis process can be applied to the chroma components.</p>
 
-<p>It is a requirement of bitstream conformance that when the reconstructed video is monochrome, luma_only_grain is equal to 1.</p>
+<p>It is a requirement of bitstream conformance that when the reconstructed video is monochrome, luma_only_grain is equal to 1.
+<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Why need to talk about conformance? Also it seems not so important to force the value for mono)</p>
 
 <p><strong>chroma_scaling_from_luma</strong> equal to 1 specifies that the chroma scaling is inferred from the luma scaling.
 chroma_scaling_from_luma equal to 0 specifies that the chroma scaling is signaled independently.</p>
@@ -1382,7 +1495,7 @@ scaling function for cb component. The values are signaled on the scale of 0..25
 <p><strong>point_cb_scaling[ i ]</strong>  represents the scaling (output) value for the i-th point of the piecewise
 linear scaling function for cb component.</p>
 
-<p><strong>num_cr_points</strong> specifies  represents the number of points for the piece-wise linear
+<p><strong>num_cr_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the cr component.</p>
 
 <p>It is a requirement of bitstream conformance that num_cr_points is less than or equal to 10.</p>
@@ -1424,22 +1537,22 @@ respectively.</p>
 <p><strong>grain_scale_shift</strong> specifies how much the Gaussian random numbers should be scaled down during
 the grain synthesis process.</p>
 
-<p><strong>cb_mult</strong> represents a multiplier for the cb component used in derivation of the input
+<p><strong>cb_mult</strong> represents a multiplier for the cb component used in the derivation of the input
 index to the cb component scaling function.</p>
 
-<p><strong>cb_luma_mult</strong> represents a multiplier for the average luma component used in
+<p><strong>cb_luma_mult</strong> represents a multiplier for the average luma component used in the
 derivation of the input index to the cb component scaling function.</p>
 
-<p><strong>cb_offset</strong> represents an offset used in derivation of the input index to the cb component
+<p><strong>cb_offset</strong> represents an offset used in the derivation of the input index to the cb component
 scaling function.</p>
 
-<p><strong>cr_mult</strong> represents a multiplier for the cr component used in derivation of the input index
+<p><strong>cr_mult</strong> represents a multiplier for the cr component used in the derivation of the input index
 to the cr component scaling function.</p>
 
-<p><strong>cr_luma_mult</strong> represents a multiplier for the average luma component used in
+<p><strong>cr_luma_mult</strong> represents a multiplier for the average luma component used in the
 derivation of the input index to the cr component scaling function.</p>
 
-<p><strong>cr_offset</strong> represents an offset used in derivation of the input index to the cr component
+<p><strong>cr_offset</strong> represents an offset used in the derivation of the input index to the cr component
 scaling function.</p>
 
 <p><strong>overlap_flag</strong> equal to 1 indicates that the overlap between film grain blocks shall be
@@ -1447,12 +1560,13 @@ applied. overlap_flag equal to 0 indicates that the overlap between film grain b
 not be applied.</p>
 
 <p><strong>clip_to_restricted_range</strong> equal to 1 indicates that clipping to the restricted (studio)
-range shall be applied to the sample values after adding the film grain (see the semantics for color_range for an explanation of studio swing).
+range is applied to the sample values after adding the film grain (see the semantics for color_range for an explanation of studio swing).
 clip_to_restricted_range equal to 0 indicates that clipping to the full range shall be
 applied to the sample values after adding the film grain.</p>
 
 <p><strong>save_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
-in the area of memory used by the idx should be set equal to the values read in av1_film_grain_params.</p>
+in the area of memory used by the idx should be set equal to the values read in av1_film_grain_params.
+<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Better if such processes are clearly specified)</p>
 
 <h2 id="conformance-requirements">Conformance requirements</h2>
 
@@ -1571,6 +1685,8 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
 
 <h4 id="random-number-process">Random number process</h4>
 
+<p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (It is usually not recommended to define variables using a name used often in the document. “bits” for example can be problematic here since it makes it hard for someone to search for it in the document. The same for the output, which is here the variable “result”.)</p>
+
 <p>The input to this process is a variable bits specifying the number of random bits to return.</p>
 
 <p>The output of this process is a pseudo-random number based on the state in RandomRegister.</p>
@@ -1593,7 +1709,7 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
 
 <p>This process generates noise via an auto-regressive filter.</p>
 
-<p>First an array LumaGrain 82 samples wide and 73 samples high of white noise is generated for luma as follows:</p>
+<p>First, an array LumaGrain, which is 82 samples wide and 73 samples high, of white noise is generated for luma as follows:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">-</span> <span class="n">BitDepth</span> <span class="o">+</span> <span class="n">grain_scale_shift</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">73</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
@@ -1667,6 +1783,9 @@ the chroma grain is generated in a similar way, except the filtering includes a 
 
 <p>Then the auto-regressive filter is applied as follows:</p>
 
+<p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Should “is applied” be “can be applied”? Otherwise it sounds as if the process is “strict”)
+[AN]: This is a reference implementation. Using “is applied” wrt the reference implementation may be appropriate.</p>
+
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="n">ar_coeff_shift_minus_6</span> <span class="o">+</span> <span class="mi">6</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">chromaH</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">chromaW</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
@@ -1708,7 +1827,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 
 <h4 id="scaling-lookup-initialization-process">Scaling lookup initialization process</h4>
 
-<p>This process computes 3 lookup tables for the different color components.</p>
+<p>This process computes a lookup table for each available color component.</p>
 
 <p>Each lookup table ScalingLut[ plane ] contains 256 entries constructed by a piecewise linear interpolation of the given points as follows:</p>
 
