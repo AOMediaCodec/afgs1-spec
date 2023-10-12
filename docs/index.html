@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-07-15 05:22 PT</em></p>
+<p><em>Last modified: 2023-10-11 19:27 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -54,9 +54,9 @@ the Film grain synthesis specification.</p>
 
 <h2 class="no_toc no_count" id="abstract">Abstract</h2>
 
-<p>This document defines the format and processing for the
-standalone <a href="http://aomedia.org/">Alliance for Open Media</a> AV1 film grain synthesis technology.
-Signaling of the film grain parameters is done using the ITU-T T.35 registered user metadata.</p>
+<p>This document defines the format, the required parsing and decoding processes, and the processing steps for the
+standalone <a href="http://aomedia.org/">Alliance for Open Media</a> film grain synthesis technology.
+Signaling of the film grain parameters can be done using ITU-T T.35 registered user metadata, which is described in this document.</p>
 
 <h2 class="no_toc no_count" id="contents">Contents</h2>
 
@@ -122,10 +122,10 @@ Signaling of the film grain parameters is done using the ITU-T T.35 registered u
 
 <h2 id="scope">Scope</h2>
 
-<p>This document provides the metadata format and a bit-accurate specification for 
-the standalone AOMedia film grain synthesis technology. This technology is equivalent at the frame level
-to the film grain technology described in the AV1 specification, but can be utilized with other video compression systems. 
-The corresponding metadata can be signaled using ITU-T T.35 registered user metadata format.</p>
+<p>This document provides the metadata format and bit-accurate specification for 
+the standalone AOMedia film grain synthesis technology. This technology is based 
+on the film grain modeling process that is specified in the AV1 specification. However, 
+it permits the same model to be applied on other video coding specifications using ITU-T T.35 signaling.</p>
 
 <h2 id="terms-and-definitions">Terms and definitions</h2>
 
@@ -307,19 +307,6 @@ in the bitstream.</p>
 Specification are similar to those used in the C programming language.
 However, the operation of integer division with truncation is specifically
 defined.</p>
-
-<p>In addition, a length 2 array used to hold a motion vector (indicated
-by the variable name ending with the letters <code class="highlighter-rouge">Mv</code> or <code class="highlighter-rouge">Mvs</code>) can be accessed
-using either array notation (e.g. <code class="highlighter-rouge">Mv[ 0 ]</code> and <code class="highlighter-rouge">Mv[ 1 ]</code>), or by just
-the name (e.g., <code class="highlighter-rouge">Mv</code>). The only operations defined when using the name are
-assignment and equality/inequality testing. Assignment of an array is
-represented using the notation <code class="highlighter-rouge">A = B</code> and is specified to mean the same
-as doing both the individual assignments <code class="highlighter-rouge">A[ 0 ] = B[ 0 ]</code> and
-<code class="highlighter-rouge">A[ 1 ] = B[ 1 ].</code> Equality testing of 2 motion vectors is represented using the
-notation <code class="highlighter-rouge">A == B</code> and is specified to mean the same as
-<code class="highlighter-rouge">(A[ 0 ] == B[ 0 ] &amp;&amp; A[ 1 ] == B[ 1 ])</code>. Inequality testing is defined as
-<code class="highlighter-rouge">A != B</code> and is specified to mean the same as
-<code class="highlighter-rouge">(A[ 0 ] != B[ 0 ] || A[ 1 ] != B[ 1 ])</code>.</p>
 
 <p>When a variable is said to be representable by a signed integer with <code class="highlighter-rouge">x</code> bits,
 it means that the variable is greater than or equal to <code class="highlighter-rouge">-(1 &lt;&lt; (x-1))</code>, and that
@@ -1013,6 +1000,18 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">apply_units_resolution_log2</b></td>
+      <td>f(4)</td>
+    </tr>
+    <tr>
+      <td>    <b class="syntax-element">apply_horz_resolution</b></td>
+      <td>f(12)</td>
+    </tr>
+    <tr>
+      <td>    <b class="syntax-element">apply_vert_resolution</b></td>
+      <td>f(12)</td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">num_y_points</b></td>
       <td>f(4)</td>
     </tr>
@@ -1335,7 +1334,15 @@ in av1_film_grain_params should be set equal to the values stored in an area of 
 <p><strong>tempGrainSeed</strong> is a temporary variable that is used to avoid losing the value of grain_seed when load_grain_params is called.
 When update_grain is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
 
-<p><strong>num_y_points</strong> specifies the number of points for the piece-wise linear
+<p><strong>apply_units_resolution_log2</strong> indicates the units used for indicating apply_horz_resolution and apply_vert_resolution.</p>
+
+<p><strong>apply_vert_resolution</strong> indicates the luma vertical resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
+
+<p><strong>apply_horz_resolution</strong> indicates the luma horizontal resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
+
+<p>[Ed.note. It is intended to recommend for the encoders to put the FGS parameters corresponding to the decoded picture resolution into the metadata.]</p>
+
+<p class="alert alert-info"><strong>num_y_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the luma component.</p>
 
 <p>It is a requirement of bitstream conformance that num_y_points is less than or equal to 14.</p>
