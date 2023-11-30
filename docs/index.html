@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-11-29 14:33 PT</em></p>
+<p><em>Last modified: 2023-11-29 21:21 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -1711,26 +1711,20 @@ process of the decoder and is less than or equal to the intended display resolut
 <p>For a given decoded picture, there shall not be more than one film grain parameter set for a given
 combination of luma horizontal and luma vertical resolution.</p>
 
-<p>For a given decoded picture, one film grain parameter set with apply_horz_resolution and
+<p>For a given decoded picture, if film grain parameter sets are transmitted
+for this picture, one film grain parameter set with apply_horz_resolution and
 apply_vert_resolution respectively equal to (i) the horizontal resolution of the coded
 frame » apply_units_resolution_log2 and (ii) the vertical resolution of the coded
 frame » apply_units_resolution_log2 shall be provided.</p>
 
-<p>Film grain parameter sets in a single ITU-T T.35 message shall not have the same combination
-of luma horizontal and luma vertical resolutions.</p>
+<p>For a given decoded picture, there shall not be more than one film grain parameter set
+with the same film_grain_param_set_idx value.</p>
 
-<p>Film grain parameter sets in a single ITU-T T.35 message shall not have the same
-film_grain_param_set_idx value.</p>
-
-<p>Each T.35 message shall contain one film grain parameter set with apply_horz_resolution and
-apply_vert_resolution respectively equal to (i) the horizontal resolution of the coded
-frame » apply_units_resolution_log2 and (ii) the vertical resolution of the coded
-frame » apply_units_resolution_log2.</p>
-
-<p class="alert alert-info"><strong>Note:</strong> The conformance statement above means that each T.35 message must include a
-set of film grain parameters that correspond to the coded resolution.
-[AN]: # (So, FGS parameter sets are sent in different SEI messages, each SEI message should
-still have decoded picture resolution?)</p>
+<p class="alert alert-info"><strong>Note:</strong> The conformance statements above mean that if film grain parameter sets are transmitted
+for a decoded picture, there must be one film grain parameter set that corresponds to the
+decoded picture resolution, there shall not be more than one film grain parameter set that
+correspond to the same resolution, and film grain parameter sets related to the same
+decoded picture shall each use a unique of film_grain_param_set_idx.</p>
 
 <h3 id="film-grain-parameters-semantics">Film grain parameters semantics</h3>
 
