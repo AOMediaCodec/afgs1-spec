@@ -27,7 +27,7 @@ jobs:
           ruby-version: '3.0'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           run: | 
-            gem install bundler
+            gem install jekyll bundler
       
       # - name: Cache RBENV_ROOT
       #   uses: actions/cache@v1
