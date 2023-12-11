@@ -52,7 +52,9 @@ jobs:
 
       - name: Build spec
         run: |
-          npm ci
+          npm update -g npm
+          npm install -g grunt-cli
+          npm install
           grunt
 
       # - name: Run bikeshed
