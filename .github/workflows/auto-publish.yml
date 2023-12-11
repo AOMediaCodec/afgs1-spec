@@ -1,0 +1,68 @@
+name: Auto-Publish
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  main:
+    name: Compile and deploy
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@main
+      - uses: masa-iwasaki/setup-rbenv@v1
+      
+      - name: Cache RBENV_ROOT
+        uses: actions/cache@v1
+        id: cache_rbenv
+        with:
+          path: /home/runner/.rbenv
+          key: ${{ runner.os }}-rbenv-${{ hashFiles('**/.ruby-version') }}
+          restore-keys: |
+            {{ runner.os }}-rbenv-
+      
+      - name: Install Ruby & Co.
+        run: |
+          eval "$(rbenv init -)"
+          rbenv install -s `cat .ruby-version`
+          gem install bundler
+          bundle install
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Build spec
+        run: |
+          cd av1-spec
+          npm ci
+          grunt
+
+      # - name: Run bikeshed
+      #   run: |
+      #     bikeshed spec
+      #     mkdir dist
+      #     cp *.html dist
+      #     cp -r figures dist
+      #     mkdir dist/conformance
+      #     cp -r conformance/conformance_page/dist/* dist/conformance
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./docs
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v1
