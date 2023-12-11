@@ -52,7 +52,6 @@ jobs:
 
       - name: Build spec
         run: |
-          cd av1-spec
           npm ci
           grunt
 
