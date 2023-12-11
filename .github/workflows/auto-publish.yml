@@ -21,29 +21,16 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@main
-      - uses: ruby/setup-ruby@v1
-        with: 
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
           ruby-version: '3.0'
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          run: | 
-            gem install jekyll bundler
-      
-      # - name: Cache RBENV_ROOT
-      #   uses: actions/cache@v1
-      #   id: cache_rbenv
-      #   with:
-      #     path: /home/runner/.rbenv
-      #     key: ${{ runner.os }}-rbenv-${{ hashFiles('**/.ruby-version') }}
-      #     restore-keys: |
-      #       {{ runner.os }}-rbenv-
-      
-      # - name: Install Ruby & Co.
-      #   run: |
-      #     eval "$(rbenv init -)"
-      #     rbenv install -s `cat .ruby-version`
-      #     gem install bundler
-      #     bundle install
+          bundler-cache: true
+
+      - name: Install Jekyll and Bundler
+        run: gem install jekyll bundler
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -57,20 +44,10 @@ jobs:
           npm install
           grunt
 
-      # - name: Run bikeshed
-      #   run: |
-      #     bikeshed spec
-      #     mkdir dist
-      #     cp *.html dist
-      #     cp -r figures dist
-      #     mkdir dist/conformance
-      #     cp -r conformance/conformance_page/dist/* dist/conformance
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./docs
 
       - name: Deploy
-        id: deployment
         uses: actions/deploy-pages@v1
