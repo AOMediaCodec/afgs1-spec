@@ -1,4 +1,5 @@
 name: Auto-Publish
+
 on:
   push:
     branches: [main]
@@ -25,14 +26,8 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
-          bundler-cache: true
-
-      - name: Install Jekyll, Bundler, and REXML
-        run: |
-          gem install bundler -v '>= 2.1'
-          gem install jekyll -v '>= 4.0'
-          gem install rexml
+          ruby-version: '2.6'
+          bundler-cache: true # This will install gems based on your Gemfile
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
