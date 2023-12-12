@@ -10,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -30,7 +29,10 @@ jobs:
           bundler-cache: true
 
       - name: Install Jekyll and Bundler
-        run: gem install jekyll bundler
+        run: |
+          gem install bundler
+          gem install jekyll
+          gem install rexml # Explicitly install rexml
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
