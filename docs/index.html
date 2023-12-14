@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-12-13 21:18 PT</em></p>
+<p><em>Last modified: 2023-12-13 21:36 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -180,7 +180,7 @@ matrices) or its single sample value.</p>
   </dd>
   <dt>Decoded frame</dt>
   <dd>
-    <p>The frame reconstructed out of the bitstream by the decoder.</p>
+    <p>The frame reconstructed out of the bitstream by the video decoder.</p>
   </dd>
   <dt>Video decoder</dt>
   <dd>
@@ -191,28 +191,27 @@ matrices) or its single sample value.</p>
     <p>The process that derives decoded frames from syntax elements, including any processing 
 steps used prior to and generating decoded video frames.</p>
   </dd>
-  <dt>Film grain decoding process</dt>
+  <dt>Video encoding process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates a video bitstream.</p>
+  </dd>
+  <dt>Film grain synthesis process</dt>
   <dd>
     <p>The process that derives film grain parameters from syntax elements, including any processing 
 steps used  for the film grain synthesis process.</p>
   </dd>
-</dl>
-
-<p>Film grain synthesis module</p>
-
-<p><a href="# The conformance requirements need further discussion.">ToDo</a> Add a definition of the fgs decoding process and module and adjust the specification text accordingly.</p>
-
-<dl>
-  <dt>Encoder</dt>
+  <dt>Film grain synthesis module</dt>
   <dd>
-    <p>One embodiment of the encoding process.</p>
+    <p>One embodiment of the film grain synthesis process.</p>
   </dd>
-  <dt>Encoding process</dt>
+  <dt>Film grain analyzer</dt>
   <dd>
-    <p>A process not specified in this Specification that generates the bitstream
+    <p>One embodiment of the film grain analysis process.</p>
+  </dd>
+  <dt>Film grain analysis process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates film grain parameters
 that conforms to the description provided in this document.</p>
-
-    <p><a href="# The conformance requirements need further discussion.">ToDo</a> Adjust the definition of the encoding process and its usage in the specification (e.g. a film grain analyzer).</p>
   </dd>
   <dt>Flag</dt>
   <dd>
@@ -229,11 +228,6 @@ luma sample matrix (Y) and two chroma sample matrices (U and V).</p>
   <dd>
     <p>An Intra frame which resets the decoding process when it is shown.</p>
   </dd>
-  <dt>Level</dt>
-  <dd>
-    <p>A defined set of constraints on the values for the syntax elements and
-variables.</p>
-  </dd>
   <dt>Luma</dt>
   <dd>
     <p>A sample value matrix or a single sample value representing the monochrome
@@ -244,10 +238,6 @@ signal related to the primary colors.</p>
   <dt>Parse</dt>
   <dd>
     <p>The procedure of getting the syntax element from the bitstream.</p>
-  </dd>
-  <dt>Profile</dt>
-  <dd>
-    <p>A subset of syntax, semantics and algorithms defined in a part.</p>
   </dd>
   <dt>Raster scan</dt>
   <dd>
