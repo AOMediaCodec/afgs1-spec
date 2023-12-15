@@ -40,6 +40,7 @@
 
 <p><em>Last modified: 2023-12-13 21:36 PT</em></p>
 
+
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
 
@@ -117,11 +118,6 @@ Signaling of the film grain parameters can be done using ITU-T T.35 registered u
     </ul>
   </li>
   <li><a href="#additional-tables" id="markdown-toc-additional-tables">Additional tables</a></li>
-  <li><a href="#annex-a-matching-video-decoder-profiles-and-levels" id="markdown-toc-annex-a-matching-video-decoder-profiles-and-levels">Annex A: Matching video decoder profiles and levels</a>    <ul>
-      <li><a href="#general" id="markdown-toc-general">General</a></li>
-      <li><a href="#conformance" id="markdown-toc-conformance">Conformance</a></li>
-    </ul>
-  </li>
   <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
@@ -2814,27 +2810,6 @@ with zero mean and standard deviation of about 512 clipped to the range of [-204
   <span class="mi">428</span><span class="p">,</span>   <span class="o">-</span><span class="mi">484</span>
 <span class="p">}</span>
 </code></pre></div></div>
-
-<div class="annex">
-  <h2 class="no_count" id="annex-a-matching-video-decoder-profiles-and-levels">Annex A: Matching video decoder profiles and levels</h2>
-
-  <h3 id="general">General</h3>
-
-  <p>Profiles and levels of video coding specification specify restrictions on the capabilities 
-needed to decode the bitstreams.</p>
-
-  <p>The profile specifies the bit depth and subsampling formats supported, while the
-level defines resolution and performance characteristics.</p>
-
-  <h3 id="conformance">Conformance</h3>
-
-  <p>A film grain synthesis module compliant to level X.Y of a video decoder must be able to correctly and on time generate 
-film grain for all bitstreams (that can be decoded by the general decoding process of the video codec) that conform to that level.</p>
-
-  <p>When doing that, the film grain synthesis module must be able to produce output frames according to
-the display schedule if such is indicated by the bitstream.</p>
-
-</div>
 
 <h2 class="no_count" id="bibliography">Bibliography</h2>
 

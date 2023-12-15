@@ -37,12 +37,6 @@ version_date: Released 2017-xx-xx
 <div style="page-break-before: always"></div>
 {% include_relative 10.additional.tables.md %}
 
-{::options parse_block_html="true" /}
-<div class="annex">
-{::options parse_block_html="false" /}
-<div style="page-break-before: always"></div>
-{% include_relative annex.a.levels.md %}
-
 <div id="biblio" markdown="1" style="page-break-before: always">
 {% include_relative bibliography.md %}
 </div>
