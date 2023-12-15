@@ -1,0 +1,52 @@
+name: Auto-Publish
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  main:
+    name: Compile and deploy
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.6.10'
+          bundler-cache: true # This will install gems based on your Gemfile
+
+      - name: Update Bundler
+        run: |
+          gem install bundler
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.3
+
+      - name: Build spec
+        run: |
+          npm update -g npm
+          npm install -g grunt-cli
+          npm install
+          grunt
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./docs
+
+      - name: Deploy
+        uses: actions/deploy-pages@v1
