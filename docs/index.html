@@ -38,7 +38,8 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-11-29 21:21 PT</em></p>
+<p><em>Last modified: 2023-12-13 21:36 PT</em></p>
+
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -117,11 +118,6 @@ Signaling of the film grain parameters can be done using ITU-T T.35 registered u
     </ul>
   </li>
   <li><a href="#additional-tables" id="markdown-toc-additional-tables">Additional tables</a></li>
-  <li><a href="#annex-a-matching-video-decoder-profiles-and-levels" id="markdown-toc-annex-a-matching-video-decoder-profiles-and-levels">Annex A: Matching video decoder profiles and levels</a>    <ul>
-      <li><a href="#general" id="markdown-toc-general">General</a></li>
-      <li><a href="#conformance" id="markdown-toc-conformance">Conformance</a></li>
-    </ul>
-  </li>
   <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
@@ -180,7 +176,7 @@ matrices) or its single sample value.</p>
   </dd>
   <dt>Decoded frame</dt>
   <dd>
-    <p>The frame reconstructed out of the bitstream by the decoder.</p>
+    <p>The frame reconstructed out of the bitstream by the video decoder.</p>
   </dd>
   <dt>Video decoder</dt>
   <dd>
@@ -191,28 +187,27 @@ matrices) or its single sample value.</p>
     <p>The process that derives decoded frames from syntax elements, including any processing 
 steps used prior to and generating decoded video frames.</p>
   </dd>
-  <dt>Film grain decoding process</dt>
+  <dt>Video encoding process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates a video bitstream.</p>
+  </dd>
+  <dt>Film grain synthesis process</dt>
   <dd>
     <p>The process that derives film grain parameters from syntax elements, including any processing 
 steps used  for the film grain synthesis process.</p>
   </dd>
-</dl>
-
-<p>Film grain synthesis module</p>
-
-<p><a href="# The conformance requirements need further discussion.">ToDo</a> Add a definition of the fgs decoding process and module and adjust the specification text accordingly.</p>
-
-<dl>
-  <dt>Encoder</dt>
+  <dt>Film grain synthesis module</dt>
   <dd>
-    <p>One embodiment of the encoding process.</p>
+    <p>One embodiment of the film grain synthesis process.</p>
   </dd>
-  <dt>Encoding process</dt>
+  <dt>Film grain analyzer</dt>
   <dd>
-    <p>A process not specified in this Specification that generates the bitstream
+    <p>One embodiment of the film grain analysis process.</p>
+  </dd>
+  <dt>Film grain analysis process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates film grain parameters
 that conforms to the description provided in this document.</p>
-
-    <p><a href="# The conformance requirements need further discussion.">ToDo</a> Adjust the definition of the encoding process and its usage in the specification (e.g. a film grain analyzer).</p>
   </dd>
   <dt>Flag</dt>
   <dd>
@@ -229,11 +224,6 @@ luma sample matrix (Y) and two chroma sample matrices (U and V).</p>
   <dd>
     <p>An Intra frame which resets the decoding process when it is shown.</p>
   </dd>
-  <dt>Level</dt>
-  <dd>
-    <p>A defined set of constraints on the values for the syntax elements and
-variables.</p>
-  </dd>
   <dt>Luma</dt>
   <dd>
     <p>A sample value matrix or a single sample value representing the monochrome
@@ -244,10 +234,6 @@ signal related to the primary colors.</p>
   <dt>Parse</dt>
   <dd>
     <p>The procedure of getting the syntax element from the bitstream.</p>
-  </dd>
-  <dt>Profile</dt>
-  <dd>
-    <p>A subset of syntax, semantics and algorithms defined in a part.</p>
   </dd>
   <dt>Raster scan</dt>
   <dd>
@@ -351,22 +337,6 @@ RFC 2119.</p>
     <tr>
       <td>/</td>
       <td>Integer division with truncation of the result toward zero. For example, <code class="highlighter-rouge">7/4</code> and <code class="highlighter-rouge">-7/-4</code> are truncated to <code class="highlighter-rouge">1</code> and <code class="highlighter-rouge">-7/4</code> and <code class="highlighter-rouge">7/-4</code> are truncated to <code class="highlighter-rouge">-1</code>.</td>
-    </tr>
-    <tr>
-      <td>a % b</td>
-      <td>Remainder from division of <code class="highlighter-rouge">a</code> by <code class="highlighter-rouge">b</code>. Both <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> are positive integers.</td>
-    </tr>
-    <tr>
-      <td>÷</td>
-      <td>Floating point (arithmetical) division.</td>
-    </tr>
-    <tr>
-      <td>ceil(x)</td>
-      <td>The smallest integer that is greater or equal than <code class="highlighter-rouge">x</code>.</td>
-    </tr>
-    <tr>
-      <td>floor(x)</td>
-      <td>The largest integer that is smaller or equal than <code class="highlighter-rouge">x</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -496,8 +466,6 @@ and Round2Signed) are defined as follows:</p>
 
 <p><img src="assets/images/formula-round2.svg.png" class="img-fluid" alt="" /></p>
 
-<p><img src="assets/images/formula-round2signed.svg.png" class="img-fluid" alt="" /></p>
-
 <p>The definition of Round2 uses standard mathematical power and division
 operations, not integer operations. An equivalent definition using integer
 operations is:</p>
@@ -506,52 +474,6 @@ operations is:</p>
   <span class="k">if</span> <span class="p">(</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span>
   <span class="k">return</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">n</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The FloorLog2(x) function is defined to be the floor of the base 2 logarithm of
-the input x.</p>
-
-<p>The input x will always be an integer, and will always be greater than or equal
-to 1.</p>
-
-<p>This function extracts the location of the most significant bit in x.</p>
-
-<p>An equivalent definition (using the pseudo-code notation introduced in the
-following section) is:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FloorLog2</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">while</span> <span class="p">(</span> <span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
-    <span class="n">s</span><span class="o">++</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The CeilLog2(x) function is defined to be the ceiling of the base 2 logarithm of
-the input x (when x is 0, it is defined to return 0).</p>
-
-<p>The input x will always be an integer, and will always be greater than or equal
-to 0.</p>
-
-<p>This function extracts the number of bits needed to code a value in the
-range 0 to x-1.</p>
-
-<p>An equivalent definition (using the pseudo-code notation introduced in the
-following section) is:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CeilLog2</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span>
-  <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
-  <span class="k">while</span> <span class="p">(</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">i</span><span class="o">++</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">i</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -967,7 +889,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>       av1_film_grain_params[ i ] ( )</td>
+      <td>       av1_film_grain_params( )</td>
       <td> </td>
     </tr>
     <tr>
@@ -975,11 +897,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>film_grain_param_set_idx = select_film_grain_param_set()</td>
+      <td>    film_grain_param_set_idx = select_film_grain_param_set()</td>
       <td> </td>
     </tr>
     <tr>
-      <td>load_grain_params(film_grain_param_set_idx)</td>
+      <td>    load_grain_params(film_grain_param_set_idx)</td>
       <td> </td>
     </tr>
     <tr>
@@ -1696,13 +1618,16 @@ contains AOMedia film grain parameters, as defined by this specification.</p>
 
 <p><strong>num_film_grain_sets_minus1</strong> plus 1 specifies the number of signaled film grain parameter sets.</p>
 
-<p><strong>select_film_grain_param_set()</strong> is a function that returns the index of the film grain parameter
- set signaled in the current av1_film_grain_param_sets function that is most appropriate for the current
- decoder configuration.</p>
+<p><strong>select_film_grain_param_set()</strong> is a function call that returns the index of the film grain parameter
+set signaled in the current av1_film_grain_param_sets function that is most appropriate for the current
+decoder configuration.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> It is recommended that the most appropriate film grain parameter set is the film grain
 parameter set having the largest spatial resolution that is both supported by the film grain synthesis
 process of the decoder and is less than or equal to the intended display resolution.</p>
+
+<p><strong>load_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
+in av1_film_grain_params should be set equal to the values stored in an area of memory used by the idx.</p>
 
 <h4 id="conformance">Conformance</h4>
 
@@ -1711,8 +1636,8 @@ process of the decoder and is less than or equal to the intended display resolut
 <p>For a given decoded picture, there shall not be more than one film grain parameter set for a given
 combination of luma horizontal and luma vertical resolution.</p>
 
-<p>For a given decoded picture, if film grain parameter sets are transmitted
-for this picture, one film grain parameter set with apply_horz_resolution and
+<p>For a given decoded picture, if film grain parameter sets are associated with
+this picture, one film grain parameter set with apply_horz_resolution and
 apply_vert_resolution respectively equal to (i) the horizontal resolution of the coded
 frame » apply_units_resolution_log2 and (ii) the vertical resolution of the coded
 frame » apply_units_resolution_log2 shall be provided.</p>
@@ -1720,8 +1645,8 @@ frame » apply_units_resolution_log2 shall be provided.</p>
 <p>For a given decoded picture, there shall not be more than one film grain parameter set
 with the same film_grain_param_set_idx value.</p>
 
-<p class="alert alert-info"><strong>Note:</strong> The conformance statements above mean that if film grain parameter sets are transmitted
-for a decoded picture, there must be one film grain parameter set that corresponds to the
+<p class="alert alert-info"><strong>Note:</strong> The conformance statements above mean that if film grain parameter sets are associated with
+a decoded picture, there must be one film grain parameter set that corresponds to the
 decoded picture resolution, there shall not be more than one film grain parameter set that
 correspond to the same resolution, and film grain parameter sets related to the same
 decoded picture shall each use a unique of film_grain_param_set_idx.</p>
@@ -1772,9 +1697,6 @@ have update_grain equal to 1.</p>
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with a particular film_grain_param_set_idx value can only
 be infered from previously signaled parameters in the display order with the same value of film_grain_param_set_idx
 in the current coded video sequence.</p>
-
-<p><strong>load_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
-in av1_film_grain_params should be set equal to the values stored in an area of memory used by the idx.</p>
 
 <p><strong>tempGrainSeed</strong> is a temporary variable that is used to avoid losing the value of grain_seed when load_grain_params is called.
 When update_grain is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
@@ -2042,9 +1964,13 @@ point_cr_scaling [i] in the film grain parameters set  film_grain_param_set_idx_
 
 <p class="alert alert-info"><strong>Note:</strong> cr_scaling_mult represents a value of multiplier from -16 to +15.9375 with granularity of values of 1/16. cr_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
 
-<p>It is a requirement of the specification conformance that the film_grain_param_set_idx_for_prediction i is equal to film_grain_param_set_idx of the av1_film_grain_params( ) set with index 0, i.e. av1_film_grain_params( )[ i ] in the current aom_itu_t_t35_payload( ).</p>
+<p>It is a requirement of bitstream conformance that when film_grain_param_set_idx_for_prediction is present, it shall be 
+equal to the value of film_grain_param_set_idx that is determined in the first call to av1_film_grain_params( ) 
+within the current aom_itu_t_t35_payload( ).</p>
 
-<p class="alert alert-info"><strong>Note:</strong> the proposed syntax restricts prediction between the film grain parameters sets to be within one aom_itu_t_t35_payload( ), and the reference can only be done to the first av1_film_grain_params( ) set in the payload.  In particular, scaling function prediction from other SEI messages is prohibited.</p>
+<p class="alert alert-info"><strong>Note:</strong> This requirement restricts prediction between the film grain parameters sets to be within one 
+aom_itu_t_t35_payload( ).  It also restricts the reference for the prediction process to be the film grain parameter set 
+determined in the first av1_film_grain_params( ) call.</p>
 
 <p><strong>num_cr_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the cr component.</p>
@@ -2885,33 +2811,11 @@ with zero mean and standard deviation of about 512 clipped to the range of [-204
 <span class="p">}</span>
 </code></pre></div></div>
 
-<div class="annex">
-  <h2 class="no_count" id="annex-a-matching-video-decoder-profiles-and-levels">Annex A: Matching video decoder profiles and levels</h2>
-
-  <h3 id="general">General</h3>
-
-  <p>Profiles and levels of video coding specification specify restrictions on the capabilities 
-needed to decode the bitstreams.</p>
-
-  <p>The profile specifies the bit depth and subsampling formats supported, while the
-level defines resolution and performance characteristics.</p>
-
-  <h3 id="conformance">Conformance</h3>
-
-  <p>A film grain synthesis module compliant to level X.Y of a video decoder must be able to correctly and on time generate 
-film grain for all bitstreams (that can be decoded by the general decoding process of the video codec) that conform to that level.</p>
-
-  <p>When doing that, the film grain synthesis module must be able to produce output frames according to
-the display schedule if such is indicated by the bitstream.</p>
-
-</div>
-
 <h2 class="no_count" id="bibliography">Bibliography</h2>
 
 <ol>
   <li>AV1 Bitstream &amp; Decoding Process Specification, Version 1.0.0 with Errata 1, 2019-01-08</li>
   <li>Rec. ITU-T T.35:2000, Procedure for the allocation of ITU-T defined codes for non standard facilities.</li>
-  <li>AOM Metadata Registry, Pre-Draft, 2022-02-14, https://aomediacodec.github.io/metadata/</li>
 </ol>
 
 
