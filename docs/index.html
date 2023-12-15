@@ -38,7 +38,8 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-12-13 20:48 PT</em></p>
+<p><em>Last modified: 2023-12-13 21:36 PT</em></p>
+
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -175,7 +176,7 @@ matrices) or its single sample value.</p>
   </dd>
   <dt>Decoded frame</dt>
   <dd>
-    <p>The frame reconstructed out of the bitstream by the decoder.</p>
+    <p>The frame reconstructed out of the bitstream by the video decoder.</p>
   </dd>
   <dt>Video decoder</dt>
   <dd>
@@ -186,28 +187,27 @@ matrices) or its single sample value.</p>
     <p>The process that derives decoded frames from syntax elements, including any processing 
 steps used prior to and generating decoded video frames.</p>
   </dd>
-  <dt>Film grain decoding process</dt>
+  <dt>Video encoding process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates a video bitstream.</p>
+  </dd>
+  <dt>Film grain synthesis process</dt>
   <dd>
     <p>The process that derives film grain parameters from syntax elements, including any processing 
 steps used  for the film grain synthesis process.</p>
   </dd>
-</dl>
-
-<p>Film grain synthesis module</p>
-
-<p><a href="# The conformance requirements need further discussion.">ToDo</a> Add a definition of the fgs decoding process and module and adjust the specification text accordingly.</p>
-
-<dl>
-  <dt>Encoder</dt>
+  <dt>Film grain synthesis module</dt>
   <dd>
-    <p>One embodiment of the encoding process.</p>
+    <p>One embodiment of the film grain synthesis process.</p>
   </dd>
-  <dt>Encoding process</dt>
+  <dt>Film grain analyzer</dt>
   <dd>
-    <p>A process not specified in this Specification that generates the bitstream
+    <p>One embodiment of the film grain analysis process.</p>
+  </dd>
+  <dt>Film grain analysis process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates film grain parameters
 that conforms to the description provided in this document.</p>
-
-    <p><a href="# The conformance requirements need further discussion.">ToDo</a> Adjust the definition of the encoding process and its usage in the specification (e.g. a film grain analyzer).</p>
   </dd>
   <dt>Flag</dt>
   <dd>
@@ -224,11 +224,6 @@ luma sample matrix (Y) and two chroma sample matrices (U and V).</p>
   <dd>
     <p>An Intra frame which resets the decoding process when it is shown.</p>
   </dd>
-  <dt>Level</dt>
-  <dd>
-    <p>A defined set of constraints on the values for the syntax elements and
-variables.</p>
-  </dd>
   <dt>Luma</dt>
   <dd>
     <p>A sample value matrix or a single sample value representing the monochrome
@@ -239,10 +234,6 @@ signal related to the primary colors.</p>
   <dt>Parse</dt>
   <dd>
     <p>The procedure of getting the syntax element from the bitstream.</p>
-  </dd>
-  <dt>Profile</dt>
-  <dd>
-    <p>A subset of syntax, semantics and algorithms defined in a part.</p>
   </dd>
   <dt>Raster scan</dt>
   <dd>
@@ -346,22 +337,6 @@ RFC 2119.</p>
     <tr>
       <td>/</td>
       <td>Integer division with truncation of the result toward zero. For example, <code class="highlighter-rouge">7/4</code> and <code class="highlighter-rouge">-7/-4</code> are truncated to <code class="highlighter-rouge">1</code> and <code class="highlighter-rouge">-7/4</code> and <code class="highlighter-rouge">7/-4</code> are truncated to <code class="highlighter-rouge">-1</code>.</td>
-    </tr>
-    <tr>
-      <td>a % b</td>
-      <td>Remainder from division of <code class="highlighter-rouge">a</code> by <code class="highlighter-rouge">b</code>. Both <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> are positive integers.</td>
-    </tr>
-    <tr>
-      <td>÷</td>
-      <td>Floating point (arithmetical) division.</td>
-    </tr>
-    <tr>
-      <td>ceil(x)</td>
-      <td>The smallest integer that is greater or equal than <code class="highlighter-rouge">x</code>.</td>
-    </tr>
-    <tr>
-      <td>floor(x)</td>
-      <td>The largest integer that is smaller or equal than <code class="highlighter-rouge">x</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -491,8 +466,6 @@ and Round2Signed) are defined as follows:</p>
 
 <p><img src="assets/images/formula-round2.svg.png" class="img-fluid" alt="" /></p>
 
-<p><img src="assets/images/formula-round2signed.svg.png" class="img-fluid" alt="" /></p>
-
 <p>The definition of Round2 uses standard mathematical power and division
 operations, not integer operations. An equivalent definition using integer
 operations is:</p>
@@ -501,52 +474,6 @@ operations is:</p>
   <span class="k">if</span> <span class="p">(</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span>
   <span class="k">return</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">n</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The FloorLog2(x) function is defined to be the floor of the base 2 logarithm of
-the input x.</p>
-
-<p>The input x will always be an integer, and will always be greater than or equal
-to 1.</p>
-
-<p>This function extracts the location of the most significant bit in x.</p>
-
-<p>An equivalent definition (using the pseudo-code notation introduced in the
-following section) is:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FloorLog2</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">while</span> <span class="p">(</span> <span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
-    <span class="n">s</span><span class="o">++</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The CeilLog2(x) function is defined to be the ceiling of the base 2 logarithm of
-the input x (when x is 0, it is defined to return 0).</p>
-
-<p>The input x will always be an integer, and will always be greater than or equal
-to 0.</p>
-
-<p>This function extracts the number of bits needed to code a value in the
-range 0 to x-1.</p>
-
-<p>An equivalent definition (using the pseudo-code notation introduced in the
-following section) is:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CeilLog2</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span>
-  <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
-  <span class="k">while</span> <span class="p">(</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">i</span><span class="o">++</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">i</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -2889,7 +2816,6 @@ with zero mean and standard deviation of about 512 clipped to the range of [-204
 <ol>
   <li>AV1 Bitstream &amp; Decoding Process Specification, Version 1.0.0 with Errata 1, 2019-01-08</li>
   <li>Rec. ITU-T T.35:2000, Procedure for the allocation of ITU-T defined codes for non standard facilities.</li>
-  <li>AOM Metadata Registry, Pre-Draft, 2022-02-14, https://aomediacodec.github.io/metadata/</li>
 </ol>
 
 
