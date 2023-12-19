@@ -38,8 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-12-13 21:36 PT</em></p>
-
+<p><em>Last modified: 2023-12-19 07:42 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -212,7 +211,7 @@ that conforms to the description provided in this document.</p>
   <dt>Flag</dt>
   <dd>
     <p>A binary variable - some variables and syntax elements (e.g.
-luma_only_grain) are described using the word flag to highlight that the
+video_frame_characteristic_flag) are described using the word flag to highlight that the
 syntax element can only be equal to 0 or equal to 1.</p>
   </dd>
   <dt>Frame</dt>
@@ -252,7 +251,7 @@ the third row, and so on. Each raster row is scanned in left to right order.</p>
 prediction values.</p>
 
     <p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (I would assume that here we reconstruct noise and we add it on the images. There is no residual. Correct? We likely need to redefine this term for this document assuming it is needed. Same for other terms in this document, such as “reference”)
-<a href="# The conformance requirements need further discussion.">ToDo</a> Clean-up the reconstruction usage in this specification.</p>
+[ToDo] Clean-up the reconstruction usage in this specification.</p>
   </dd>
   <dt>Reference</dt>
   <dd>
@@ -273,7 +272,7 @@ future.</p>
   </dd>
 </dl>
 
-<p><a href="# The conformance requirements need further discussion.">ToDo</a> Check if the reference synthesis process supports the bit depths outside of the 8 to 12 bit range.</p>
+<p>[ToDo] Check if the reference synthesis process supports the bit depths outside of the 8 to 12 bit range.</p>
 
 <dl>
   <dt>Sequence</dt>
@@ -881,6 +880,22 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td><strong>Type</strong></td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">afgs1_enable_flag</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>    if( !afgs1_enable_flag ) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>       return</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    }</td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">num_film_grain_sets_minus1</b></td>
       <td>f(3)</td>
     </tr>
@@ -897,11 +912,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    film_grain_param_set_idx = select_film_grain_param_set()</td>
+      <td>    selectedParamSet = select_film_grain_param_set( )</td>
       <td> </td>
     </tr>
     <tr>
-      <td>    load_grain_params(film_grain_param_set_idx)</td>
+      <td>    load_grain_params( selectedParamSet )</td>
       <td> </td>
     </tr>
     <tr>
@@ -920,6 +935,10 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td><strong>Type</strong></td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">film_grain_param_set_idx</b></td>
+      <td>f(3)</td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">apply_grain</b></td>
       <td>f(1)</td>
     </tr>
@@ -928,7 +947,15 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>        reset_grain_params()</td>
+      <td>        load_grain_params( film_grain_param_set_idx )</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        apply_grain = 0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        save_grain_params( film_grain_param_set_idx )</td>
       <td> </td>
     </tr>
     <tr>
@@ -942,10 +969,6 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
     <tr>
       <td>    <b class="syntax-element">grain_seed</b></td>
       <td>f(16)</td>
-    </tr>
-    <tr>
-      <td>    <b class="syntax-element">film_grain_param_set_idx</b></td>
-      <td>f(3)</td>
     </tr>
     <tr>
       <td>    <b class="syntax-element">update_grain</b></td>
@@ -964,7 +987,15 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
+      <td>        apply_grain = 1</td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>        grain_seed = tempGrainSeed</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        save_grain_params( film_grain_param_set_idx )</td>
       <td> </td>
     </tr>
     <tr>
@@ -988,6 +1019,38 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(12)</td>
     </tr>
     <tr>
+      <td>    <b class="syntax-element">luma_only</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>    SubX = SubY = 0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    if ( !luma_only ) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>         subsampling_x</td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>         SubX = subsampling_x</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>         subsampling_y</td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>         SubY = subsampling_y</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    }</td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">video_frame_characteristics_flag</b></td>
       <td>f(1)</td>
     </tr>
@@ -996,43 +1059,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">bit_depth</b></td>
+      <td>        <b class="syntax-element">bit_depth_minus8</b></td>
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>        BitDepth = bit_depth + 8</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">mono_chrome</b></td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>        SubX = SubY = 0</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        if ( !mono_chrome ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>            subsampling_x</td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>            SubX = subsampling_x</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>            subsampling_y</td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>            SubY = subsampling_y</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        }</td>
+      <td>        BitDepth = bit_depth_minus8 + 8</td>
       <td> </td>
     </tr>
     <tr>
@@ -1156,11 +1187,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">luma_only_grain</b></td>
-      <td>f(1)</td>
-    </tr>
-    <tr>
-      <td>    if ( luma_only_grain ) {</td>
+      <td>    if ( luma_only ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1180,7 +1207,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( luma_only_grain || chroma_scaling_from_luma ) {</td>
+      <td>    if ( luma_only || chroma_scaling_from_luma ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1616,6 +1643,10 @@ contains AOMedia film grain parameters, as defined by this specification.</p>
 
 <h3 id="film-grain-parameter-sets-semantics">Film grain parameter sets semantics</h3>
 
+<p><strong>afgs_enable_flag</strong> equal to 1 specifies that the film grain synthesis process is applied to the decoded frame
+associated with the current message.  afgs_enable_flag equal to 0 specifies that the film grain synthesis process is not 
+applied to the decoded frame associated with the current message.</p>
+
 <p><strong>num_film_grain_sets_minus1</strong> plus 1 specifies the number of signaled film grain parameter sets.</p>
 
 <p><strong>select_film_grain_param_set()</strong> is a function call that returns the index of the film grain parameter
@@ -1626,8 +1657,9 @@ decoder configuration.</p>
 parameter set having the largest spatial resolution that is both supported by the film grain synthesis
 process of the decoder and is less than or equal to the intended display resolution.</p>
 
-<p><strong>load_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
-in av1_film_grain_params should be set equal to the values stored in an area of memory used by the idx.</p>
+<p><strong>load_grain_params( idx )</strong> is a function call that specifies that all syntax elements determined in the 
+av1_film_grain_parmas function and all variables beginning with upper case determined in the av1_film_grain_params
+function shall be set equal to the values located in the memory location denoted by idx.</p>
 
 <h4 id="conformance">Conformance</h4>
 
@@ -1636,14 +1668,18 @@ in av1_film_grain_params should be set equal to the values stored in an area of 
 <p>For a given decoded picture, there shall not be more than one film grain parameter set for a given
 combination of luma horizontal and luma vertical resolution.</p>
 
-<p>For a given decoded picture, if film grain parameter sets are associated with
-this picture, one film grain parameter set with apply_horz_resolution and
-apply_vert_resolution respectively equal to (i) the horizontal resolution of the coded
-frame » apply_units_resolution_log2 and (ii) the vertical resolution of the coded
-frame » apply_units_resolution_log2 shall be provided.</p>
+<p>For a given decoded picture, if film grain parameter sets are associated with this picture, one film grain parameter 
+set shall be provided satisfying the following conditions: (i) apply_horz_resolution equal to the luma horizontal 
+resolution of the decoded frame » apply_units_resolution_log2, (ii) apply_vert_resolution equal to the luma vertical 
+resolution of the decoded frame » apply_units_resolution_log2, (iii) subsampling_x equal to the chroma horizontal 
+subsampling of the decoded frame, (iv) subsampling_y equal to the chroma vertical subsampling of the decoded frame, 
+and (v) bitdepth equal to the bitdepth of the decoded frame when the bitdepth syntax element is present.</p>
 
 <p>For a given decoded picture, there shall not be more than one film grain parameter set
 with the same film_grain_param_set_idx value.</p>
+
+<p>For a given decoded picture, all film grain parameter sets associated with the picture shall
+have the same value for afgs1_enable_flag.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> The conformance statements above mean that if film grain parameter sets are associated with
 a decoded picture, there must be one film grain parameter set that corresponds to the
@@ -1655,7 +1691,8 @@ decoded picture shall each use a unique of film_grain_param_set_idx.</p>
 
 <p>This metadata provides the post-processing module with a model for parameterized film grain
 synthesis. The film grain process is applied to frames output by a video decoder or
-a video post-processing module. The film grain synthesis shall be applied at the decoder output resolution.</p>
+a video post-processing module. The film grain synthesis should be applied at the resolution 
+specified for the selected film grain parameter set.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use this film grain metadata to characterize film grain that was present in the
 original source video material and was removed by pre-processing filtering techniques. The specified
@@ -1673,19 +1710,23 @@ should not refer to the film grain parameters associated with higher scalability
 <p class="alert alert-info"><strong>Note:</strong> In case of the update_grain equal to 0, the film grain synthesis module should use the parameters
 from the previous frame in the display order and not the coding order.</p>
 
-<p><strong>apply_grain</strong> equal to 1 specifies that film grain should be added to this frame.
-apply_grain equal to 0 specifies that film grain should not be added.</p>
-
-<p><strong>reset_grain_params( )</strong> is a function call that indicates that all the syntax elements read in film_grain_params should be set equal to 0.</p>
-
-<p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
-
 <p><strong>film_grain_param_set_idx</strong> is an index of a film grain parameter set. Up to 8 separate film grain parameter
 sets may be simultaneously stored by the film grain processing module.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.
 For example, in the case of varying output frame resolutions, an encoder may assign different film_grain_param_set_idx to
 film grain parameters that are used with frames with different output resolutions.</p>
+
+<p><strong>apply_grain</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
+determined in the current av1_film_grain_params function are selected.  apply_grain equal to 0 specifies that the 
+film grain syntehsis process is enabled when the film grain parameters are selected.</p>
+
+<p><strong>save_grain_params( idx )</strong> is a function call that specifies that all syntax elements determined in the 
+av1_film_grain_params_function and all variables beginning with upper case determined in the 
+av1_film_grain_params_function shall be stored in the memory location denoted by idx.
+<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Better if such processes are clearly specified)</p>
+
+<p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
 <p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
 update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
@@ -1707,25 +1748,30 @@ When update_grain is equal to 0, a previous set of parameters should be used for
 
 <p><strong>apply_horz_resolution</strong> indicates the luma horizontal resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
 
-<p>[Ed.note. It is intended to recommend for the encoders to put the FGS parameters corresponding to the decoded picture resolution into the metadata.]</p>
+<p class="alert alert-info">[Ed.note. It is intended to recommend for the encoders to put the FGS parameters corresponding to the decoded picture resolution into the metadata.]</p>
 
-<p class="alert alert-info"><strong>video_frame_characteristics_flag</strong> equal to 1 indicates that the syntax elements bit_depth, mono_chrome, subsampling_x, subsampling_y are signaled in this metadata message.
-video_frame_characteristics_flag equal to 0 indicates that the syntax elements bit_depth, mono_chrome, subsampling_x, subsampling_y are not signal in this metadata message.
-If video_frame_characteristics_flag equal to 0, variables BitDepth, mono_chrome, SubX, and SubY are derived from the decoded video frame, to which this metadata message
-belongs.</p>
+<p><strong>luma_only</strong> equal to 1 specifies that the film grain synthesis parameters do not include U and V color planes.  luma_only
+equal to 0 specifies that the film grain synthesis parameters do include U and V color planes.</p>
 
-<p><strong>bit_depth</strong> is a syntax element which determines bit depth of the decoded video sequence or a decoded video frame, to which this metadata belongs to.</p>
+<p><strong>subsampling_x</strong> equal to 0 specifies that the horizontal resolution of the chroma component of the film grain 
+synthesis parameters is the same as the horizontal resolution of the luma component.  subsampling_x equal to 1
+specifies that the horizontal resolution of the chroma component of the film grain synthesis parameters is equal to
+the horizontal resolution of the luma component subsampled by a factor of two.</p>
 
-<p><strong>mono_chrome</strong> equal to 1 indicates that the video does not contain U and V color planes. mono_chrome equal to 0 indicates that the video contains Y, U, and V color planes.</p>
+<p><strong>subsampling_y</strong> equal to 0 specifies that the vertical resolution of the chroma component of the film grain
+synthesis parameters is the same as the vertical resolution of the luma component.  subsampling_y equal to 1
+specifies that the vertical resolution of the chroma component of the film grain synthesis parameters is equal to
+the vertical resolution of the luma component subsampled by a factor of two.</p>
 
-<p><strong>subsampling_x</strong>, <strong>subsampling_y</strong> specify the chroma subsampling format:</p>
+<p class="alert alert-info"><strong>Note:</strong> The table below shows example mappings between common image formats and values for the subsampling_x, subsampling_y,
+and luma_only syntax elements.</p>
 
-<table class="table table-sm table-bordered">
+<table class="table table-sm table-bordered alert alert-info">
   <thead>
     <tr>
       <th>subsampling_x</th>
       <th>subsampling_y</th>
-      <th>mono_chrome</th>
+      <th>luma_only</th>
       <th>Description</th>
     </tr>
   </thead>
@@ -1756,6 +1802,13 @@ belongs.</p>
     </tr>
   </tbody>
 </table>
+
+<p><strong>video_frame_characteristics_flag</strong> equal to 1 specifies that the syntax element bit_depth_minus8 is present in this message.
+video_frame_characteristics_flag equal to 0 specifies that the syntax element bit_depth_minus8 is not present in this message.</p>
+
+<p><strong>bit_depth_minus8</strong> indicates the bitdepth of the decoded video frame associated with the current film grain parameters.
+When bit_depth_minus8 is not present, the variable BitDepth is derived from the decoded video frame that is associated
+with the current film grain parameters.</p>
 
 <p><strong>predict_scaling</strong> equal to 0 specifies that scaling functions in the current film grain parameter set
 are not predicted from scaling functions that belong to other film grain parameters sets.
@@ -1837,12 +1890,6 @@ In case of 12 bit video, these values correspond to luma values divided by 16.)<
 
 <p>point_y_scaling[ i ] represents the scaling (output) value for the i-th point of the piecewise
 linear scaling function for luma component.</p>
-
-<p><strong>luma_only_grain</strong> equal to 1 indicates that the film grain synthesis process is only applied to the luma component.
-luma_only_grain equal to 0 indicates that the film grain synthesis process can be applied to the chroma components.</p>
-
-<p>It is a requirement of bitstream conformance that when the reconstructed video is monochrome, luma_only_grain is equal to 1.
-<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Why need to talk about conformance? Also it seems not so important to force the value for mono)</p>
 
 <p><strong>chroma_scaling_from_luma</strong> equal to 1 specifies that the chroma scaling is inferred from the luma scaling.
 chroma_scaling_from_luma equal to 0 specifies that the chroma scaling is signaled independently.</p>
@@ -1977,10 +2024,10 @@ scaling function of the cr component.</p>
 
 <p>It is a requirement of bitstream conformance that num_cr_points is less than or equal to 10.</p>
 
-<p>If subX is equal to 1 and subY is equal to 1 and num_cb_points is equal to 0,
+<p>If SubX is equal to 1 and SubY is equal to 1 and num_cb_points is equal to 0,
 it is a requirement of bitstream conformance that num_cr_points is equal to 0.</p>
 
-<p>If subX is equal to 1 and subY is equal to 1 and num_cb_points is not equal to 0,
+<p>If SubX is equal to 1 and SubY is equal to 1 and num_cb_points is not equal to 0,
 it is a requirement of bitstream conformance that num_cr_points is not equal to 0.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> These requirements ensure that for 4:2:0 chroma subsampling, film grain noise will be applied to both chroma components, or to neither.
@@ -2079,16 +2126,12 @@ range is applied to the sample values after adding the film grain (see the seman
 clip_to_restricted_range equal to 0 indicates that clipping to the full range shall be
 applied to the sample values after adding the film grain.</p>
 
-<p><strong>save_grain_params( idx )</strong> is a function call that indicates that all the syntax elements
-in the area of memory used by the idx should be set equal to the values read in av1_film_grain_params.
-<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Better if such processes are clearly specified)</p>
-
 <h2 id="conformance-requirements">Conformance requirements</h2>
 
 <p>When AV1 film grain metadata are not present in the bitstream, the AV1 film grain synthesis module shall produce output frames that are identical in all respects
 and have the same output order as the input frames to the AV1 film grain synthesis module.</p>
 
-<p>When AV1 film grain metadata is present in the bitstream, a decoder shall implement a film grain synthesis process that
+<p>When AV1 film grain metadata is present in the bitstream, a film grain synthesis module shall implement a film grain synthesis process that
 modifies the its input arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 8.2</a>.</p>
 
 <p>When film_grain_params_present is equal to 1, a conformant AV1 film grain synthesis module shall satisfy at least one of the
@@ -2133,9 +2176,10 @@ Some applications, such as transcoding from or to another video coding standard,
 
 <p>This process is invoked to process video frames.</p>
 
-<p>If apply_grain is equal to 1, then
-the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a> is invoked with inputs of w, h, subX, and subY.
-This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
+<p>If afgs1_enable_flag is equal to 1 and apply_grain is present and equal to 1, then
+the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a> is invoked with inputs of w, h, SubX, and SubY.</p>
+
+<p>This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
 intermediate values of video frames from the previous post-processing modules.</p>
 
 <p>Finally, the frame to be processed is defined to be the arrays OutY, OutU, OutV where the bit depth for each sample is BitDepth.</p>
@@ -2157,7 +2201,7 @@ intermediate values of video frames from the previous post-processing modules.</
     <p>variables w and h specifying the width and height of the frame,</p>
   </li>
   <li>
-    <p>variables subX and subY specifying the subsampling parameters of the frame,</p>
+    <p>variables SubX and SubY specifying the subsampling parameters of the frame,</p>
   </li>
   <li>
     <p>arrays OutY, OutU, OutV,</p>
@@ -2166,11 +2210,6 @@ intermediate values of video frames from the previous post-processing modules.</
     <p>variable BitDepth specifying the bit depth of the video frame samples.</p>
   </li>
 </ul>
-
-<p>subX equal to 0 means that the chroma components have the same horizontal resolution as the luma component.
-subX equal to 1 means that the chroma components as subsampled by a factor of 2 in the horizontal direction.
-subY equal to 0 means that the chroma components have the same vertical resolution as the luma component.
-subY equal to 1 means that the chroma components as subsampled by a factor of 2 in the vertica direction.</p>
 
 <p>The process modifies the arrays OutY, OutU, OutV to add film grain noise as follows:</p>
 
@@ -2194,7 +2233,7 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
     <p>The scaling lookup initialization process specified in <a href="#scaling-lookup-initialization-process">section 8.2.4</a> is invoked.</p>
   </li>
   <li>
-    <p>The add noise process specified in <a href="#add-noise-synthesis-process">section 8.2.5</a> is invoked with w, h, subX, and subY as inputs.</p>
+    <p>The add noise process specified in <a href="#add-noise-synthesis-process">section 8.2.5</a> is invoked with w, h, SubX, and SubY as inputs.</p>
   </li>
 </ol>
 
@@ -2262,12 +2301,12 @@ subY equal to 1 means that the chroma components as subsampled by a factor of 2 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>If mono_chrome is equal to 0,
-the chroma grain is generated in a similar way, except the filtering includes a coefficient that introduces a correlation with the luma grain.</p>
+<p>If luma_only is equal to 0, the chroma grain is generated in a similar way, except the filtering includes a coefficient 
+that introduces a correlation with the luma grain.</p>
 
-<p>The variable chromaW (representing the width of the chroma noise array) is set equal to (subX ? 44 : 82).</p>
+<p>The variable chromaW (representing the width of the chroma noise array) is set equal to (SubX ? 44 : 82).</p>
 
-<p>The variable chromaH (representing the height of the chroma noise array) is set equal to (subY ? 38 : 73).</p>
+<p>The variable chromaH (representing the height of the chroma noise array) is set equal to (SubY ? 38 : 73).</p>
 
 <p>White noise arrays CbGrain and CrGrain chromaW samples wide and chromaH samples high are generated as follows:</p>
 
@@ -2314,12 +2353,12 @@ the chroma grain is generated in a similar way, except the filtering includes a 
         <span class="k">if</span> <span class="p">(</span> <span class="n">deltaRow</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">deltaCol</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span> <span class="n">num_y_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
             <span class="n">luma</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">lumaX</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">subX</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
-            <span class="n">lumaY</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">subY</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">subY</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-              <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">subX</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
+            <span class="n">lumaX</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">SubX</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+            <span class="n">lumaY</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">SubY</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+            <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">SubY</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+              <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">SubX</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
                 <span class="n">luma</span> <span class="o">+=</span> <span class="n">LumaGrain</span><span class="p">[</span> <span class="n">lumaY</span> <span class="o">+</span> <span class="n">i</span> <span class="p">][</span> <span class="n">lumaX</span> <span class="o">+</span> <span class="n">j</span> <span class="p">]</span>
-            <span class="n">luma</span> <span class="o">=</span> <span class="n">Round2</span><span class="p">(</span> <span class="n">luma</span><span class="p">,</span> <span class="n">subX</span> <span class="o">+</span> <span class="n">subY</span> <span class="p">)</span>
+            <span class="n">luma</span> <span class="o">=</span> <span class="n">Round2</span><span class="p">(</span> <span class="n">luma</span><span class="p">,</span> <span class="n">SubX</span> <span class="o">+</span> <span class="n">SubY</span> <span class="p">)</span>
             <span class="n">s0</span> <span class="o">+=</span> <span class="n">luma</span> <span class="o">*</span> <span class="n">c0</span>
             <span class="n">s1</span> <span class="o">+=</span> <span class="n">luma</span> <span class="o">*</span> <span class="n">c1</span>
           <span class="p">}</span>
@@ -2407,7 +2446,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
     <p>variables w and h specifying the width and height of the frame,</p>
   </li>
   <li>
-    <p>variables subX and subY specifying the subsampling parameters of the frame.</p>
+    <p>variables SubX and SubY specifying the subsampling parameters of the frame.</p>
   </li>
 </ul>
 
@@ -2418,7 +2457,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <p>noiseStripe[ lumaNum ][ 0 ] is 34 samples high and w samples wide
 (a few additional samples across are actually written to the array, but these are never read) and contains noise for the luma component.</p>
 
-<p>noiseStripe[ lumaNum ][ 1 ] and noiseStripe[ lumaNum ][ 2 ] are (34 &gt;&gt; subY) samples high and Round2(w, subX) samples wide and contain noise for the chroma components.</p>
+<p>noiseStripe[ lumaNum ][ 1 ] and noiseStripe[ lumaNum ][ 2 ] are (34 &gt;&gt; SubY) samples high and Round2(w, SubX) samples wide and contain noise for the chroma components.</p>
 
 <p>noiseStripe represents the result of constructing square grain blocks and blending horizontally adjacent blocks together
 (although blending is only applied if overlap_flag is equal to 1) and is constructed as follows:</p>
@@ -2433,8 +2472,8 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
     <span class="n">offsetX</span> <span class="o">=</span> <span class="n">rand</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span>
     <span class="n">offsetY</span> <span class="o">=</span> <span class="n">rand</span> <span class="o">&amp;</span> <span class="mi">15</span>
     <span class="k">for</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">plane</span> <span class="o">&lt;</span> <span class="n">NumPlanes</span><span class="p">;</span> <span class="n">plane</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">planeSubX</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">subX</span> <span class="o">:</span> <span class="mi">0</span>
-      <span class="n">planeSubY</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">subY</span> <span class="o">:</span> <span class="mi">0</span>
+      <span class="n">planeSubX</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">SubX</span> <span class="o">:</span> <span class="mi">0</span>
+      <span class="n">planeSubY</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">SubY</span> <span class="o">:</span> <span class="mi">0</span>
       <span class="n">planeOffsetX</span> <span class="o">=</span> <span class="n">planeSubX</span> <span class="o">?</span> <span class="mi">6</span> <span class="o">+</span> <span class="n">offsetX</span> <span class="o">:</span> <span class="mi">9</span> <span class="o">+</span> <span class="n">offsetX</span> <span class="o">*</span> <span class="mi">2</span>
       <span class="n">planeOffsetY</span> <span class="o">=</span> <span class="n">planeSubY</span> <span class="o">?</span> <span class="mi">6</span> <span class="o">+</span> <span class="n">offsetY</span> <span class="o">:</span> <span class="mi">9</span> <span class="o">+</span> <span class="n">offsetY</span> <span class="o">*</span> <span class="mi">2</span>
       <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">34</span> <span class="o">&gt;&gt;</span> <span class="n">planeSubY</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
@@ -2475,8 +2514,8 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <p>Then the noise stripes are blended together to form a noise image noiseImage as follows:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">plane</span> <span class="o">&lt;</span> <span class="n">NumPlanes</span><span class="p">;</span> <span class="n">plane</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="n">planeSubX</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">subX</span> <span class="o">:</span> <span class="mi">0</span>
-  <span class="n">planeSubY</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">subY</span> <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">planeSubX</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">SubX</span> <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">planeSubY</span> <span class="o">=</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">SubY</span> <span class="o">:</span> <span class="mi">0</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">planeSubY</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">planeSubY</span> <span class="p">)</span> <span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">lumaNum</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="p">(</span> <span class="mi">5</span> <span class="o">-</span> <span class="n">planeSubY</span> <span class="p">)</span>
     <span class="n">i</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">lumaNum</span> <span class="o">&lt;&lt;</span> <span class="p">(</span> <span class="mi">5</span> <span class="o">-</span> <span class="n">planeSubY</span> <span class="p">)</span> <span class="p">)</span>
@@ -2524,12 +2563,12 @@ and 1 line buffer for each chroma component.</p>
   <span class="n">maxChroma</span> <span class="o">=</span> <span class="n">maxLuma</span>
 <span class="p">}</span>
 <span class="n">ScalingShift</span> <span class="o">=</span> <span class="n">grain_scaling_minus_8</span> <span class="o">+</span> <span class="mi">8</span>
-<span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">subY</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">subY</span><span class="p">)</span> <span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">subX</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">subX</span><span class="p">)</span> <span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">lumaX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">subX</span>
-    <span class="n">lumaY</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="n">subY</span>
+<span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">SubY</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">SubY</span><span class="p">)</span> <span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">SubX</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">SubX</span><span class="p">)</span> <span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">lumaX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">SubX</span>
+    <span class="n">lumaY</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="n">SubY</span>
     <span class="n">lumaNextX</span> <span class="o">=</span> <span class="n">Min</span><span class="p">(</span> <span class="n">lumaX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">subX</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">SubX</span> <span class="p">)</span>
       <span class="n">averageLuma</span> <span class="o">=</span> <span class="n">Round2</span><span class="p">(</span> <span class="n">OutY</span><span class="p">[</span> <span class="n">lumaY</span> <span class="p">][</span> <span class="n">lumaX</span> <span class="p">]</span> <span class="o">+</span> <span class="n">OutY</span><span class="p">[</span> <span class="n">lumaY</span> <span class="p">][</span> <span class="n">lumaNextX</span> <span class="p">],</span> <span class="mi">1</span> <span class="p">)</span>
     <span class="k">else</span>
       <span class="n">averageLuma</span> <span class="o">=</span> <span class="n">OutY</span><span class="p">[</span> <span class="n">lumaY</span> <span class="p">][</span> <span class="n">lumaX</span> <span class="p">]</span>
