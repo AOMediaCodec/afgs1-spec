@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2023-12-19 07:42 PT</em></p>
+<p><em>Last modified: 2024-01-01 21:29 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -175,8 +175,7 @@ matrices) or its single sample value.</p>
   </dd>
   <dt>Decoded picture</dt>
   <dd>
-
-    <p>The frame reconstructed out of the bitstream by the video decoder.</p>
+    <p>The picture reconstructed out of the bitstream by the decoder.</p>
   </dd>
   <dt>Video decoder</dt>
   <dd>
@@ -212,28 +211,29 @@ that conforms to the description provided in this document.</p>
   <dt>Flag</dt>
   <dd>
     <p>A binary variable - some variables and syntax elements (e.g.
-video_frame_characteristic_flag) are described using the word flag to highlight that the
+video_signal_characteristics_flag) are described using the word flag to highlight that the
 syntax element can only be equal to 0 or equal to 1.</p>
   </dd>
   <dt>Frame</dt>
   <dd>
-    <p>The representation of video signals in the spatial domain, composed of one
-luma sample matrix (Y) and two chroma sample matrices (U and V).</p>
+    <p>A composition of samples that constitute an entire image and includes samples from a top and a bottom field, 
+where the top and bottom fields correspond to samples from even and odd numbered rows respectively. 
+A frame may be composed of one
+luma sample matrix (Y) and optionally two chroma sample matrices (U and V).</p>
   </dd>
   <dt>Field</dt>
   <dd>
-    <p>An assembly of alternate rows of a frame. A frame is composed of two fields, 
+    <p>A collection of samples from alternate rows of a frame. A frame is composed of two fields, 
 a top field and a bottom field.</p>
   </dd>
   <dt>Picture</dt>
   <dd>
-    <p>A collective term for a frame or field.</p>
+    <p>The representation of video signals in the spatial domain, composed of one
+luma sample matrix (Y) and , optionally, two chroma sample matrices (U and V) 
+in a 4:2:0, 4:2:2, 4:4:4, 4:0:0 color format. The picture could be either a 
+frame or a field.</p>
   </dd>
   <dt>Key picture</dt>
-  <dd>
-    <p>An Intra picture which resets the decoding process when it is shown.</p>
-  </dd>
-  <dt>IDR picture</dt>
   <dd>
     <p>An Intra picture which resets the decoding process when it is shown.</p>
   </dd>
@@ -248,6 +248,10 @@ signal related to the primary colors.</p>
   <dd>
     <p>The procedure of getting the syntax element from the bitstream.</p>
   </dd>
+  <dt>Profile</dt>
+  <dd>
+    <p>A subset of syntax, semantics, and algorithms defined in a part.</p>
+  </dd>
   <dt>Raster scan</dt>
   <dd>
     <p>Maps a two dimensional rectangular raster into a one dimensional raster, in
@@ -257,7 +261,7 @@ the third row, and so on. Each raster row is scanned in left to right order.</p>
   </dd>
   <dt>Random Access Point (RAP)</dt>
   <dd>
-    <p>A picture, ar which a decoder may start decoding a coded video sequence.</p>
+    <p>A picture, at which a decoder may start decoding a coded video sequence.</p>
   </dd>
   <dt>Reconstruction</dt>
   <dd>
@@ -1065,11 +1069,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">video_frame_characteristics_flag</b></td>
+      <td>    <b class="syntax-element">video_signal_characteristics_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    if (video_frame_characteristics_flag)</td>
+      <td>    if (video_signal_characteristics_flag)</td>
       <td> </td>
     </tr>
     <tr>
@@ -1695,7 +1699,6 @@ with the same film_grain_param_set_idx value.</p>
 <p>For a given decoded picture, all film grain parameter sets associated with the picture shall
 have the same value for afgs1_enable_flag.</p>
 
-
 <p class="alert alert-info"><strong>Note:</strong> The conformance statements above mean that if film grain parameter sets are associated with
 a decoded picture, there must be one film grain parameter set that corresponds to the
 decoded picture resolution, there shall not be more than one film grain parameter set that
@@ -1705,11 +1708,9 @@ decoded picture shall each use a unique of film_grain_param_set_idx.</p>
 <h3 id="film-grain-parameters-semantics">Film grain parameters semantics</h3>
 
 <p>This metadata provides the post-processing module with a model for parameterized film grain
-
 synthesis. The film grain process is applied to frames output by a video decoder or
 a video post-processing module. The film grain synthesis should be applied at the resolution 
 specified for the selected film grain parameter set.</p>
-
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use this film grain metadata to characterize film grain that was present in the
 original source video material and was removed by pre-processing filtering techniques. The specified
@@ -1724,10 +1725,8 @@ encoded video bitstream.</p>
 scalability layers structure of the bitstream. In particular, the metadata assosiated with lower scalability layers
 should not refer to the film grain parameters associated with higher scalability layers.</p>
 
-
 <p class="alert alert-info"><strong>Note:</strong> In case of the update_grain equal to 0, the film grain synthesis module should use the parameters
 from the previous frame in the display order and not the coding order.</p>
-
 
 <p><strong>film_grain_param_set_idx</strong> is an index of a film grain parameter set. Up to 8 separate film grain parameter
 sets may be simultaneously stored by the film grain processing module.</p>
@@ -1735,7 +1734,6 @@ sets may be simultaneously stored by the film grain processing module.</p>
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.
 For example, in the case of varying output picture resolutions, an encoder may assign different film_grain_param_set_idx to
 film grain parameters that are used with pictures with different output resolutions.</p>
-
 
 <p><strong>apply_grain</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
 determined in the current av1_film_grain_params function are selected.  apply_grain equal to 0 specifies that the 
@@ -1750,7 +1748,6 @@ av1_film_grain_params_function shall be stored in the memory location denoted by
 
 <p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
 update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
-
 
 <p>It is a requirement of bitstream conformance that for every distinct value of film_grain_param_set_idx used in a coded video
 sequence, the first picture in the display order with that value of film_grain_param_set_idx that has apply_grain flag equal to 1
@@ -1771,7 +1768,6 @@ When update_grain is equal to 0, a previous set of parameters should be used for
 
 <p class="alert alert-info">[Ed.note. It is intended to recommend for the encoders to put the FGS parameters corresponding to the decoded picture resolution into the metadata.]</p>
 
-
 <p><strong>luma_only</strong> equal to 1 specifies that the film grain synthesis parameters do not include U and V color planes.  luma_only
 equal to 0 specifies that the film grain synthesis parameters do include U and V color planes.</p>
 
@@ -1779,7 +1775,6 @@ equal to 0 specifies that the film grain synthesis parameters do include U and V
 synthesis parameters is the same as the horizontal resolution of the luma component.  subsampling_x equal to 1
 specifies that the horizontal resolution of the chroma component of the film grain synthesis parameters is equal to
 the horizontal resolution of the luma component subsampled by a factor of two.</p>
-
 
 <p><strong>subsampling_y</strong> equal to 0 specifies that the vertical resolution of the chroma component of the film grain
 synthesis parameters is the same as the vertical resolution of the luma component.  subsampling_y equal to 1
@@ -1826,8 +1821,8 @@ and luma_only syntax elements.</p>
   </tbody>
 </table>
 
-<p><strong>video_frame_characteristics_flag</strong> equal to 1 specifies that the syntax element bit_depth_minus8 is present in this message.
-video_frame_characteristics_flag equal to 0 specifies that the syntax element bit_depth_minus8 is not present in this message.</p>
+<p><strong>video_signal_characteristics_flag</strong> equal to 1 specifies that the syntax element bit_depth_minus8 is present in this message.
+video_signal_characteristics_flag equal to 0 specifies that the syntax element bit_depth_minus8 is not present in this message.</p>
 
 <p><strong>bit_depth_minus8</strong> indicates the bitdepth of the decoded video frame associated with the current film grain parameters.
 When bit_depth_minus8 is not present, the variable BitDepth is derived from the decoded video frame that is associated
@@ -2199,13 +2194,11 @@ Some applications, such as transcoding from or to another video coding standard,
 
 <p>This process is invoked to process video pictures.</p>
 
-
 <p>If afgs1_enable_flag is equal to 1 and apply_grain is present and equal to 1, then
 the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a> is invoked with inputs of w, h, SubX, and SubY.</p>
 
 <p>This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
 intermediate values of video frames from the previous post-processing modules.</p>
-
 
 <p>Finally, the picture to be processed is defined to be the arrays OutY, OutU, OutV where the bit depth for each sample is BitDepth.</p>
 
@@ -2226,9 +2219,7 @@ intermediate values of video frames from the previous post-processing modules.</
     <p>variables w and h specifying the width and height of the picture,</p>
   </li>
   <li>
-
     <p>variables SubX and SubY specifying the subsampling parameters of the frame,</p>
-
   </li>
   <li>
     <p>arrays OutY, OutU, OutV,</p>
@@ -2474,7 +2465,6 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
   </li>
   <li>
     <p>variables SubX and SubY specifying the subsampling parameters of the frame.</p>
-
   </li>
 </ul>
 
