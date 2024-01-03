@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2024-01-01 21:29 PT</em></p>
+<p><em>Last modified: 2024-01-02 21:52 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -122,10 +122,19 @@ Signaling of the film grain parameters can be done using ITU-T T.35 registered u
 
 <h2 id="scope">Scope</h2>
 
-<p>This document provides the metadata format and bit-accurate specification for 
-the standalone AOMedia film grain synthesis technology. This technology is based 
-on the film grain modeling process that is specified in the AV1 specification. However, 
-it permits the same model to be applied on other video coding specifications using ITU-T T.35 signaling.</p>
+<p>This document specifies the syntax, semantics, and decoding process for the AOMedia Film Grain 
+Synthesis process. The process can be used with any video coding or transport mechanism.  This includes
+the use of ITU-T T.35 signaling, and this use is also specified in this document. Alternatively, the payload 
+can be carried by other suitable transport mechanisms.</p>
+
+<p>This specification is based on the film grain modeling process that is specified 
+in the AV1 specification. However, this AOMedia Film Grain 
+Synthesis process specification allows sending more than one film grain parameter
+set for a decoded picture. A decoder can apply the film grain synthesis process at a different
+resolution than the decoded picture resolution if the parameters for such resolution 
+are present in the bitstream. A film grain 
+parameter set that corresponds to the decoded picture resolution has to be present, which
+may be useful for certain AV1 film grain synthesis implementations.</p>
 
 <h2 id="terms-and-definitions">Terms and definitions</h2>
 
@@ -841,9 +850,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
   </tbody>
 </table>
 
-<p class="alert alert-info"><strong>Note:</strong> The syntax above represents signaling of ITU-T T.35 metadata
-reserved for AOMedia and not general ITU-T T.35 syntax.</p>
-
 <p class="alert alert-info"><strong>Note:</strong> The last byte of the valid content of the data is
 considered to be the last byte that is not equal to zero. This rule is to
 prevent the dropping of valid bytes by systems that interpret trailing zero
@@ -861,10 +867,10 @@ at least one byte of the payload data (including the trailing bit) shall not be 
     </tr>
     <tr>
       <td>    <b class="syntax-element">itu_t_t35_terminal_provider_oriented_code</b></td>
-      <td>f(16)</td>
+      <td>f(8)</td>
     </tr>
     <tr>
-      <td>    if ( itu_t_t35_terminal_provider_oriented_code == 0x0001 ) {</td>
+      <td>    if ( itu_t_t35_terminal_provider_oriented_code == 0x01 ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -886,8 +892,11 @@ at least one byte of the payload data (including the trailing bit) shall not be 
 itu_t_t35_terminal_provider_oriented_code that
 identifies the av1 film grain parameters metadata.
 The complete syntax of aom_itu_t_t35_payload( ) and the list of values for
-AOMedia itu_t_t35_terminal_provider_oriented_code are defined
-in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.</p>
+AOMedia itu_t_t35_terminal_provider_oriented_code are outside the scope of this specification.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> The syntax tables above define the signaling of the AFGS film grain parameter
+information as user data registered according to ITU-T Recommendation T.35.  Other methods 
+for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
 
 <h3 id="film-grain-parameter-sets-syntax">Film grain parameter sets syntax</h3>
 
@@ -1085,6 +1094,34 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
+      <td>        <b class="syntax-element">cicp_info_present_flag</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>        if ( cicp_info_present_flag ) }</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>            color_primaries</td>
+      <td>f(8)</td>
+    </tr>
+    <tr>
+      <td>            transfer_characteristics</td>
+      <td>f(8)</td>
+    </tr>
+    <tr>
+      <td>            matrix_coefficients</td>
+      <td>f(8)</td>
+    </tr>
+    <tr>
+      <td>            video_full_range_flag</td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>        }</td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>    }</td>
       <td> </td>
     </tr>
@@ -1105,11 +1142,15 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    } else</td>
+      <td>    } else {</td>
       <td> </td>
     </tr>
     <tr>
       <td>        predict_y_scaling = 0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    }</td>
       <td> </td>
     </tr>
     <tr>
@@ -1133,11 +1174,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>        BitsRes = bits_per_y_scaling_res</td>
+      <td>        if (bits_per_y_scaling_res) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        if (bits_per_y_scaling_res) {</td>
+      <td>              bitsRes = bits_per_y_scaling_res</td>
       <td> </td>
     </tr>
     <tr>
@@ -1146,7 +1187,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
     </tr>
     <tr>
       <td>                  <b class="syntax-element">point_y_scaling_res[ i ]</b></td>
-      <td>f(BitsRes)</td>
+      <td>f(bitsRes)</td>
     </tr>
     <tr>
       <td>              <b class="syntax-element">y_scaling_res_granularity</b></td>
@@ -1165,36 +1206,44 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(4)</td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">point_y_value_increment_bits_minus1</b></td>
+      <td>        if (num_y_points) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>            <b class="syntax-element">point_y_value_increment_bits_minus1</b></td>
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>        BitsIncr = point_y_value_increment_bits_minus1 + 1</td>
+      <td>            bitsIncr = point_y_value_increment_bits_minus1 + 1</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        point_y_value[ -1 ] = 0</td>
+      <td>            point_y_value[ -1 ] = 0</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        point_y_scaling_bits_minus5</td>
+      <td>            point_y_scaling_bits_minus5</td>
       <td>f(2)</td>
     </tr>
     <tr>
-      <td>        BitsScal = point_y_scaling_bits_minus5 + 5</td>
+      <td>            bitsScal = point_y_scaling_bits_minus5 + 5</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        for ( i = 0; i &lt; num_y_points; i++ ) {</td>
+      <td>            for ( i = 0; i &lt; num_y_points; i++ ) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">point_y_value_increment[ i ]</b></td>
-      <td>f(BitsIncr)</td>
+      <td>                <b class="syntax-element">point_y_value_increment[ i ]</b></td>
+      <td>f(bitsIncr)</td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">point_y_scaling[ i ]</b></td>
-      <td>f(BitsScal)</td>
+      <td>                <b class="syntax-element">point_y_scaling[ i ]</b></td>
+      <td>f(bitsScal)</td>
+    </tr>
+    <tr>
+      <td>            }</td>
+      <td> </td>
     </tr>
     <tr>
       <td>        }</td>
@@ -1277,11 +1326,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>            BitsRes = bits_per_cb_scaling_res</td>
+      <td>            if (bits_per_cb_scaling_res) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            if (bits_per_cb_scaling_res) {</td>
+      <td>                bitsRes = bits_per_cb_scaling_res</td>
       <td> </td>
     </tr>
     <tr>
@@ -1290,7 +1339,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
     </tr>
     <tr>
       <td>                    <b class="syntax-element">point_cb_scaling_res[ i ]</b></td>
-      <td>f(BitsRes)</td>
+      <td>f(bitsRes)</td>
     </tr>
     <tr>
       <td>                <b class="syntax-element">cb_scaling_res_granularity</b></td>
@@ -1309,43 +1358,51 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(4)</td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">point_cb_value_increment_bits_minus1</b></td>
+      <td>            if (num_cb_points) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>                <b class="syntax-element">point_cb_value_increment_bits_minus1</b></td>
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>            BitsIncr = point_cb_value_increment_bits_minus1 + 1</td>
+      <td>                bitsIncr = point_cb_value_increment_bits_minus1 + 1</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            point_cb_value[ -1 ] = 0</td>
+      <td>                point_cb_value[ -1 ] = 0</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            point_cb_scaling_bits_minus5</td>
+      <td>                point_cb_scaling_bits_minus5</td>
       <td>f(2)</td>
     </tr>
     <tr>
-      <td>            BitsScal = point_cb_scaling_bits_minus5 + 5</td>
+      <td>                bitsScal = point_cb_scaling_bits_minus5 + 5</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            cb_scaling_offset</td>
+      <td>                cb_scaling_offset</td>
       <td>f(8)</td>
     </tr>
     <tr>
-      <td>            for ( i = 0; i &lt; num_cb_points; i++ ) {</td>
+      <td>                for ( i = 0; i &lt; num_cb_points; i++ ) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>               <b class="syntax-element">point_cb_value_increment[ i ]</b></td>
-      <td>f(BitsIncr)</td>
+      <td>                    <b class="syntax-element">point_cb_value_increment[ i ]</b></td>
+      <td>f(bitsIncr)</td>
     </tr>
     <tr>
-      <td>               <b class="syntax-element">point_cb_scaling[ i ]</b></td>
-      <td>f(BitsScal)</td>
+      <td>                    <b class="syntax-element">point_cb_scaling[ i ]</b></td>
+      <td>f(bitsScal)</td>
     </tr>
     <tr>
       <td>            }</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>          }</td>
       <td> </td>
     </tr>
     <tr>
@@ -1389,11 +1446,11 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>            BitsRes = bits_per_cr_scaling_res</td>
+      <td>            if (bits_per_cr_scaling_res) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            if (bits_per_cr_scaling_res) {</td>
+      <td>                bitsRes = bits_per_cr_scaling_res</td>
       <td> </td>
     </tr>
     <tr>
@@ -1402,7 +1459,7 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
     </tr>
     <tr>
       <td>                    <b class="syntax-element">point_cr_scaling_res[ i ]</b></td>
-      <td>f(BitsRes)</td>
+      <td>f(bitsRes)</td>
     </tr>
     <tr>
       <td>                <b class="syntax-element">cr_scaling_res_granularity</b></td>
@@ -1421,40 +1478,48 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td>f(4)</td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">point_cr_value_increment_bits_minus1</b></td>
+      <td>            if (num_cr_points) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>                <b class="syntax-element">point_cr_value_increment_bits_minus1</b></td>
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>            BitsIncr = point_cr_value_increment_bits_minus1 + 1</td>
+      <td>                bitsIncr = point_cr_value_increment_bits_minus1 + 1</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            point_cr_value[ -1 ] = 0</td>
+      <td>                point_cr_value[ -1 ] = 0</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            point_cr_scaling_bits_minus5</td>
+      <td>                point_cr_scaling_bits_minus5</td>
       <td>f(2)</td>
     </tr>
     <tr>
-      <td>            BitsScal = point_cr_scaling_bits_minus5 + 5</td>
+      <td>                bitsScal = point_cr_scaling_bits_minus5 + 5</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            cr_scaling_offset</td>
+      <td>                cr_scaling_offset</td>
       <td>f(8)</td>
     </tr>
     <tr>
-      <td>            for ( i = 0; i &lt; num_cr_points; i++ ) {</td>
+      <td>                for ( i = 0; i &lt; num_cr_points; i++ ) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>                <b class="syntax-element">point_cr_value_increment[ i ]</b></td>
-      <td>f(BitsIncr)</td>
+      <td>                    <b class="syntax-element">point_cr_value_increment[ i ]</b></td>
+      <td>f(bitsIncr)</td>
     </tr>
     <tr>
-      <td>                <b class="syntax-element">point_cr_scaling[ i ]</b></td>
-      <td>f(BitsScal)</td>
+      <td>                    <b class="syntax-element">point_cr_scaling[ i ]</b></td>
+      <td>f(bitsScal)</td>
+    </tr>
+    <tr>
+      <td>                }</td>
+      <td> </td>
     </tr>
     <tr>
       <td>            }</td>
@@ -1481,19 +1546,19 @@ in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metad
       <td> </td>
     </tr>
     <tr>
-      <td>    bits_per_ar_coeff_y_minus5</td>
-      <td>f(2)</td>
-    </tr>
-    <tr>
-      <td>    BitsArY = bits_per_ar_coeff_y_minus5 + 5</td>
-      <td> </td>
-    </tr>
-    <tr>
       <td>    if ( num_y_points || predict_y_scaling ) {</td>
       <td> </td>
     </tr>
     <tr>
       <td>        numPosChroma = numPosLuma + 1</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>        bits_per_ar_coeff_y_minus5</td>
+      <td>f(2)</td>
+    </tr>
+    <tr>
+      <td>        BitsArY = bits_per_ar_coeff_y_minus5 + 5</td>
       <td> </td>
     </tr>
     <tr>
@@ -1691,7 +1756,11 @@ set shall be provided satisfying the following conditions: (i) apply_horz_resolu
 resolution of the decoded frame » apply_units_resolution_log2, (ii) apply_vert_resolution equal to the luma vertical 
 resolution of the decoded frame » apply_units_resolution_log2, (iii) subsampling_x equal to the chroma horizontal 
 subsampling of the decoded frame, (iv) subsampling_y equal to the chroma vertical subsampling of the decoded frame, 
-and (v) bitdepth equal to the bitdepth of the decoded frame when the bitdepth syntax element is present.</p>
+(v) bitdepth equal to the bitdepth of the decoded frame when the bitdepth syntax element is present, 
+(vi) color_primaries equal to the color primaries of the decoded frame when the color_primaries syntax element is present, 
+(vii) transfer_characteristics equal to the transfer characteristics of the decoded frame when the transfer_characteristics syntax element is present, 
+(viii) matrix_coefficients equal to the matrix coefficients of the decoded frame when the matrix_coefficients syntax element is present, 
+(ix) video_full_range_flag equal to the video full range flag of the decoded frame when the video_full_range_flag syntax element is present.</p>
 
 <p>For a given decoded picture, there shall not be more than one film grain parameter set
 with the same film_grain_param_set_idx value.</p>
@@ -1731,9 +1800,7 @@ from the previous frame in the display order and not the coding order.</p>
 <p><strong>film_grain_param_set_idx</strong> is an index of a film grain parameter set. Up to 8 separate film grain parameter
 sets may be simultaneously stored by the film grain processing module.</p>
 
-<p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.
-For example, in the case of varying output picture resolutions, an encoder may assign different film_grain_param_set_idx to
-film grain parameters that are used with pictures with different output resolutions.</p>
+<p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.</p>
 
 <p><strong>apply_grain</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
 determined in the current av1_film_grain_params function are selected.  apply_grain equal to 0 specifies that the 
@@ -1765,8 +1832,6 @@ When update_grain is equal to 0, a previous set of parameters should be used for
 <p><strong>apply_vert_resolution</strong> indicates the luma vertical resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
 
 <p><strong>apply_horz_resolution</strong> indicates the luma horizontal resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
-
-<p class="alert alert-info">[Ed.note. It is intended to recommend for the encoders to put the FGS parameters corresponding to the decoded picture resolution into the metadata.]</p>
 
 <p><strong>luma_only</strong> equal to 1 specifies that the film grain synthesis parameters do not include U and V color planes.  luma_only
 equal to 0 specifies that the film grain synthesis parameters do include U and V color planes.</p>
@@ -1821,12 +1886,49 @@ and luma_only syntax elements.</p>
   </tbody>
 </table>
 
-<p><strong>video_signal_characteristics_flag</strong> equal to 1 specifies that the syntax element bit_depth_minus8 is present in this message.
-video_signal_characteristics_flag equal to 0 specifies that the syntax element bit_depth_minus8 is not present in this message.</p>
+<p><strong>video_signal_characteristics_flag</strong> equal to 1 specifies that bit_depth_minus8, color_primaries, 
+transfer_characteristics, and matrix_coefficients may be present. video_frame_characteristics_flag equal to 0 specifies 
+that bit_depth_minus8, color_primaries, transfer_characteristics, and matrix_coefficients are not present.</p>
 
 <p><strong>bit_depth_minus8</strong> indicates the bitdepth of the decoded video frame associated with the current film grain parameters.
 When bit_depth_minus8 is not present, the variable BitDepth is derived from the decoded video frame that is associated
 with the current film grain parameters.</p>
+
+<p><strong>cicp_info_present_flag</strong> equal to 1 specifies that color_primaries, transfer_characteristics, and matrix coefficients
+are present.  cicp_info_present_flag equal to 0 specifies that color_primaries, transfer_characteristics, and matrix
+coefficients are not present.</p>
+
+<p><strong>color_primaries</strong> is an integer that indicates the color primaries of the decoded video frame associated with the
+current film grain parameters.  The integer value is defined by the “Color primaries” section of ISO/IEC 23091-4 and/or
+ITU-T H.273.  The syntax element is intended to be informative and is not used in the film grain
+process defined in this specification.  When present, color_primaries should match any color primary information of 
+the decoded video frame that is associated with the current film grain parameters.  The behavior of the film
+grain synthesis process in response to the syntax element not matching the decoded frame associated with the current
+film grain parameters is outside the scope of this specification.</p>
+
+<p><strong>transfer_characteristics</strong> is an integer that indicates the transfer characteristics of the decoded frame associated
+with the current film grain parameters.  The integer value is defined by the “Transfer characteristics” section of 
+ISO/IEC 23091-4 and/or ITU-T H.273.  The syntax element is intended to be informative and is not used in the film grain 
+process defined in this specification.  When present, transfer_characteristics should match any transform characteristic
+information of the decoded video frame that is associated with the current film grain parameters.  The behavior of the film
+grain synthesis process in response to the syntax element not matching the decoded frame associated with the current
+film grain parameters is outside the scope of this specification.</p>
+
+<p><strong>matrix_coefficients</strong> is an integer that indicates the matrix coefficients of the decoded frame associated with the
+current film grain parameters.  The integer value is defined by the “Matrix coefficients” section of ISO/IEC 23091-4 
+and/or ITU-T H.273.  The syntax element is intended to be informative and is not used in the film grain process
+defined in this specification.  When present, matrix_coefficients should match any matrix coefficient information
+of the decoded video frame that is associated with the current film grain parameters.  The behavior of the film
+grain synthesis process in response to the syntax element not matching the decoded frame associated with the current
+film grain parameters is outside the scope of this specification.</p>
+
+<p><strong>video_full_range_flag</strong> is a flag that indicates the scaling and offset values applied in association with the matrix 
+coefficients of the decoded frame associated with the current film grain parameters.  The value is defined by the 
+“Matrix coefficients” section of ISO/IEC 23091-4 and/or ITU-T H.273.  The syntax element is intended to be informative 
+and is not used in the film grain process defined in this specification.  When present, video_full_range_flag should 
+match any video full range information of the decoded video frame that is associated with the current film grain parameters.<br />
+The behavior of the film grain synthesis process in response to the syntax element not matching the decoded frame 
+associated with the current film grain parameters is outside the scope of this specification.</p>
 
 <p><strong>predict_scaling</strong> equal to 0 specifies that scaling functions in the current film grain parameter set
 are not predicted from scaling functions that belong to other film grain parameters sets.
