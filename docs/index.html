@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2024-01-02 21:52 PT</em></p>
+<p><em>Last modified: 2024-01-03 10:10 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -966,11 +966,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">apply_grain</b></td>
+      <td>    <b class="syntax-element">apply_grain_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    if ( !apply_grain ) {</td>
+      <td>    if ( !apply_grain_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -978,7 +978,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        apply_grain = 0</td>
+      <td>        apply_grain_flag = 0</td>
       <td> </td>
     </tr>
     <tr>
@@ -998,11 +998,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td>f(16)</td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">update_grain</b></td>
+      <td>    <b class="syntax-element">update_grain_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    if ( !update_grain ) {</td>
+      <td>    if ( !update_grain_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1014,7 +1014,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        apply_grain = 1</td>
+      <td>        apply_grain_flag = 1</td>
       <td> </td>
     </tr>
     <tr>
@@ -1126,11 +1126,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">predict_scaling</b></td>
+      <td>    <b class="syntax-element">predict_scaling_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    if (predict_scaling) {</td>
+      <td>    if (predict_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1138,7 +1138,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td>f(3)</td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">predict_y_scaling</b></td>
+      <td>        <b class="syntax-element">predict_y_scaling_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
@@ -1146,7 +1146,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        predict_y_scaling = 0</td>
+      <td>        predict_y_scaling_flag = 0</td>
       <td> </td>
     </tr>
     <tr>
@@ -1154,7 +1154,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if (predict_y_scaling) {</td>
+      <td>    if (predict_y_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1258,7 +1258,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        chroma_scaling_from_luma = 0</td>
+      <td>        chroma_scaling_from_luma_flag = 0</td>
       <td> </td>
     </tr>
     <tr>
@@ -1266,7 +1266,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">chroma_scaling_from_luma</b></td>
+      <td>        <b class="syntax-element">chroma_scaling_from_luma_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
@@ -1274,7 +1274,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( luma_only || chroma_scaling_from_luma ) {</td>
+      <td>    if ( luma_only || chroma_scaling_from_luma_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1290,11 +1290,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        if (predict_scaling) {</td>
+      <td>        if (predict_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">predict_cb_scaling</b></td>
+      <td>            <b class="syntax-element">predict_cb_scaling_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
@@ -1302,11 +1302,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>            predict_cb_scaling = 0</td>
+      <td>            predict_cb_scaling_flag = 0</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        if (predict_cb_scaling) {</td>
+      <td>        if (predict_cb_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1410,11 +1410,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>        if (predict_scaling) {</td>
+      <td>        if (predict_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">predict_cr_scaling</b></td>
+      <td>            <b class="syntax-element">predict_cr_scaling_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
@@ -1422,11 +1422,11 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>            predict_cr_scaling = 0</td>
+      <td>            predict_cr_scaling_flag = 0</td>
       <td> </td>
     </tr>
     <tr>
-      <td>        if (predict_cr_scaling) {</td>
+      <td>        if (predict_cr_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1546,7 +1546,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( num_y_points || predict_y_scaling ) {</td>
+      <td>    if ( num_y_points || predict_y_scaling_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1582,7 +1582,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( chroma_scaling_from_luma || num_cb_points  || predict_cb_scaling ) {</td>
+      <td>    if ( chroma_scaling_from_luma_flag || num_cb_points  || predict_cb_scaling_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1606,7 +1606,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( chroma_scaling_from_luma || num_cr_points  || predict_cr_scaling ) {</td>
+      <td>    if ( chroma_scaling_from_luma_flag || num_cr_points  || predict_cr_scaling_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1759,7 +1759,7 @@ subsampling of the decoded frame, (iv) subsampling_y equal to the chroma vertica
 (v) bitdepth equal to the bitdepth of the decoded frame when the bitdepth syntax element is present, 
 (vi) color_primaries equal to the color primaries of the decoded frame when the color_primaries syntax element is present, 
 (vii) transfer_characteristics equal to the transfer characteristics of the decoded frame when the transfer_characteristics syntax element is present, 
-(viii) matrix_coefficients equal to the matrix coefficients of the decoded frame when the matrix_coefficients syntax element is present, 
+(viii) matrix_coefficients equal to the matrix coefficients of the decoded frame when the matrix_coefficients syntax element is present, and
 (ix) video_full_range_flag equal to the video full range flag of the decoded frame when the video_full_range_flag syntax element is present.</p>
 
 <p>For a given decoded picture, there shall not be more than one film grain parameter set
@@ -1794,7 +1794,7 @@ encoded video bitstream.</p>
 scalability layers structure of the bitstream. In particular, the metadata assosiated with lower scalability layers
 should not refer to the film grain parameters associated with higher scalability layers.</p>
 
-<p class="alert alert-info"><strong>Note:</strong> In case of the update_grain equal to 0, the film grain synthesis module should use the parameters
+<p class="alert alert-info"><strong>Note:</strong> In case of the update_grain_flag equal to 0, the film grain synthesis module should use the parameters
 from the previous frame in the display order and not the coding order.</p>
 
 <p><strong>film_grain_param_set_idx</strong> is an index of a film grain parameter set. Up to 8 separate film grain parameter
@@ -1802,8 +1802,8 @@ sets may be simultaneously stored by the film grain processing module.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.</p>
 
-<p><strong>apply_grain</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
-determined in the current av1_film_grain_params function are selected.  apply_grain equal to 0 specifies that the 
+<p><strong>apply_grain_flag</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
+determined in the current av1_film_grain_params function are selected.  apply_grain_flag equal to 0 specifies that the 
 film grain syntehsis process is enabled when the film grain parameters are selected.</p>
 
 <p><strong>save_grain_params( idx )</strong> is a function call that specifies that all syntax elements determined in the 
@@ -1813,19 +1813,19 @@ av1_film_grain_params_function shall be stored in the memory location denoted by
 
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
-<p><strong>update_grain</strong> equal to 1 means that a new set of parameters is sent.
-update_grain equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
+<p><strong>update_grain_flag</strong> equal to 1 means that a new set of parameters is sent.
+update_grain_flag equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
 
 <p>It is a requirement of bitstream conformance that for every distinct value of film_grain_param_set_idx used in a coded video
-sequence, the first picture in the display order with that value of film_grain_param_set_idx that has apply_grain flag equal to 1
-have update_grain equal to 1.</p>
+sequence, the first frame in the display order with that value of film_grain_param_set_idx that has apply_grain_flag flag equal to 1
+have update_grain_flag equal to 1.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with a particular film_grain_param_set_idx value can only
 be infered from previously signaled parameters in the display order with the same value of film_grain_param_set_idx
 in the current coded video sequence.</p>
 
 <p><strong>tempGrainSeed</strong> is a temporary variable that is used to avoid losing the value of grain_seed when load_grain_params is called.
-When update_grain is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
+When update_grain_flag is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
 
 <p><strong>apply_units_resolution_log2</strong> indicates the units used for indicating apply_horz_resolution and apply_vert_resolution.</p>
 
@@ -1930,13 +1930,13 @@ match any video full range information of the decoded video frame that is associ
 The behavior of the film grain synthesis process in response to the syntax element not matching the decoded frame 
 associated with the current film grain parameters is outside the scope of this specification.</p>
 
-<p><strong>predict_scaling</strong> equal to 0 specifies that scaling functions in the current film grain parameter set
+<p><strong>predict_scaling_flag</strong> equal to 0 specifies that scaling functions in the current film grain parameter set
 are not predicted from scaling functions that belong to other film grain parameters sets.
-predict_scaling equal to 1 specifies that scaling functions in the current film grain parameter
+predict_scaling_flag equal to 1 specifies that scaling functions in the current film grain parameter
 set may be predicted from scaling functions that belong to other film grain parameters sets.</p>
 
 <p>It is a requirement of the specification conformance that the film grain parameters set at the
-decoded picture resolution have the predict_scaling flag equal to zero.</p>
+decoded picture resolution have the predict_scaling_flag flag equal to zero.</p>
 
 <p><strong>film_grain_param_set_idx_for_prediction</strong> specifies an index of a film grain parameter set that is used
 for prediction of scaling functions of the current film grain parameter set.</p>
@@ -1944,8 +1944,8 @@ for prediction of scaling functions of the current film grain parameter set.</p>
 <p>It is a requirement of the conformance to the current specification that the values of the film grain parameter
  set with index film_grain_param_set_idx_for_prediction has been initialized with values of the scaling functions that in the current coded video sequence.</p>
 
-<p><strong>predict_y_scaling</strong> equal to 0 indicates that the luma scaling functions in the current film grain parameter set are
-not predicted from a different film grain parameter set. predict_y_scaling equal to 1 indicates that the luma scaling
+<p><strong>predict_y_scaling_flag</strong> equal to 0 indicates that the luma scaling functions in the current film grain parameter set are
+not predicted from a different film grain parameter set. predict_y_scaling_flag equal to 1 indicates that the luma scaling
 functions in the current film grain
 parameter set are predicted from a different film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
 
@@ -1963,7 +1963,7 @@ in the film grain parameter set referenced with film_grain_param_set_idx_for_pre
 
 <p><strong>y_scaling_res_granularity</strong> specifies the granularity with which the difference values for the predicted scaling function are encoded.</p>
 
-<p>When predict_y_scaling parameters is equal to 1, the luma scaling function values are derived as follows</p>
+<p>When predict_y_scaling_flag parameters is equal to 1, the luma scaling function values are derived as follows</p>
 
 <p>It is a requirement of the specification conformance that parameter num_y_points_in_ref is set equal to the
 parameters num_y_points in the film grain parameters set film_grain_param_set_idx_for_prediction. Values
@@ -2011,15 +2011,15 @@ In case of 12 bit video, these values correspond to luma values divided by 16.)<
 <p>point_y_scaling[ i ] represents the scaling (output) value for the i-th point of the piecewise
 linear scaling function for luma component.</p>
 
-<p><strong>chroma_scaling_from_luma</strong> equal to 1 specifies that the chroma scaling is inferred from the luma scaling.
-chroma_scaling_from_luma equal to 0 specifies that the chroma scaling is signaled independently.</p>
+<p><strong>chroma_scaling_from_luma_flag</strong> equal to 1 specifies that the chroma scaling is inferred from the luma scaling.
+chroma_scaling_from_luma_flag equal to 0 specifies that the chroma scaling is signaled independently.</p>
 
-<p><strong>predict_cb_scaling</strong> equal to 0 indicates that the Cb scaling functions in the current film grain parameter
-set are not predicted from a different film grain parameter set. predict_cb_scaling equal to 1 indicates that
+<p><strong>predict_cb_scaling_flag</strong> equal to 0 indicates that the Cb scaling functions in the current film grain parameter
+set are not predicted from a different film grain parameter set. predict_cb_scaling_flag equal to 1 indicates that
 the Cb scaling functions in the current film grain parameter set are predicted from a film grain parameter set
  indicated by film_grain_param_set_idx_for_prediction.</p>
 
-<p>If predict_cb_scaling is equal to 1, variables cb_mult, cb_luma_mult, and cb_offset are set equal to variables
+<p>If predict_cb_scaling_flag is equal to 1, variables cb_mult, cb_luma_mult, and cb_offset are set equal to variables
 cb_mult, cb_luma_mult, and cb_offset in the  film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
 
 <p><strong>cb_scaling_mult</strong> specifies a multiplier used for predicting the Cb film grain scaling function.</p>
@@ -2037,7 +2037,7 @@ using  bits_per_cb_scaling_res bits and is in the [-2 bits_per_cb_value_res-1,  
 <p><strong>cb_scaling_res_granularity</strong> specifies the granularity with which the difference values for
 the predicted scaling function are encoded.</p>
 
-<p>When predict_cb_scaling parameters is equal to 1, the Cb scaling function values are derived as follows</p>
+<p>When predict_cb_scaling_flag parameters is equal to 1, the Cb scaling function values are derived as follows</p>
 
 <p>It is a requirement of the specification conformance that parameter num_cb_points_in_ref is set equal
 to num_cb_points in the film grain parameters set  film_grain_param_set_idx_for_prediction. Values
@@ -2061,7 +2061,7 @@ scaling function of the cb component.</p>
 
 <p>It is a requirement of bitstream conformance that num_cb_points is less than or equal to 10.</p>
 
-<p class="alert alert-info"><strong>Note:</strong> When chroma_scaling_from_luma is equal to 1, it is still allowed for num_y_points to take values up to 14.
+<p class="alert alert-info"><strong>Note:</strong> When chroma_scaling_from_luma_flag is equal to 1, it is still allowed for num_y_points to take values up to 14.
 This means that the chroma scaling also needs to support up to 14 points.</p>
 
 <p><strong>point_cb_value_increment_bits_minus1</strong> specifies the number of bits minus 1 that will be spent on signaling the increments of point_cb_values.</p>
@@ -2089,12 +2089,12 @@ linear scaling function for cb component.</p>
     <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cb_scaling_offset</span><span class="p">.</span>
 </code></pre></div></div>
 
-<p><strong>predict_cr_scaling</strong> equal to 0 indicates that the Cr scaling functions in the current film grain
-parameter set are not predicted from a different film grain parameter set. predict_cr_scaling equal
+<p><strong>predict_cr_scaling_flag</strong> equal to 0 indicates that the Cr scaling functions in the current film grain
+parameter set are not predicted from a different film grain parameter set. predict_cr_scaling_flag equal
 to 1 indicates that the Cr scaling functions in the current film grain parameter set are predicted
 from a film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
 
-<p>If predict_cr_scaling is equal to 1, variables cr_mult, cr_luma_mult, and cr_offset are set equal
+<p>If predict_cr_scaling_flag is equal to 1, variables cr_mult, cr_luma_mult, and cr_offset are set equal
 to variables  cr_mult, cr_luma_mult, and cr_offset in the  film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
 
 <p><strong>cr_scaling_mult</strong> specifies a multiplier used for predicting the Cr film grain scaling function.</p>
@@ -2113,7 +2113,7 @@ is signaled using  bits_per_cb_scaling_res bits and is in the [-2 bits_per_cr_va
 <p><strong>cr_scaling_res_granularity</strong> specifies the granularity with which the difference values for the
 predicted scaling function are encoded.</p>
 
-<p>When predict_cr_scaling parameters is equal to 1, the Cr scaling function values are derived as follows</p>
+<p>When predict_cr_scaling_flag parameters is equal to 1, the Cr scaling function values are derived as follows</p>
 
 <p>It is a requirement of the specification conformance that parameter num_cr_points_in_ref is set equal
 to num_cr_points in the film grain parameters set  film_grain_param_set_idx_for_prediction.
@@ -2296,7 +2296,7 @@ Some applications, such as transcoding from or to another video coding standard,
 
 <p>This process is invoked to process video pictures.</p>
 
-<p>If afgs1_enable_flag is equal to 1 and apply_grain is present and equal to 1, then
+<p>If afgs1_enable_flag is equal to 1 and apply_grain_flag is present and equal to 1, then
 the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a> is invoked with inputs of w, h, SubX, and SubY.</p>
 
 <p>This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
@@ -2434,7 +2434,7 @@ that introduces a correlation with the luma grain.</p>
 <span class="n">RandomRegister</span> <span class="o">=</span> <span class="n">grain_seed</span> <span class="o">^</span> <span class="mh">0xb524</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">chromaH</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">chromaW</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cb_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cb_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">g</span> <span class="o">=</span> <span class="n">Gaussian_Sequence</span><span class="p">[</span> <span class="n">get_random_number</span><span class="p">(</span> <span class="mi">11</span> <span class="p">)</span> <span class="p">]</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
       <span class="n">g</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2445,7 +2445,7 @@ that introduces a correlation with the luma grain.</p>
 <span class="n">RandomRegister</span> <span class="o">=</span> <span class="n">grain_seed</span> <span class="o">^</span> <span class="mh">0x49d8</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">chromaH</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">chromaW</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cr_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cr_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">g</span> <span class="o">=</span> <span class="n">Gaussian_Sequence</span><span class="p">[</span> <span class="n">get_random_number</span><span class="p">(</span> <span class="mi">11</span> <span class="p">)</span> <span class="p">]</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
       <span class="n">g</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2497,7 +2497,7 @@ that introduces a correlation with the luma grain.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> When num_y_points is equal to 0, this process may use uninitialized values within ar_coeffs_y_plus_128 to compute LumaGrain.
 However, LumaGrain will never be read in this case so it does not matter what values are constucted.
-Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_from_luma is equal to 0, the CbGrain/CrGrain arrays will never be read.</p>
+Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_from_luma_flag is equal to 0, the CbGrain/CrGrain arrays will never be read.</p>
 
 <h4 id="scaling-lookup-initialization-process">Scaling lookup initialization process</h4>
 
@@ -2506,7 +2506,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <p>Each lookup table ScalingLut[ plane ] contains 256 entries constructed by a piecewise linear interpolation of the given points as follows:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">plane</span> <span class="o">&lt;</span> <span class="n">NumPlanes</span><span class="p">;</span> <span class="n">plane</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span>
         <span class="n">numPoints</span> <span class="o">=</span> <span class="n">num_y_points</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
         <span class="n">numPoints</span> <span class="o">=</span> <span class="n">num_cb_points</span>
@@ -2539,7 +2539,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <p>where the functions get_x and get_y return the coordinates for a specific point and are specified as:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">get_x</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">i</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span>
         <span class="k">return</span> <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
         <span class="k">return</span> <span class="n">point_cb_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
@@ -2548,7 +2548,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <span class="p">}</span>
 
 <span class="n">get_y</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">i</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span>
         <span class="k">return</span> <span class="n">point_y_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
         <span class="k">return</span> <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
@@ -2692,9 +2692,9 @@ and 1 line buffer for each chroma component.</p>
       <span class="n">averageLuma</span> <span class="o">=</span> <span class="n">Round2</span><span class="p">(</span> <span class="n">OutY</span><span class="p">[</span> <span class="n">lumaY</span> <span class="p">][</span> <span class="n">lumaX</span> <span class="p">]</span> <span class="o">+</span> <span class="n">OutY</span><span class="p">[</span> <span class="n">lumaY</span> <span class="p">][</span> <span class="n">lumaNextX</span> <span class="p">],</span> <span class="mi">1</span> <span class="p">)</span>
     <span class="k">else</span>
       <span class="n">averageLuma</span> <span class="o">=</span> <span class="n">OutY</span><span class="p">[</span> <span class="n">lumaY</span> <span class="p">][</span> <span class="n">lumaX</span> <span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cb_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cb_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span> <span class="p">{</span>
       <span class="n">orig</span> <span class="o">=</span> <span class="n">OutU</span><span class="p">[</span> <span class="n">y</span> <span class="p">][</span> <span class="n">x</span> <span class="p">]</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="n">chroma_scaling_from_luma</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span> <span class="p">{</span>
         <span class="n">merged</span> <span class="o">=</span> <span class="n">averageLuma</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="n">combined</span> <span class="o">=</span> <span class="n">averageLuma</span> <span class="o">*</span> <span class="p">(</span> <span class="n">cb_luma_mult</span> <span class="o">-</span> <span class="mi">128</span> <span class="p">)</span> <span class="o">+</span> <span class="n">orig</span> <span class="o">*</span> <span class="p">(</span> <span class="n">cb_mult</span> <span class="o">-</span> <span class="mi">128</span> <span class="p">)</span>
@@ -2705,9 +2705,9 @@ and 1 line buffer for each chroma component.</p>
       <span class="n">OutU</span><span class="p">[</span> <span class="n">y</span> <span class="p">][</span> <span class="n">x</span> <span class="p">]</span> <span class="o">=</span> <span class="n">Clip3</span><span class="p">(</span> <span class="n">minValue</span><span class="p">,</span> <span class="n">maxChroma</span><span class="p">,</span> <span class="n">orig</span> <span class="o">+</span> <span class="n">noise</span> <span class="p">)</span>
     <span class="p">}</span>
 
-    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cr_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">num_cr_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">orig</span> <span class="o">=</span> <span class="n">OutV</span><span class="p">[</span> <span class="n">y</span> <span class="p">][</span> <span class="n">x</span> <span class="p">]</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="n">chroma_scaling_from_luma</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span> <span class="p">{</span>
         <span class="n">merged</span> <span class="o">=</span> <span class="n">averageLuma</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="n">combined</span> <span class="o">=</span> <span class="n">averageLuma</span> <span class="o">*</span> <span class="p">(</span> <span class="n">cr_luma_mult</span> <span class="o">-</span> <span class="mi">128</span> <span class="p">)</span> <span class="o">+</span> <span class="n">orig</span> <span class="o">*</span> <span class="p">(</span> <span class="n">cr_mult</span> <span class="o">-</span> <span class="mi">128</span> <span class="p">)</span>
