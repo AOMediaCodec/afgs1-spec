@@ -21,13 +21,6 @@ version_date: Released 2022-xx-xx
 {% include_relative 09.parsing.process.md %}
 {% include_relative 10.additional.tables.md %}
 
-
-{::options parse_block_html="true" /}
-<div class="annex">
-{::options parse_block_html="false" /}
-{% include_relative annex.a.levels.md %}
-</div>
-
 {% include_relative bibliography.md %}
 
 {% comment %}
