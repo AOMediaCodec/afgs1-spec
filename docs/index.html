@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2024-01-03 10:10 PT</em></p>
+<p><em>Last modified: 2024-01-06 20:26 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -83,20 +83,22 @@ Signaling of the film grain parameters can be done using ITU-T T.35 registered u
   <li><a href="#syntax-structures" id="markdown-toc-syntax-structures">Syntax structures</a>    <ul>
       <li><a href="#general-1" id="markdown-toc-general-1">General</a></li>
       <li><a href="#aomedia-itu-t-t35-metadata-syntax" id="markdown-toc-aomedia-itu-t-t35-metadata-syntax">AOMedia ITU-T T.35 metadata syntax</a></li>
-      <li><a href="#aomedia-itu-t-t35-payload-syntax" id="markdown-toc-aomedia-itu-t-t35-payload-syntax">AOMedia ITU-T T.35 payload syntax</a></li>
       <li><a href="#film-grain-parameter-sets-syntax" id="markdown-toc-film-grain-parameter-sets-syntax">Film grain parameter sets syntax</a></li>
+      <li><a href="#film-grain-parameter-payload-syntax" id="markdown-toc-film-grain-parameter-payload-syntax">Film grain parameter payload syntax</a></li>
       <li><a href="#film-grain-parameters-syntax" id="markdown-toc-film-grain-parameters-syntax">Film grain parameters syntax</a></li>
+      <li><a href="#padding-bits-syntax" id="markdown-toc-padding-bits-syntax">Padding bits syntax</a></li>
     </ul>
   </li>
   <li><a href="#syntax-structures-semantics" id="markdown-toc-syntax-structures-semantics">Syntax structures semantics</a>    <ul>
       <li><a href="#general-2" id="markdown-toc-general-2">General</a></li>
       <li><a href="#aomedia-itu-t-t35-metadata-semantics" id="markdown-toc-aomedia-itu-t-t35-metadata-semantics">AOMedia ITU-T T.35 metadata semantics</a></li>
-      <li><a href="#aomedia-itu-t-t35-payload-semantics" id="markdown-toc-aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</a></li>
       <li><a href="#film-grain-parameter-sets-semantics" id="markdown-toc-film-grain-parameter-sets-semantics">Film grain parameter sets semantics</a>        <ul>
           <li><a href="#conformance" id="markdown-toc-conformance">Conformance</a></li>
         </ul>
       </li>
+      <li><a href="#film-grain-parameter-payload-semantics" id="markdown-toc-film-grain-parameter-payload-semantics">Film grain parameter payload semantics</a></li>
       <li><a href="#film-grain-parameters-semantics" id="markdown-toc-film-grain-parameters-semantics">Film grain parameters semantics</a></li>
+      <li><a href="#padding-bits-semantics" id="markdown-toc-padding-bits-semantics">Padding bits semantics</a></li>
     </ul>
   </li>
   <li><a href="#conformance-requirements" id="markdown-toc-conformance-requirements">Conformance requirements</a></li>
@@ -123,8 +125,8 @@ Signaling of the film grain parameters can be done using ITU-T T.35 registered u
 <h2 id="scope">Scope</h2>
 
 <p>This document specifies the syntax, semantics, and decoding process for the AOMedia Film Grain 
-Synthesis process. The process can be used with any video coding or transport mechanism.  This includes
-the use of ITU-T T.35 signaling, and this use is also specified in this document. Alternatively, the payload 
+Synthesis process. The process can be used with any video coding or transport mechanism. This includes
+the use of ITU-T T.35 based signaling, and this use is also specified in this document. Alternatively, the payload 
 can be carried by other suitable transport mechanisms.</p>
 
 <p>This specification is based on the film grain modeling process that is specified 
@@ -184,38 +186,30 @@ matrices) or its single sample value.</p>
   </dd>
   <dt>Decoded picture</dt>
   <dd>
-    <p>The picture reconstructed out of the bitstream by the decoder.</p>
+    <p>The picture reconstructed out of the bitstream by the video decoder.</p>
   </dd>
-  <dt>Video decoder</dt>
+  <dt>Field</dt>
   <dd>
-    <p>One embodiment of the video decoding process.</p>
-  </dd>
-  <dt>Video decoding process</dt>
-  <dd>
-    <p>The process that derives decoded pictures from syntax elements, including any processing 
-steps used prior to and generating decoded video pictures.</p>
-  </dd>
-  <dt>Video encoding process</dt>
-  <dd>
-    <p>A process not specified in this Specification that generates a video bitstream.</p>
-  </dd>
-  <dt>Film grain synthesis process</dt>
-  <dd>
-    <p>The process that derives film grain parameters from syntax elements, including any processing 
-steps used  for the film grain synthesis process.</p>
-  </dd>
-  <dt>Film grain synthesis module</dt>
-  <dd>
-    <p>One embodiment of the film grain synthesis process.</p>
-  </dd>
-  <dt>Film grain analyzer</dt>
-  <dd>
-    <p>One embodiment of the film grain analysis process.</p>
+    <p>A collection of samples from alternate rows of a frame. A frame is composed of two fields, 
+a top field and a bottom field.</p>
   </dd>
   <dt>Film grain analysis process</dt>
   <dd>
     <p>A process not specified in this Specification that generates film grain parameters
 that conforms to the description provided in this document.</p>
+  </dd>
+  <dt>Film grain analyzer</dt>
+  <dd>
+    <p>One embodiment of the film grain analysis process.</p>
+  </dd>
+  <dt>Film grain synthesis module</dt>
+  <dd>
+    <p>One embodiment of the film grain synthesis process.</p>
+  </dd>
+  <dt>Film grain synthesis process</dt>
+  <dd>
+    <p>The process that derives film grain parameters from syntax elements, including any processing 
+steps used for the film grain synthesis process.</p>
   </dd>
   <dt>Flag</dt>
   <dd>
@@ -229,18 +223,6 @@ syntax element can only be equal to 0 or equal to 1.</p>
 where the top and bottom fields correspond to samples from even and odd numbered rows respectively. 
 A frame may be composed of one
 luma sample matrix (Y) and optionally two chroma sample matrices (U and V).</p>
-  </dd>
-  <dt>Field</dt>
-  <dd>
-    <p>A collection of samples from alternate rows of a frame. A frame is composed of two fields, 
-a top field and a bottom field.</p>
-  </dd>
-  <dt>Picture</dt>
-  <dd>
-    <p>The representation of video signals in the spatial domain, composed of one
-luma sample matrix (Y) and , optionally, two chroma sample matrices (U and V) 
-in a 4:2:0, 4:2:2, 4:4:4, 4:0:0 color format. The picture could be either a 
-frame or a field.</p>
   </dd>
   <dt>Key picture</dt>
   <dd>
@@ -256,6 +238,13 @@ signal related to the primary colors.</p>
   <dt>Parse</dt>
   <dd>
     <p>The procedure of getting the syntax element from the bitstream.</p>
+  </dd>
+  <dt>Picture</dt>
+  <dd>
+    <p>The representation of video signals in the spatial domain, composed of one
+luma sample matrix (Y) and , optionally, two chroma sample matrices (U and V) 
+in a 4:2:0, 4:2:2, 4:4:4, 4:0:0 color format. The picture could be either a 
+frame or a field.</p>
   </dd>
   <dt>Profile</dt>
   <dd>
@@ -277,7 +266,7 @@ the third row, and so on. Each raster row is scanned in left to right order.</p>
     <p>Obtaining the addition of the decoded residual and the corresponding
 prediction values.</p>
 
-    <p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (I would assume that here we reconstruct noise and we add it on the images. There is no residual. Correct? We likely need to redefine this term for this document assuming it is needed. Same for other terms in this document, such as “reference”)
+    <p>[AMT]: # (I would assume that here we reconstruct noise and we add it on the images. There is no residual. Correct? We likely need to redefine this term for this document assuming it is needed. Same for other terms in this document, such as “reference”)
 [ToDo] Clean-up the reconstruction usage in this specification.</p>
   </dd>
   <dt>Reference</dt>
@@ -310,6 +299,19 @@ several consecutive coded picture.</p>
   <dt>Syntax element</dt>
   <dd>
     <p>An element of data represented in the bitstream.</p>
+  </dd>
+  <dt>Video decoder</dt>
+  <dd>
+    <p>One embodiment of the video decoding process.</p>
+  </dd>
+  <dt>Video decoding process</dt>
+  <dd>
+    <p>The process that derives decoded pictures from syntax elements, including any processing 
+steps used prior to and after generating the decoded video pictures.</p>
+  </dd>
+  <dt>Video encoding process</dt>
+  <dd>
+    <p>A process not specified in this Specification that generates a video bitstream.</p>
   </dd>
 </dl>
 
@@ -796,6 +798,11 @@ section is called syntax if it causes syntax elements to be read from the
 bitstream, either directly or indirectly through subprocesses. The remaining
 sections are called functions.</p>
 
+<p>The specification of these functions makes use of a bitstream position indicator. This bitstream position indicator locates
+the position of the bit that is going to be read next.</p>
+
+<p><b class="syntax-element">get_position</b>( ): Return the value of the bitstream position indicator.</p>
+
 <h3 id="descriptors">Descriptors</h3>
 
 <h4 id="fn">f(n)</h4>
@@ -816,7 +823,7 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
 <table class="syntax">
   <tbody>
     <tr>
-      <td>metadata_itut_t35( ) {</td>
+      <td>metadata_aom_itu_t_t35( ) {</td>
       <td><strong>Type</strong></td>
     </tr>
     <tr>
@@ -824,46 +831,8 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td>f(8)</td>
     </tr>
     <tr>
-      <td>    if ( itu_t_t35_country_code == 0xB5 ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>        <b class="syntax-element">itu_t_t35_terminal_provider_code</b></td>
+      <td>    <b class="syntax-element">itu_t_t35_terminal_provider_code</b></td>
       <td>f(16)</td>
-    </tr>
-    <tr>
-      <td>        if ( itu_t_t35_terminal_provider_code == 0x5890 ) {</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>            aom_itu_t_t35_payload()</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>    }</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>}</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<p class="alert alert-info"><strong>Note:</strong> The last byte of the valid content of the data is
-considered to be the last byte that is not equal to zero. This rule is to
-prevent the dropping of valid bytes by systems that interpret trailing zero
-bytes as a padding continuation of the trailing bits.
-This implies that when any payload data is present,
-at least one byte of the payload data (including the trailing bit) shall not be equal to 0.</p>
-
-<h3 id="aomedia-itu-t-t35-payload-syntax">AOMedia ITU-T T.35 payload syntax</h3>
-
-<table class="syntax">
-  <tbody>
-    <tr>
-      <td>aom_itu_t_t35_payload( ) {</td>
-      <td><strong>Type</strong></td>
     </tr>
     <tr>
       <td>    <b class="syntax-element">itu_t_t35_terminal_provider_oriented_code</b></td>
@@ -887,16 +856,6 @@ at least one byte of the payload data (including the trailing bit) shall not be 
     </tr>
   </tbody>
 </table>
-
-<p class="alert alert-info"><strong>Note:</strong> This specification only provides the value of the
-itu_t_t35_terminal_provider_oriented_code that
-identifies the av1 film grain parameters metadata.
-The complete syntax of aom_itu_t_t35_payload( ) and the list of values for
-AOMedia itu_t_t35_terminal_provider_oriented_code are outside the scope of this specification.</p>
-
-<p class="alert alert-info"><strong>Note:</strong> The syntax tables above define the signaling of the AFGS film grain parameter
-information as user data registered according to ITU-T Recommendation T.35.  Other methods 
-for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
 
 <h3 id="film-grain-parameter-sets-syntax">Film grain parameter sets syntax</h3>
 
@@ -923,6 +882,14 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
+      <td>    /* Add reserved bits so that av1_film_grain_payload is byte aligned */</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    <b class="syntax-element">reserved_4bits</b></td>
+      <td>f(4)</td>
+    </tr>
+    <tr>
       <td>    <b class="syntax-element">num_film_grain_sets_minus1</b></td>
       <td>f(3)</td>
     </tr>
@@ -931,7 +898,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>       av1_film_grain_params( )</td>
+      <td>       av1_film_grain_payload( )</td>
       <td> </td>
     </tr>
     <tr>
@@ -944,6 +911,109 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
     </tr>
     <tr>
       <td>    load_grain_params( selectedParamSet )</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>}</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="film-grain-parameter-payload-syntax">Film grain parameter payload syntax</h3>
+
+<table class="syntax">
+  <tbody>
+    <tr>
+      <td>av1_film_grain_payload( ) {</td>
+      <td><strong>Type</strong></td>
+    </tr>
+    <tr>
+      <td>    /* Store the current bit-stream position</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    startPosition = get_position( )</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    /* Receive the payload size.  Note that a (very) large percentage</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    of film grain parameter messages will be 21 bits.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    (This occurs when update_grain is equal to 0.)  Receive the</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    size of these messages with 3 bits so that there is no additional</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    overhead for byte alignment in this case. */</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    <b class="syntax-element">payload_less_than_4byte_flag</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>    n = payload_less_than_4byte_flag ? 2 : 8</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    <b class="syntax-element">payload_size</b></td>
+      <td>f(n)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    /* Receive the film grain parameters */</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    av1_film_grain_params( )</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    /* Determine the number of bits consumed by the payload */</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    currentPosition = get_position( )</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    payloadBits = currentPosition - startPosition</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    / * Zero pad (and byte align) to the payload size</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    padding_bits( payload_size * 8 - payloadBits )</td>
       <td> </td>
     </tr>
     <tr>
@@ -1046,7 +1116,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td>f(12)</td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">luma_only</b></td>
+      <td>    <b class="syntax-element">luma_only_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
@@ -1054,7 +1124,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( !luma_only ) {</td>
+      <td>    if ( !luma_only_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1254,7 +1324,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( luma_only ) {</td>
+      <td>    if ( luma_only_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1274,7 +1344,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( luma_only || chroma_scaling_from_luma_flag ) {</td>
+      <td>    if ( luma_only_flag || chroma_scaling_from_luma_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1534,7 +1604,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">grain_scaling_minus_8</b></td>
+      <td>    <b class="syntax-element">grain_scaling_minus8</b></td>
       <td>f(2)</td>
     </tr>
     <tr>
@@ -1630,7 +1700,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td> </td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">ar_coeff_shift_minus_6</b></td>
+      <td>    <b class="syntax-element">ar_coeff_shift_minus6</b></td>
       <td>f(2)</td>
     </tr>
     <tr>
@@ -1682,7 +1752,7 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
       <td>f(1)</td>
     </tr>
     <tr>
-      <td>    <b class="syntax-element">clip_to_restricted_range</b></td>
+      <td>    <b class="syntax-element">clip_to_restricted_range_flag</b></td>
       <td>f(1)</td>
     </tr>
     <tr>
@@ -1696,41 +1766,68 @@ for indicating the av1_film_grain_param_sets( ) are also allowed.</p>
   </tbody>
 </table>
 
+<h3 id="padding-bits-syntax">Padding bits syntax</h3>
+
+<table class="syntax">
+  <tbody>
+    <tr>
+      <td>padding_bits( nbBits ) {</td>
+      <td><strong>Type</strong></td>
+    </tr>
+    <tr>
+      <td>    while( nbBits &gt; 0 ) {</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>       <b class="syntax-element">padding_zero_bit</b></td>
+      <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>       nbBits--</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>    }</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>}</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="syntax-structures-semantics">Syntax structures semantics</h2>
 
 <h3 id="general-2">General</h3>
 
-<p>This section specifies the meaning of the syntax elements read in the syntax
+<p>This section specifies the meaning of the syntax elements present in the syntax
 structures.</p>
 
 <p>Important variables and function calls are also described.</p>
 
 <h3 id="aomedia-itu-t-t35-metadata-semantics">AOMedia ITU-T T.35 metadata semantics</h3>
 
-<p><strong>itu_t_t35_country_code</strong> is a syntax element that corresponds to the syntax element itu_t_t35_terminal_provider_code in an ITU-T T.35 user registered metadata syntax. Its value shall be equal to 0xB5, which indicates that the
-itu_t_t35_terminal_provider_code is registered in the United States.</p>
+<p><strong>itu_t_t35_country_code</strong> is a syntax element that corresponds to the country code
+in an ITU-T T.35 user registered metadata syntax.  itu_t_t35_country_code shall be equal
+to 0xB5 for bitstreams conforming to this version of the specification.</p>
 
-<p><strong>itu_t_t35_terminal_provider_code</strong> are two bytes having values specified as a terminal
-provider code in
-<a href="https://cdn.cta.tech/cta/media/media/resources/standards/pdfs/manucode_2020-2.pdf">reference name required</a>.
-itu_t_t35_terminal_provider_code equal to 0x5890 indicates that the ITU-T T.35 payload is
-specified by AOMedia.</p>
+<p><strong>itu_t_t35_terminal_provider_code</strong> is a syntax element that corresponds to a terminal
+provider code in an ITU-T T.35 user registered metadata syntax.  itu_t_t35_terminal_provider_code 
+shall be equal to 0x5890 for bitstreams conforming to this version of the  specification.</p>
 
-<h3 id="aomedia-itu-t-t35-payload-semantics">AOMedia ITU-T T.35 payload semantics</h3>
-
-<p><strong>itu_t_t35_terminal_provider_oriented_code</strong> provides the value of the
-ITU-T T.35 terminal provider oriented code that is defined
-in the <a href="https://aomediacodec.github.io/metadata-registry/">AOMedia metadata registry</a> specification.
-itu_t_t35_terminal_provider_oriented_code equal to 0x0001 indicates that the ITU-T T.35 payload
-contains AOMedia film grain parameters, as defined by this specification.</p>
+<p><strong>itu_t_t35_terminal_provider_oriented_code</strong> shall be equal to 0x01 for bitstreams 
+conforming to this version of the specification.</p>
 
 <h3 id="film-grain-parameter-sets-semantics">Film grain parameter sets semantics</h3>
 
-<p><strong>afgs_enable_flag</strong> equal to 1 specifies that the film grain synthesis process is applied to the decoded frame
-associated with the current message.  afgs_enable_flag equal to 0 specifies that the film grain synthesis process is not 
-applied to the decoded frame associated with the current message.</p>
+<p><strong>afgs_enable_flag</strong> equal to 1 specifies that the film grain synthesis process is applied to the decoded picture
+associated with the current av1_film_grain_param_sets function.  afgs_enable_flag equal to 0 specifies that the film grain synthesis process is not 
+applied to the decoded picture associated with the current av1_film_grain_param_sets function.</p>
 
-<p><strong>num_film_grain_sets_minus1</strong> plus 1 specifies the number of signaled film grain parameter sets.</p>
+<p><strong>reserved_4bits</strong> must be set to 0.  The value is ignored by a decoder.</p>
+
+<p><strong>num_film_grain_sets_minus1</strong> plus 1 specifies the number of signaled film grain parameter sets in the current av1_film_grain_param_sets function.</p>
 
 <p><strong>select_film_grain_param_set()</strong> is a function call that returns the index of the film grain parameter
 set signaled in the current av1_film_grain_param_sets function that is most appropriate for the current
@@ -1741,7 +1838,7 @@ parameter set having the largest spatial resolution that is both supported by th
 process of the decoder and is less than or equal to the intended display resolution.</p>
 
 <p><strong>load_grain_params( idx )</strong> is a function call that specifies that all syntax elements determined in the 
-av1_film_grain_parmas function and all variables beginning with upper case determined in the av1_film_grain_params
+av1_film_grain_params function and all variables beginning with upper case determined in the av1_film_grain_params
 function shall be set equal to the values located in the memory location denoted by idx.</p>
 
 <h4 id="conformance">Conformance</h4>
@@ -1753,14 +1850,14 @@ combination of luma horizontal and luma vertical resolution.</p>
 
 <p>For a given decoded picture, if film grain parameter sets are associated with this picture, one film grain parameter 
 set shall be provided satisfying the following conditions: (i) apply_horz_resolution equal to the luma horizontal 
-resolution of the decoded frame » apply_units_resolution_log2, (ii) apply_vert_resolution equal to the luma vertical 
-resolution of the decoded frame » apply_units_resolution_log2, (iii) subsampling_x equal to the chroma horizontal 
-subsampling of the decoded frame, (iv) subsampling_y equal to the chroma vertical subsampling of the decoded frame, 
-(v) bitdepth equal to the bitdepth of the decoded frame when the bitdepth syntax element is present, 
-(vi) color_primaries equal to the color primaries of the decoded frame when the color_primaries syntax element is present, 
-(vii) transfer_characteristics equal to the transfer characteristics of the decoded frame when the transfer_characteristics syntax element is present, 
-(viii) matrix_coefficients equal to the matrix coefficients of the decoded frame when the matrix_coefficients syntax element is present, and
-(ix) video_full_range_flag equal to the video full range flag of the decoded frame when the video_full_range_flag syntax element is present.</p>
+resolution of the decoded picture » apply_units_resolution_log2, (ii) apply_vert_resolution equal to the luma vertical 
+resolution of the decoded picture » apply_units_resolution_log2, (iii) subsampling_x equal to the chroma horizontal 
+subsampling of the decoded picture, (iv) subsampling_y equal to the chroma vertical subsampling of the decoded picture, 
+(v) bitdepth equal to the bitdepth of the decoded picture when the bitdepth syntax element is present, 
+(vi) color_primaries equal to the color primaries of the decoded picture when the color_primaries syntax element is present, 
+(vii) transfer_characteristics equal to the transfer characteristics of the decoded picture when the transfer_characteristics syntax element is present, 
+(viii) matrix_coefficients equal to the matrix coefficients of the decoded picture when the matrix_coefficients syntax element is present, and
+(ix) video_full_range_flag equal to the video full range flag of the decoded picture when the video_full_range_flag syntax element is present.</p>
 
 <p>For a given decoded picture, there shall not be more than one film grain parameter set
 with the same film_grain_param_set_idx value.</p>
@@ -1774,10 +1871,23 @@ decoded picture resolution, there shall not be more than one film grain paramete
 correspond to the same resolution, and film grain parameter sets related to the same
 decoded picture shall each use a unique of film_grain_param_set_idx.</p>
 
+<h3 id="film-grain-parameter-payload-semantics">Film grain parameter payload semantics</h3>
+<p><strong>payload_less_than_4byte_flag</strong> equal to 1 specifies that the number of bytes used by the data in the current
+av1_film_grain_payload is less than four bytes.  payload_less_than_4byte_flag equal to 0 specifies that the number of
+bytes used by the data in the current av1_film_grain_payload may be equal to four or more bytes.</p>
+
+<p><strong>payload_size</strong> specifies the number of bytes used by the data in the current av1_film_grain_payload.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> The number of bytes used by the data in the current av1_film_grain_payload includes the 
+payload_less_than_4byte_flag and payload_size syntax elements, all syntax elements in the av1_film_grain_params function 
+(and any sub-functions), as well as optional zero padding bytes.  The zero padding
+bytes can be useful for applications that choose to create an av1_film_grain_payload prior to determining the 
+payload contents.</p>
+
 <h3 id="film-grain-parameters-semantics">Film grain parameters semantics</h3>
 
 <p>This metadata provides the post-processing module with a model for parameterized film grain
-synthesis. The film grain process is applied to frames output by a video decoder or
+synthesis. The film grain process is applied to pictures output by a video decoder or
 a video post-processing module. The film grain synthesis should be applied at the resolution 
 specified for the selected film grain parameter set.</p>
 
@@ -1791,70 +1901,79 @@ is associated with the coded video picture that follows the current metadata mes
 encoded video bitstream.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> When coding the film grain parameters in this metadata message, the encoder should consider the 
-scalability layers structure of the bitstream. In particular, the metadata assosiated with lower scalability layers
+scalability layering structure of the bitstream. In particular, the metadata assosiated with lower scalability layers
 should not refer to the film grain parameters associated with higher scalability layers.</p>
 
-<p class="alert alert-info"><strong>Note:</strong> In case of the update_grain_flag equal to 0, the film grain synthesis module should use the parameters
-from the previous frame in the display order and not the coding order.</p>
-
-<p><strong>film_grain_param_set_idx</strong> is an index of a film grain parameter set. Up to 8 separate film grain parameter
-sets may be simultaneously stored by the film grain processing module.</p>
+<p><strong>film_grain_param_set_idx</strong> specifies the index of a film grain parameter set. Up to 8 separate film grain parameter
+sets can be simultaneously stored by the film grain processing module.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.</p>
 
 <p><strong>apply_grain_flag</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
 determined in the current av1_film_grain_params function are selected.  apply_grain_flag equal to 0 specifies that the 
-film grain syntehsis process is enabled when the film grain parameters are selected.</p>
+film grain synthesis process is enabled when the film grain parameters are selected.</p>
 
 <p><strong>save_grain_params( idx )</strong> is a function call that specifies that all syntax elements determined in the 
-av1_film_grain_params_function and all variables beginning with upper case determined in the 
-av1_film_grain_params_function shall be stored in the memory location denoted by idx.
-<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Better if such processes are clearly specified)</p>
+av1_film_grain_params function and all variables beginning with upper case determined in the 
+av1_film_grain_params function shall be stored in the memory location denoted by idx.</p>
 
 <p><strong>grain_seed</strong> specifies the starting value for the pseudo-random numbers used during film grain synthesis.</p>
 
-<p><strong>update_grain_flag</strong> equal to 1 means that a new set of parameters is sent.
-update_grain_flag equal to 0 means that the previous set of parameters in the frame display order should be used.</p>
+<p><strong>update_grain_flag</strong> equal to 1 specifies the presence of a new set of film grain parameters. update_grain_flag equal to 0 
+specifies that a set of film grain parameters corresponding to the film_grain_param_set_idx value should be used.</p>
 
-<p>It is a requirement of bitstream conformance that for every distinct value of film_grain_param_set_idx used in a coded video
-sequence, the first frame in the display order with that value of film_grain_param_set_idx that has apply_grain_flag flag equal to 1
+<p>It is a requirement of the specification conformance that for every distinct value of film_grain_param_set_idx used in a coded video
+sequence, the first frame in the decoding order with that value of film_grain_param_set_idx that has apply_grain_flag flag equal to 1
 have update_grain_flag equal to 1.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with a particular film_grain_param_set_idx value can only
-be infered from previously signaled parameters in the display order with the same value of film_grain_param_set_idx
+be inferred from previously signaled parameters in the frame decoding order with the same value of film_grain_param_set_idx
 in the current coded video sequence.</p>
 
-<p><strong>tempGrainSeed</strong> is a temporary variable that is used to avoid losing the value of grain_seed when load_grain_params is called.
-When update_grain_flag is equal to 0, a previous set of parameters should be used for everything except grain_seed.</p>
+<p>It is a requirement of the specification conformance that if (i) update_grain_flag is equal to zero, (ii) apply_horz_resolution equal to 
+the luma horizontal resolution of the decoded frame » apply_units_resolution_log2, and (iii) apply_vert_resolution equal to the luma 
+vertical resolution of the decoded frame » apply_units_resolution_log2 then the film_grain_param_set_idx shall reference the 
+film grain parameters set that when the save_grain_params( film_grain_param_set_idx ) function was called, the following conditions were true
+(i) update_grain_flag was equal to 1, (ii) apply_horz_resolution was equal to 
+the luma horizontal resolution of the decoded frame » apply_units_resolution_log2, and (iii) apply_vert_resolution was equal to the luma 
+vertical resolution of the decoded frame » apply_units_resolution_log2.</p>
 
-<p><strong>apply_units_resolution_log2</strong> indicates the units used for indicating apply_horz_resolution and apply_vert_resolution.</p>
+<p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with the decoded picture resolution can only
+be inferred from previously signaled parameters that corresponded to the decoded picture resolution. This requirement is 
+intended to make sure that bitstreams that exercise variable decoded picture resolution do not copy the film grain parameters
+for the decoded picture resolutions from frames that were not at a decoded picture resolutions. This requirements helps
+decoders that only use (and store) film grain parameter sets that correspond to the decoded picture resolution.</p>
 
-<p><strong>apply_vert_resolution</strong> indicates the luma vertical resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
+<p><strong>tempGrainSeed</strong> is a temporary variable that is used to preserve the value of grain_seed when load_grain_params is called.</p>
 
-<p><strong>apply_horz_resolution</strong> indicates the luma horizontal resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
+<p><strong>apply_units_resolution_log2</strong> specifies the units used for indicating apply_horz_resolution and apply_vert_resolution.</p>
 
-<p><strong>luma_only</strong> equal to 1 specifies that the film grain synthesis parameters do not include U and V color planes.  luma_only
-equal to 0 specifies that the film grain synthesis parameters do include U and V color planes.</p>
+<p><strong>apply_vert_resolution</strong> specifies the luma vertical resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
+
+<p><strong>apply_horz_resolution</strong> specifies the luma horizontal resolution corresponding to the film grain synthesis parameters in units of 1 « apply_units_resolution_log2 luma samples.</p>
+
+<p><strong>luma_only_flag</strong> equal to 1 specifies that the film grain synthesis parameters in the current set do not include U and V color planes.  luma_only_flag
+equal to 0 specifies that the film grain synthesis parameters in the current set include U and V color planes.</p>
 
 <p><strong>subsampling_x</strong> equal to 0 specifies that the horizontal resolution of the chroma component of the film grain 
-synthesis parameters is the same as the horizontal resolution of the luma component.  subsampling_x equal to 1
-specifies that the horizontal resolution of the chroma component of the film grain synthesis parameters is equal to
+synthesis parameters in the current set is the same as the horizontal resolution of the luma component.  subsampling_x equal to 1
+specifies that the horizontal resolution of the chroma component of the film grain synthesis parameters in the current set is equal to
 the horizontal resolution of the luma component subsampled by a factor of two.</p>
 
 <p><strong>subsampling_y</strong> equal to 0 specifies that the vertical resolution of the chroma component of the film grain
-synthesis parameters is the same as the vertical resolution of the luma component.  subsampling_y equal to 1
-specifies that the vertical resolution of the chroma component of the film grain synthesis parameters is equal to
+synthesis parameters in the current set is the same as the vertical resolution of the luma component.  subsampling_y equal to 1
+specifies that the vertical resolution of the chroma component of the film grain synthesis parameters in the current set is equal to
 the vertical resolution of the luma component subsampled by a factor of two.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> The table below shows example mappings between common image formats and values for the subsampling_x, subsampling_y,
-and luma_only syntax elements.</p>
+and luma_only_flag syntax elements.</p>
 
 <table class="table table-sm table-bordered alert alert-info">
   <thead>
     <tr>
       <th>subsampling_x</th>
       <th>subsampling_y</th>
-      <th>luma_only</th>
+      <th>luma_only_flag</th>
       <th>Description</th>
     </tr>
   </thead>
@@ -1887,163 +2006,172 @@ and luma_only syntax elements.</p>
 </table>
 
 <p><strong>video_signal_characteristics_flag</strong> equal to 1 specifies that bit_depth_minus8, color_primaries, 
-transfer_characteristics, and matrix_coefficients may be present. video_frame_characteristics_flag equal to 0 specifies 
+transfer_characteristics, and matrix_coefficients may be present. video_signal_characteristics_flag equal to 0 specifies 
 that bit_depth_minus8, color_primaries, transfer_characteristics, and matrix_coefficients are not present.</p>
 
-<p><strong>bit_depth_minus8</strong> indicates the bitdepth of the decoded video frame associated with the current film grain parameters.
-When bit_depth_minus8 is not present, the variable BitDepth is derived from the decoded video frame that is associated
+<p><strong>bit_depth_minus8</strong> indicates the bitdepth of the decoded video picture associated with the current film grain parameters.
+When bit_depth_minus8 is not present, the variable BitDepth is derived from the decoded video picture that is associated
 with the current film grain parameters.</p>
 
 <p><strong>cicp_info_present_flag</strong> equal to 1 specifies that color_primaries, transfer_characteristics, and matrix coefficients
 are present.  cicp_info_present_flag equal to 0 specifies that color_primaries, transfer_characteristics, and matrix
 coefficients are not present.</p>
 
-<p><strong>color_primaries</strong> is an integer that indicates the color primaries of the decoded video frame associated with the
-current film grain parameters.  The integer value is defined by the “Color primaries” section of ISO/IEC 23091-4 and/or
+<p><strong>color_primaries</strong> is an integer that indicates the color primaries of the decoded video picture associated with the
+current film grain parameters.  The integer value is defined by the corresponding color primaries section of ISO/IEC 23091-4 and/or
 ITU-T H.273.  The syntax element is intended to be informative and is not used in the film grain
 process defined in this specification.  When present, color_primaries should match any color primary information of 
-the decoded video frame that is associated with the current film grain parameters.  The behavior of the film
-grain synthesis process in response to the syntax element not matching the decoded frame associated with the current
-film grain parameters is outside the scope of this specification.</p>
+the decoded video picture that is associated with the current film grain parameters.  The behavior of the film
+grain synthesis process in response to this syntax element not matching the decoded picture associated with the current
+film grain parameters is outside the scope of this specification. When color_primaries is not present its value should 
+be set to be equal to the corresponding color primaries value of its associated decoded video picture.</p>
 
-<p><strong>transfer_characteristics</strong> is an integer that indicates the transfer characteristics of the decoded frame associated
-with the current film grain parameters.  The integer value is defined by the “Transfer characteristics” section of 
+<p><strong>transfer_characteristics</strong> is an integer that indicates the transfer characteristics of the decoded picture associated
+with the current film grain parameters.  The integer value is defined by the corresponding transfer characteristics section of 
 ISO/IEC 23091-4 and/or ITU-T H.273.  The syntax element is intended to be informative and is not used in the film grain 
-process defined in this specification.  When present, transfer_characteristics should match any transform characteristic
-information of the decoded video frame that is associated with the current film grain parameters.  The behavior of the film
-grain synthesis process in response to the syntax element not matching the decoded frame associated with the current
-film grain parameters is outside the scope of this specification.</p>
+process defined in this specification.  When present, transfer_characteristics should match any transform characteristics
+information of the decoded video picture that is associated with the current film grain parameters.  The behavior of the film
+grain synthesis process in response to this syntax element not matching the decoded picture associated with the current
+film grain parameters is outside the scope of this specification. When transfer_characteristics is not present its value should 
+be set to be equal to the corresponding transfer characteristics value of its associated decoded video picture.</p>
 
-<p><strong>matrix_coefficients</strong> is an integer that indicates the matrix coefficients of the decoded frame associated with the
-current film grain parameters.  The integer value is defined by the “Matrix coefficients” section of ISO/IEC 23091-4 
+<p><strong>matrix_coefficients</strong> is an integer that indicates the matrix coefficients of the decoded picture associated with the
+current film grain parameters.  The integer value is defined by the corresponding matrix coefficients section of ISO/IEC 23091-4 
 and/or ITU-T H.273.  The syntax element is intended to be informative and is not used in the film grain process
 defined in this specification.  When present, matrix_coefficients should match any matrix coefficient information
-of the decoded video frame that is associated with the current film grain parameters.  The behavior of the film
-grain synthesis process in response to the syntax element not matching the decoded frame associated with the current
-film grain parameters is outside the scope of this specification.</p>
+of the decoded video picture that is associated with the current film grain parameters.  The behavior of the film
+grain synthesis process in response to this syntax element not matching the decoded picture associated with the current
+film grain parameters is outside the scope of this specification. When matrix_coefficients is not present its value should 
+be set to be equal to the corresponding matrix coefficients value of its associated decoded video picture.</p>
 
 <p><strong>video_full_range_flag</strong> is a flag that indicates the scaling and offset values applied in association with the matrix 
-coefficients of the decoded frame associated with the current film grain parameters.  The value is defined by the 
-“Matrix coefficients” section of ISO/IEC 23091-4 and/or ITU-T H.273.  The syntax element is intended to be informative 
+coefficients of the decoded picture associated with the current film grain parameters.  The value is defined by the 
+corresponding matrix coefficients section of ISO/IEC 23091-4 and/or ITU-T H.273.  The syntax element is intended to be informative 
 and is not used in the film grain process defined in this specification.  When present, video_full_range_flag should 
-match any video full range information of the decoded video frame that is associated with the current film grain parameters.<br />
-The behavior of the film grain synthesis process in response to the syntax element not matching the decoded frame 
-associated with the current film grain parameters is outside the scope of this specification.</p>
+match any video full range information of the decoded video picture that is associated with the current film grain parameters.<br />
+The behavior of the film grain synthesis process in response to the syntax element not matching the decoded picture 
+associated with the current film grain parameters is outside the scope of this specification. When video_full_range_flag is 
+not present its value should be set to be equal to the corresponding video full range flag value of its associated decoded video picture.</p>
 
 <p><strong>predict_scaling_flag</strong> equal to 0 specifies that scaling functions in the current film grain parameter set
-are not predicted from scaling functions that belong to other film grain parameters sets.
+are not predicted from scaling functions that belong to other film grain parameter sets.
 predict_scaling_flag equal to 1 specifies that scaling functions in the current film grain parameter
-set may be predicted from scaling functions that belong to other film grain parameters sets.</p>
+set may be predicted from scaling functions that belong to other film grain parameter sets.</p>
 
-<p>It is a requirement of the specification conformance that the film grain parameters set at the
-decoded picture resolution have the predict_scaling_flag flag equal to zero.</p>
+<p>It is a requirement of conformance to this specification that the film grain parameter set at the
+decoded picture resolution for each decoded picture has the predict_scaling_flag flag equal to zero.</p>
 
-<p><strong>film_grain_param_set_idx_for_prediction</strong> specifies an index of a film grain parameter set that is used
+<p><strong>film_grain_param_set_idx_for_prediction</strong> specifies the index of a film grain parameter set that is used
 for prediction of scaling functions of the current film grain parameter set.</p>
 
-<p>It is a requirement of the conformance to the current specification that the values of the film grain parameter
- set with index film_grain_param_set_idx_for_prediction has been initialized with values of the scaling functions that in the current coded video sequence.</p>
+<p>It is a requirement of conformance to this specification that the values of the film grain parameter
+set with index film_grain_param_set_idx_for_prediction have been initialized with values of the scaling functions
+that are in the current coded video sequence. It is also a requirement of conformance to this specification that the 
+value of film_grain_param_set_idx_for_prediction is different from the value of film_grain_param_set_idx for the 
+current film grain parameter set.</p>
 
-<p><strong>predict_y_scaling_flag</strong> equal to 0 indicates that the luma scaling functions in the current film grain parameter set are
-not predicted from a different film grain parameter set. predict_y_scaling_flag equal to 1 indicates that the luma scaling
-functions in the current film grain
-parameter set are predicted from a different film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
+<p><strong>predict_y_scaling_flag</strong> equal to 0 specifies that the luma scaling functions in the current film grain parameter set are
+not predicted from a different film grain parameter set. predict_y_scaling_flag equal to 1 specifies that the luma scaling
+functions in the current film grain parameter set are predicted from a different film grain parameter set having an index 
+film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>y_scaling_mult</strong> specifies a multiplier used for predicting the luma film grain scaling function.</p>
+<p><strong>y_scaling_mult</strong> specifies the multiplier used for predicting the luma film grain scaling function.</p>
 
-<p><strong>y_scaling_add</strong> specifies an addition / intercept parameter used for predicting the luma film grain scaling function.</p>
+<p><strong>y_scaling_add</strong> specifies the additive offset parameter used for predicting the luma film grain scaling function.</p>
 
 <p><strong>num_y_points_in_ref</strong> specifies the number of points for the piecewise linear scaling function of the luma component
-in the film grain parameter set referenced with film_grain_param_set_idx_for_prediction.</p>
+in the film grain parameter set referenced by film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>bits_per_y_scaling_res</strong> specifies the number of bits used for encoding of differences / residuals for point_y_scaling.</p>
+<p>It is a requirement of the specification conformance that the value of num_y_points_in_ref is equal to the value of num_y_points of the film grain parameter set referred to by film_grain_param_set_idx_for_prediction.</p>
+
+<p>It is a requirement of the specification conformance that num_y_points_in_ref is less than or equal to 14.</p>
+
+<p><strong>bits_per_y_scaling_res</strong> specifies the number of bits used for encoding point_y_scaling_res[ i ].</p>
 
 <p><strong>point_y_scaling_res[ i ]</strong> specifies the prediction difference of the parameters. The parameter is signaled using
- bits_per_y_scaling_res bits and is in the [-2 bits_per_y_value_res-1,  2bits_per_y_value_res-1-1] range.</p>
+ bits_per_y_scaling_res bits and is in the [-2 * bits_per_y_value_res - 1,  2 * bits_per_y_value_res - 2] range.</p>
 
 <p><strong>y_scaling_res_granularity</strong> specifies the granularity with which the difference values for the predicted scaling function are encoded.</p>
 
-<p>When predict_y_scaling_flag parameters is equal to 1, the luma scaling function values are derived as follows</p>
+<p>When predict_y_scaling_flag is equal to 1, the luma scaling function values are derived as follows:</p>
 
-<p>It is a requirement of the specification conformance that parameter num_y_points_in_ref is set equal to the
-parameters num_y_points in the film grain parameters set film_grain_param_set_idx_for_prediction. Values
-point_y_value_ref [i] are equal to point_y_value [i] in the film grain parameters set
+<p>Values of point_y_value_ref [i] are equal to the values point_y_value [i] in the film grain parameters set referenced by 
 film_grain_param_set_idx_for_prediction. Values of point_y_scaling_ref [i] are equal to point_y_scaling [i]
-in the film grain parameters set  film_grain_param_set_idx_for_prediction.</p>
+in the film grain parameters set referenced by film_grain_param_set_idx_for_prediction.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_y_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_y_value_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="n">point_y_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
-        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">point_y_scaling_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">luma_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
-        <span class="o">+</span> <span class="p">(</span><span class="n">point_y_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_y_scaling_res</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="p">)</span> <span class="p">)</span><span class="o">*</span> <span class="n">y_scaling_res_granularity</span> <span class="p">)</span>
+        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">point_y_scaling_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">point_y_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_y_scaling_res</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="p">)</span> <span class="p">)</span><span class="o">*</span> <span class="n">y_scaling_res_granularity</span> <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p class="alert alert-info"><strong>Note:</strong> y_scaling_mult represents a value of multiplier from -16 to +15.9375 with granularity of values of 1/16. luma_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
+<p class="alert alert-info"><strong>Note:</strong> y_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. y_scaling_add represents an integer value of intercept in the range between [ -256, 255].</p>
 
 <p><strong>num_y_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the luma component.</p>
 
-<p>It is a requirement of bitstream conformance that num_y_points is less than or equal to 14.
-<a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Why need to talk about conformance? Why also restrict the value to up to 14? Same for chroma)</p>
+<p>It is a requirement of conformance to this specification that num_y_points is less than or equal to 14.</p>
 
-<p><strong>point_y_value_increment_bits_minus1</strong> specifies the number of bits minus 1 that will be spent on signaling the increments of point_y_values.</p>
+<p><strong>point_y_value_increment_bits_minus1</strong> plus 1 specifies the number of bits used for encoding point_y_values_increment[ i ].</p>
 
-<p><strong>point_y_scaling_bits_minus5</strong> specifies the number of bits minus 5 that will be spent on signaling point_y_scaling[ i ].</p>
+<p><strong>point_y_scaling_bits_minus5</strong> plus 5 specifies the number of bits used for encoding point_y_scaling[ i ].</p>
 
-<p><strong>point_y_value_increment[ i ]</strong> is the increment of point_y_value [ i ] relative to the point_y_value [ i - 1 ].
-point_y_value[ i ] represents the x (luma value) coordinate for the i-th point of the piecewise linear scaling function for the luma component. The values are signaled on the scale of 0..255. (In case of 10-bit video, these values correspond to luma values divided by 4. In case of 12-bit video, these values correspond to luma values divided by 16.)</p>
+<p><strong>point_y_value_increment[ i ]</strong> is the increment of point_y_value[ i ] relative to the point_y_value[ i - 1 ].
+point_y_value[ i ] represents the x (luma value) coordinate for the i-th point of the piecewise linear scaling function for the luma component. The values are signaled in the scale of 0 to 255. In the case of 10-bit video, these values correspond to luma values divided by 4. In the case of 12-bit video, these values correspond to luma values divided by 16.</p>
 
-<p>The values of point_y_value[ i ] are obtained as follows.</p>
+<p>The values of point_y_value[ i ] are obtained as follows:</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_y_value</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_y_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
     <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_y_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">].</span>
 </code></pre></div></div>
 
 <p>point_y_value[ i ] represents the x (luma value) coordinate for the i-th point of the piecewise
-linear scaling function for luma component. The values are signaled on the scale of
-0..255. (In case of 10 bit video, these values correspond to luma values divided by 4.
-In case of 12 bit video, these values correspond to luma values divided by 16.)</p>
+linear scaling function for the luma component. The values are signaled in the scale of
+0 to 255. In the case of 10 bit video, these values correspond to luma values divided by 4.
+In the case of 12 bit video, these values correspond to luma values divided by 16.</p>
 
-<p>If i is greater than 0, it is a requirement of bitstream conformance that point_y_value[ i ] is greater than point_y_value[ i - 1 ]
-(this ensures the x coordinates are specified in increasing order).</p>
+<p>If i is greater than 0, it is a requirement of conformance to this specification that point_y_value[ i ] is greater than point_y_value[ i - 1 ], which
+ ensures that the x coordinates are specified in increasing order.</p>
 
 <p>point_y_scaling[ i ] represents the scaling (output) value for the i-th point of the piecewise
-linear scaling function for luma component.</p>
+linear scaling function for the luma component.</p>
 
 <p><strong>chroma_scaling_from_luma_flag</strong> equal to 1 specifies that the chroma scaling is inferred from the luma scaling.
 chroma_scaling_from_luma_flag equal to 0 specifies that the chroma scaling is signaled independently.</p>
 
-<p><strong>predict_cb_scaling_flag</strong> equal to 0 indicates that the Cb scaling functions in the current film grain parameter
-set are not predicted from a different film grain parameter set. predict_cb_scaling_flag equal to 1 indicates that
-the Cb scaling functions in the current film grain parameter set are predicted from a film grain parameter set
+<p><strong>predict_cb_scaling_flag</strong> equal to 0 specifies that the Cb component scaling functions in the current film grain parameter
+set are not predicted from a different film grain parameter set. predict_cb_scaling_flag equal to 1 specifies that
+the Cb component scaling functions in the current film grain parameter set are predicted from a film grain parameter set
  indicated by film_grain_param_set_idx_for_prediction.</p>
 
-<p>If predict_cb_scaling_flag is equal to 1, variables cb_mult, cb_luma_mult, and cb_offset are set equal to variables
-cb_mult, cb_luma_mult, and cb_offset in the  film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
+<p>If predict_cb_scaling_flag is equal to 1, the variables cb_mult, cb_luma_mult, and cb_offset are set equal to the variables
+cb_mult, cb_luma_mult, and cb_offset in the film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>cb_scaling_mult</strong> specifies a multiplier used for predicting the Cb film grain scaling function.</p>
+<p><strong>cb_scaling_mult</strong> specifies the multiplier used for predicting the Cb component film grain scaling function.</p>
 
-<p><strong>cb_scaling_add</strong> specifies an addition / intercept parameter used for predicting the Cb film grain scaling function.</p>
+<p><strong>cb_scaling_add</strong> specifies the additive offset parameter used for predicting the Cb component film grain scaling function.</p>
 
-<p><strong>num_cb_points_in_ref</strong> specifies the number of points for the piecewise linear scaling function of the luma
+<p><strong>num_cb_points_in_ref</strong> specifies the number of points for the piecewise linear scaling function of the Cb
 component in the film grain parameter set referenced with film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>bits_per_cb_scaling_res</strong> specifies the number of bits used for encoding of differences / residuals for point_cb_scaling.</p>
+<p>It is a requirement of the specification conformance that the value of num_cb_points_in_ref is equal to the value of num_cb_points of the film grain parameter set referred to by film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>point_cb_scaling_res[ i ]</strong> specifies the prediction difference of the parameters. The parameter is signaled
-using  bits_per_cb_scaling_res bits and is in the [-2 bits_per_cb_value_res-1,  2bits_per_cb_value_res-1-1] range.</p>
+<p>It is a requirement of the specification conformance that num_cb_points_in_ref is less than or equal to 10.</p>
+
+<p><strong>bits_per_cb_scaling_res</strong> specifies the number of bits used for encoding the parameters point_cb_scaling_res[ i ] for all possible values of i.</p>
+
+<p><strong>point_cb_scaling_res[ i ]</strong> specifies the prediction difference of the Cb parameter for the point with index i. The parameter is signaled
+using bits_per_cb_scaling_res bits and is in the [-2 * bits_per_cb_value_res - 1,  2 * bits_per_cb_value_res - 2] range.</p>
 
 <p><strong>cb_scaling_res_granularity</strong> specifies the granularity with which the difference values for
-the predicted scaling function are encoded.</p>
+the predicted scaling function for the Cb component are encoded.</p>
 
-<p>When predict_cb_scaling_flag parameters is equal to 1, the Cb scaling function values are derived as follows</p>
+<p>When predict_cb_scaling_flag parameters is equal to 1, the Cb scaling function values are derived as follows:</p>
 
-<p>It is a requirement of the specification conformance that parameter num_cb_points_in_ref is set equal
-to num_cb_points in the film grain parameters set  film_grain_param_set_idx_for_prediction. Values
-point_cb_value_ref[ i ] are equal to point_cb_value[ i ] in the film grain parameters set
-film_grain_param_set_idx_for_prediction. Values of point_cb_scaling_ref[ i ] are equal to
-point_cb_scaling[ i ] in the film grain parameters set  film_grain_param_set_idx_for_prediction.</p>
+<p>The values of point_cb_value_ref[ i ] and point_cb_scaling_ref[ i ] for all instances of index i are equal to point_cb_value[ i ] and point_cb_scaling[ i ], 
+respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">point_cb_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_value_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
@@ -2053,27 +2181,25 @@ point_cb_scaling[ i ] in the film grain parameters set  film_grain_param_set_idx
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p class="alert alert-info"><strong>Note:</strong> cb_scaling_mult represents a value of multiplier from -16 to +15.9375 with granularity of
-values of 1/16. cb_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
+<p class="alert alert-info"><strong>Note:</strong> cb_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. cb_scaling_add represents an integer value of intercept in the range [-256, 255].</p>
 
-<p><strong>num_cb_points</strong> specifies the number of points for the piece-wise linear
-scaling function of the cb component.</p>
+<p><strong>num_cb_points</strong> specifies the number of points for the piece-wise linear scaling function of the Cb component.</p>
 
-<p>It is a requirement of bitstream conformance that num_cb_points is less than or equal to 10.</p>
+<p>It is a requirement of conformance to this specification that num_cb_points is less than or equal to 10.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> When chroma_scaling_from_luma_flag is equal to 1, it is still allowed for num_y_points to take values up to 14.
 This means that the chroma scaling also needs to support up to 14 points.</p>
 
-<p><strong>point_cb_value_increment_bits_minus1</strong> specifies the number of bits minus 1 that will be spent on signaling the increments of point_cb_values.</p>
+<p><strong>point_cb_value_increment_bits_minus1</strong> plus 1 specifies the number of bits used to signal point_cb_values[ i ].</p>
 
-<p><strong>point_cb_scaling_bits_minus5</strong> specifies the number of bits minus 5 that will be spent on signaling point_cb_scaling[ i ]</p>
+<p><strong>point_cb_scaling_bits_minus5</strong> plus 5 specifies the number of bits used to signal point_cb_scaling[ i ]</p>
 
 <p><strong>cb_scaling_offset</strong> specifies the offset applied to obtain point_cb_scaling[ i ] values.</p>
 
-<p><strong>point_cb_value_increment[ i ]</strong> is the increment of point_cb_value [ i ] relative to the point_cb_value [ i - 1 ].</p>
+<p><strong>point_cb_value_increment[ i ]</strong> specifies the increment of point_cb_value[ i ] relative to the point_cb_value[ i - 1 ].</p>
 
 <p>point_cb_value[ i ] represents the x coordinate for the i-th point of the piece-wise linear
-scaling function for cb component. The values are signaled on the scale of 0..255.</p>
+scaling function for the Cb component. The values are signaled on the scale of 0..255.</p>
 
 <p>The values of point_cb_value[ i ] are obtained as follows.</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_cb_value</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2082,44 +2208,44 @@ scaling function for cb component. The values are signaled on the scale of 0..25
 </code></pre></div></div>
 
 <p>point_cb_scaling[ i ]  represents the scaling (output) value for the i-th point of the piecewise
-linear scaling function for cb component.</p>
+linear scaling function for the Cb component.</p>
 
 <p>The values of point_cb_scaling[ i ] are obtained as follows.</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
     <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cb_scaling_offset</span><span class="p">.</span>
 </code></pre></div></div>
 
-<p><strong>predict_cr_scaling_flag</strong> equal to 0 indicates that the Cr scaling functions in the current film grain
+<p><strong>predict_cr_scaling_flag</strong> equal to 0 specifies that the Cr component scaling functions in the current film grain
 parameter set are not predicted from a different film grain parameter set. predict_cr_scaling_flag equal
-to 1 indicates that the Cr scaling functions in the current film grain parameter set are predicted
-from a film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
+to 1 specifies that the Cr component scaling functions in the current film grain parameter set are predicted
+from a film grain parameter set indicated by film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
 
-<p>If predict_cr_scaling_flag is equal to 1, variables cr_mult, cr_luma_mult, and cr_offset are set equal
-to variables  cr_mult, cr_luma_mult, and cr_offset in the  film grain parameter set indicated by film_grain_param_set_idx_for_prediction.</p>
+<p>If predict_cr_scaling_flag is equal to 1, the variables cr_mult, cr_luma_mult, and cr_offset are set equal
+to the variables cr_mult, cr_luma_mult, and cr_offset in the film grain parameter set indicated by film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>cr_scaling_mult</strong> specifies a multiplier used for predicting the Cr film grain scaling function.</p>
+<p><strong>cr_scaling_mult</strong> specifies the multiplier used for predicting the Cr component film grain scaling function.</p>
 
-<p><strong>cr_scaling_add</strong> specifies an addition / intercept parameter used for predicting the Cr film grain scaling function.</p>
+<p><strong>cr_scaling_add</strong> specifies the addition parameter used for predicting the Cr component film grain scaling function.</p>
 
 <p><strong>num_cr_points_in_ref</strong> specifies the number of points for the piecewise linear scaling function of
-the luma component in the film grain parameter set referenced with film_grain_param_set_idx_for_prediction.</p>
+the Cr component in the film grain parameter set referenced with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
 
-<p><strong>bits_per_cr_scaling_res</strong> specifies the number of bits used for encoding of differences / residuals
-for point_cb_scaling.</p>
+<p>It is a requirement of the specification conformance that the value of num_cr_points_in_ref is equal to the value of num_cr_points of the film grain parameter set referred to by film_grain_param_set_idx_for_prediction.</p>
+
+<p>It is a requirement of the specification conformance that num_cr_points_in_ref is less than or equal to 10.</p>
+
+<p><strong>bits_per_cr_scaling_res</strong> specifies the number of bits used for encoding point_cb_scaling[ i ].</p>
 
 <p><strong>point_cr_scaling_res[ i ]</strong> specifies the prediction difference of the parameters. The parameter
-is signaled using  bits_per_cb_scaling_res bits and is in the [-2 bits_per_cr_value_res-1,  2bits_per_cr_value_res-1-1] range.</p>
+is signaled using  bits_per_cr_scaling_res bits and is in the [-2 * bits_per_cr_value_res - 1,  2 * bits_per_cr_value_res - 2] range.</p>
 
 <p><strong>cr_scaling_res_granularity</strong> specifies the granularity with which the difference values for the
 predicted scaling function are encoded.</p>
 
-<p>When predict_cr_scaling_flag parameters is equal to 1, the Cr scaling function values are derived as follows</p>
+<p>When predict_cr_scaling_flag parameters is equal to 1, the Cr scaling function values are derived as follows:</p>
 
-<p>It is a requirement of the specification conformance that parameter num_cr_points_in_ref is set equal
-to num_cr_points in the film grain parameters set  film_grain_param_set_idx_for_prediction.
-Values point_cr_value_ref [i] are equal to point_cr_value [i] in the film grain parameters set
-film_grain_param_set_idx_for_prediction. Values of point_cr_scaling_ref [i] are equal to
-point_cr_scaling [i] in the film grain parameters set  film_grain_param_set_idx_for_prediction.</p>
+<p>The values of point_cr_value_ref[ i ] and point_cr_scaling_ref[ i ] for all instances of index i are equal to point_cr_value[ i ] and point_cr_scaling[ i ], 
+respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points_in_ref</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">point_cr_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_value_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
@@ -2129,40 +2255,40 @@ point_cr_scaling [i] in the film grain parameters set  film_grain_param_set_idx_
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p class="alert alert-info"><strong>Note:</strong> cr_scaling_mult represents a value of multiplier from -16 to +15.9375 with granularity of values of 1/16. cr_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
+<p class="alert alert-info"><strong>Note:</strong> cr_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. cr_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
 
-<p>It is a requirement of bitstream conformance that when film_grain_param_set_idx_for_prediction is present, it shall be 
+<p>It is a requirement of conformance to this specification that when film_grain_param_set_idx_for_prediction is present, it shall be 
 equal to the value of film_grain_param_set_idx that is determined in the first call to av1_film_grain_params( ) 
 within the current aom_itu_t_t35_payload( ).</p>
 
-<p class="alert alert-info"><strong>Note:</strong> This requirement restricts prediction between the film grain parameters sets to be within one 
+<p class="alert alert-info"><strong>Note:</strong> This requirement restricts prediction between the film grain parameter sets to be within one 
 aom_itu_t_t35_payload( ).  It also restricts the reference for the prediction process to be the film grain parameter set 
 determined in the first av1_film_grain_params( ) call.</p>
 
 <p><strong>num_cr_points</strong> specifies the number of points for the piece-wise linear
-scaling function of the cr component.</p>
+scaling function of the Cr component.</p>
 
-<p>It is a requirement of bitstream conformance that num_cr_points is less than or equal to 10.</p>
+<p>It is a requirement of conformance to this specification that num_cr_points is less than or equal to 10.</p>
 
 <p>If SubX is equal to 1 and SubY is equal to 1 and num_cb_points is equal to 0,
-it is a requirement of bitstream conformance that num_cr_points is equal to 0.</p>
+it is a requirement of conformance to this specification that num_cr_points is equal to 0.</p>
 
 <p>If SubX is equal to 1 and SubY is equal to 1 and num_cb_points is not equal to 0,
-it is a requirement of bitstream conformance that num_cr_points is not equal to 0.</p>
+it is a requirement of conformance to this specification that num_cr_points is not equal to 0.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> These requirements ensure that for 4:2:0 chroma subsampling, film grain noise will be applied to both chroma components, or to neither.
 There is no restriction for 4:2:2 or 4:4:4 chroma subsampling.</p>
 
-<p><strong>point_cr_value_increment_bits_minus1</strong> specifies the number of bits minus 1 that will be spent on signaling the increments of point_cr_value.</p>
+<p><strong>point_cr_value_increment_bits_minus1</strong> plus 1 specifies the number of bits that used to signal point_cr_value_increment[ i ].</p>
 
-<p><strong>point_cr_scaling_bits_minus5</strong> specifies the number of bits minus 5 that will be spent on signaling point_cr_scaling[ i ]</p>
+<p><strong>point_cr_scaling_bits_minus5</strong> plus 5 specifies the number of bits used to signal point_cr_scaling[ i ]</p>
 
 <p><strong>cr_scaling_offset</strong> specifies the offset applied to obtain point_cr_scaling[ i ] values.</p>
 
-<p><strong>point_cr_value_increment[ i ]</strong> is the increment of point_cr_value [ i ] relative to the point_cr_value [ i - 1 ].</p>
+<p><strong>point_cr_value_increment[ i ]</strong> specifies the increment of point_cr_value[ i ] relative to the point_cr_value[ i - 1 ].</p>
 
 <p>point_cr_value[ i ]  represents the x coordinate for the i-th point of the piece-wise linear
-scaling function for cr component. The values are signaled on the scale of 0..255.</p>
+scaling function for the Cr component. The values are signaled in the range of 0 to 255.</p>
 
 <p>The values of point_cr_value[ i ] are obtained as follows.</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_cr_value</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2171,103 +2297,105 @@ scaling function for cr component. The values are signaled on the scale of 0..25
 </code></pre></div></div>
 
 <p>point_cr_scaling[ i ] represents the scaling (output) value for the i-th point of the piecewise
-linear scaling function for cr component.</p>
+linear scaling function for the Cr component.</p>
 
 <p>The values of point_cr_scaling[ i ] are obtained as follows.</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
     <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cr_scaling_offset</span><span class="p">.</span>
 </code></pre></div></div>
 
-<p><strong>grain_scaling_minus_8</strong> represents the shift – 8 applied to the values of the chroma
-component. The grain_scaling_minus_8 can take values of 0..3 and determines the
+<p><strong>grain_scaling_minus8</strong> plus 8 specifies the shift applied to the values of the chroma
+component. The grain_scaling_minus8 can take values of 0 to 3 and determines the
 range and quantization step of the standard deviation of film grain.</p>
 
 <p><strong>ar_coeff_lag</strong> specifies the number of auto-regressive coefficients for
 luma and chroma.</p>
 
-<p><strong>bits_per_ar_coeff_y_minus5</strong> specifies the number of bits minus 5 that will be spent on signaling ar_coeffs_y.</p>
+<p><strong>bits_per_ar_coeff_y_minus5</strong> plus 5 specifies the number of bits used to signal ar_coeffs_y[ i ].</p>
 
-<p><strong>ar_coeffs_y[ i ]</strong> specifies auto-regressive coefficients used for the Y plane.</p>
+<p><strong>ar_coeffs_y[ i ]</strong> specifies the auto-regressive coefficients used for the luma component.</p>
 
-<p>The values of AR coefficients for the Y component are derived as follows</p>
+<p>The values of auto-regressive coefficients plus 128 for the luma component ArCoeffsYPlus128[ i ] are derived as follows</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPosLuma</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">ar_coeffs_y</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ar_coeffs_y</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">BitsArY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)).</span>
+    <span class="n">ArCoeffsYPlus128</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ar_coeffs_y</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">BitsArY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)).</span>
 </code></pre></div></div>
 
-<p><strong>bits_per_ar_coeff_cb_minus5</strong> specifies the number of bits minus 5 that will be spent on signaling ar_coeffs_cb.</p>
+<p><strong>bits_per_ar_coeff_cb_minus5</strong> plus 5 specifies the number of bits used to signal ar_coeffs_cb[ i ].</p>
 
-<p><strong>ar_coeffs_cb[ i ]</strong> specifies auto-regressive coefficients used for the Cb plane.</p>
+<p><strong>ar_coeffs_cb[ i ]</strong> specifies the auto-regressive coefficients used for the Cb plane.</p>
 
-<p>The values of AR coefficients for the Cb component are derived as follows</p>
+<p>The values of the auto-regressive coefficients plus 128 for the Cb component ArCoeffsCbPlus128[ i ] are derived as follows:</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPosChroma</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">ar_coeffs_cb</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ar_coeffs_cb</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">BitsArCb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)).</span>
+    <span class="n">ArCoeffsCbPlus128</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ar_coeffs_cb</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">BitsArCb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)).</span>
 </code></pre></div></div>
 
-<p><strong>bits_per_ar_coeff_cr_minus5</strong> specifies the number of bits minus 5 that will be spent on signaling ar_coeffs_cr.</p>
+<p><strong>bits_per_ar_coeff_cr_minus5</strong> plus 5 specifies the number of bits used to signal ar_coeffs_cr[ i ].</p>
 
-<p><strong>ar_coeffs_cr[ i ]</strong> specifies auto-regressive coefficients used for the Cr plane.</p>
+<p><strong>ar_coeffs_cr[ i ]</strong> specifies the auto-regressive coefficients used for the Cr plane.</p>
 
-<p>The values of AR coefficients for the Cr component are derived as follows</p>
+<p>The values of the auto-regressive coefficients plus 128 for the Cr component ArCoeffsCrPlus128[ i ] are derived as follows:</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPosChroma</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">ar_coeffs_cr</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ar_coeffs_cr</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">BitsArCr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)).</span>
+        <span class="n">ArCoeffsCrPlus128</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ar_coeffs_cr</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">BitsArCr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)).</span>
 </code></pre></div></div>
 
-<p><strong>ar_coeff_shift_minus_6</strong> specifies the range of the auto-regressive coefficients. Values of 0, 1, 2, and 3
-correspond to the ranges for auto-regressive coefficients of [-2, 2), [-1, 1), [-0.5, 0.5) and [-0.25, 0.25)
+<p><strong>ar_coeff_shift_minus6</strong> specifies the range of the auto-regressive coefficients. Values of 0, 1, 2, and 3
+correspond to the ranges for auto-regressive coefficients of [-2, 2), [-1, 1), [-0.5, 0.5) and [-0.25, 0.25),
 respectively.</p>
 
 <p><strong>grain_scale_shift</strong> specifies how much the Gaussian random numbers should be scaled down during
 the grain synthesis process.</p>
 
-<p><strong>cb_mult</strong> represents a multiplier for the cb component used in the derivation of the input
-index to the cb component scaling function.</p>
+<p><strong>cb_mult</strong> specifies the multiplier for the Cb component used in the derivation of the input
+index to the Cb component scaling function.</p>
 
-<p><strong>cb_luma_mult</strong> represents a multiplier for the average luma component used in the
-derivation of the input index to the cb component scaling function.</p>
+<p><strong>cb_luma_mult</strong> specifies the multiplier for the average luma component used in the
+derivation of the input index to the Cb component scaling function.</p>
 
-<p><strong>cb_offset</strong> represents an offset used in the derivation of the input index to the cb component
+<p><strong>cb_offset</strong> specifies the offset used in the derivation of the input index to the Cb component
 scaling function.</p>
 
-<p><strong>cr_mult</strong> represents a multiplier for the cr component used in the derivation of the input index
-to the cr component scaling function.</p>
+<p><strong>cr_mult</strong> specifies the multiplier for the Cr component used in the derivation of the input index
+to the Cr component scaling function.</p>
 
-<p><strong>cr_luma_mult</strong> represents a multiplier for the average luma component used in the
-derivation of the input index to the cr component scaling function.</p>
+<p><strong>cr_luma_mult</strong> specifies the multiplier for the average luma component used in the
+derivation of the input index to the Cr component scaling function.</p>
 
-<p><strong>cr_offset</strong> represents an offset used in the derivation of the input index to the cr component
+<p><strong>cr_offset</strong> specifies the offset used in the derivation of the input index to the Cr component
 scaling function.</p>
 
-<p><strong>overlap_flag</strong> equal to 1 indicates that the overlap between film grain blocks shall be
-applied. overlap_flag equal to 0 indicates that the overlap between film grain blocks shall
+<p><strong>overlap_flag</strong> equal to 1 specifies that the overlap between film grain blocks shall be
+applied. overlap_flag equal to 0 specifies that the overlap between film grain blocks shall
 not be applied.</p>
 
-<p><strong>clip_to_restricted_range</strong> equal to 1 indicates that clipping to the restricted (studio)
+<p><strong>clip_to_restricted_range_flag</strong> equal to 1 specifies that clipping to the restricted (studio)
 range is applied to the sample values after adding the film grain (see the semantics for color_range for an explanation of studio swing).
-clip_to_restricted_range equal to 0 indicates that clipping to the full range shall be
+clip_to_restricted_range_flag equal to 0 specifies that clipping to the full range shall be
 applied to the sample values after adding the film grain.</p>
+
+<h3 id="padding-bits-semantics">Padding bits semantics</h3>
+<p><strong>padding_zero_bit</strong> shall be equal to 0.</p>
 
 <h2 id="conformance-requirements">Conformance requirements</h2>
 
-<p>When AV1 film grain metadata are not present in the bitstream, the AV1 film grain synthesis module shall produce output pictures that are identical in all respects
-and have the same output order as the input pictures to the AV1 film grain synthesis module.</p>
+<p>When AFGS1 metadata are not present in the bitstream, the AFGS1 film grain synthesis module shall produce output pictures that are identical in all respects and have the same output order as the input pictures to the AFGS1 film grain synthesis module.</p>
 
-<p>When AV1 film grain metadata is present in the bitstream, a film grain synthesis module shall implement a film grain synthesis process that
+<p>When AFGS1 metadata is present in the bitstream, a film grain synthesis module shall implement a film grain synthesis process that
 modifies the its input arrays OutY, OutU, OutV. The reference film grain synthesis process is described in <a href="#film-grain-synthesis-process">section 8.2</a>.</p>
 
-<p>When film_grain_params_present is equal to 1, a conformant AV1 film grain synthesis module shall satisfy at least one of the
+<p>When AFGS1 metadata is present in the bitstream, a conformant AFGS1 film grain synthesis module shall satisfy at least one of the
 following two options:</p>
 
 <ol>
   <li>
-    <p>A conformant AV1 film grain synthesis module shall produce output pictures that are identical in all respects and have the same output order as those produced by the AV1 film grain synthesis process specified herein including applying the exact film grain synthesis process as specified in <a href="#film-grain-synthesis-process">section 8.2</a>.</p>
+    <p>A conformant AFGS1 film grain synthesis module shall produce output pictures that are identical in all respects and have the same output order as those produced by the AFGS1 film grain synthesis process specified herein including applying the exact film grain synthesis process as specified in <a href="#film-grain-synthesis-process">section 8.2</a>.</p>
   </li>
   <li>
-    <p>A conformant AV1 film grain synthesis module shall produce output pictures that are in the same order and do not have perceptually
+    <p>A conformant AFGS1 film grain synthesis module shall produce output pictures that are in the same order and do not have perceptually
   significant differences with the pictures produced by the reference film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a>
   when applied to the input pictures of the film grain synthesis process with the film grain parameters signaled for these pictures.
   The definition of “perceptually significant differences” is beyond the scope of this specification and may be specified,
   for example, by a service provider as part of their accreditation program.
-  The film grain synthesis process applied by a conformant AV1 film grain synthesis module should be feature complete with regards to
+  The film grain synthesis process applied by a conformant AFGS1 film grain synthesis module should be feature complete with regards to
   the reference film grain synthesis process of <a href="#film-grain-synthesis-process">section 8.2</a> including scaling strength of the film grain
   as a function of intensity according to the signaled parameters, same maximum AR lag, and similar
   modeling of correlation between luma and chroma and smoothing of transitions between blocks of grain when applicable.</p>
@@ -2282,27 +2410,32 @@ before input or after the output of [section 7.18.2][] and the film grain synthe
 <p class="alert alert-info"><strong>Note:</strong>
 Some applications, such as transcoding from or to another video coding standard, may use intermediate output pictures for transcoding. In such cases, the film grain synthesis information may be adapted and inserted in the transcoded bitstream.</p>
 
-<p>The input to this process is a sequence of the reconstructed video pictures and a sequence of AV1 film grain metadata messages.</p>
-
-<p>The output from this process is a sequence of updated pictures.</p>
-
-<p>For each AV1 film grain metadata message, in turn the syntax elements are extracted as specified in <a href="#syntax-structures">section 5</a>.</p>
-
-<p>The syntax tables include function calls indicating when the remaining decode processes are triggered.</p>
-
 <h2 id="decoding-process">Decoding process</h2>
 
 <h3 id="general-3">General</h3>
 
-<p>This process is invoked to process video pictures.</p>
+<p>The input to this process is a sequence of the reconstructed video pictures and a sequence of AFGS1 film grain metadata messages. AFGS1 film grain metadata messages may be contained in a video codec elementary bistream.</p>
+
+<p>The output from this process is a sequence of updated pictures.</p>
+
+<p>AFGS1 film grain metadata messages are processed in the order they are included in the elementary bitstream, which is typically a picture decoding order.</p>
+
+<p>For each AFGS1 film grain metadata message, in turn the syntax elements are extracted as specified in <a href="#syntax-structures">section 5</a>.</p>
+
+<p>The syntax tables include function calls indicating when the corresponding decode processes are triggered.</p>
+
+<p>An AFGS1 film grain metadata message is associated with an output video picture. Mapping of AFGS1 film grain metadata messages to the output video picture is outside the scope of this specification and is determined by the corresponding specification for the video bitstream that uses AFGS1 film grain metadata messages.</p>
+
+<p>When a video decoder and optional post-processing steps produce an output video picture, the following process is invoked to and applied to video pictures.</p>
 
 <p>If afgs1_enable_flag is equal to 1 and apply_grain_flag is present and equal to 1, then
 the film grain synthesis process specified in <a href="#film-grain-synthesis-process">section 8.2</a> is invoked with inputs of w, h, SubX, and SubY.</p>
 
-<p>This process modifies arrays OutY, OutU, OutV that contain the output frame samples of the video decoder or
-intermediate values of video frames from the previous post-processing modules.</p>
+<p>This process modifies arrays OutY, OutU, and OutV that contain the output picture samples of the video decoder or</p>
 
-<p>Finally, the picture to be processed is defined to be the arrays OutY, OutU, OutV where the bit depth for each sample is BitDepth.</p>
+<p>intermediate values of video pictures from the previous post-processing modules.</p>
+
+<p>Finally, the picture to be processed is defined to be the arrays OutY, OutU, and OutV where the bit depth for each sample is BitDepth.</p>
 
 <p>This picture is the overall output and further processing (such as color conversion) is outside the scope of this specification.</p>
 
@@ -2321,17 +2454,17 @@ intermediate values of video frames from the previous post-processing modules.</
     <p>variables w and h specifying the width and height of the picture,</p>
   </li>
   <li>
-    <p>variables SubX and SubY specifying the subsampling parameters of the frame,</p>
+    <p>variables SubX and SubY specifying the subsampling parameters of the picture,</p>
   </li>
   <li>
-    <p>arrays OutY, OutU, OutV,</p>
+    <p>arrays OutY, OutU, and OutV,</p>
   </li>
   <li>
     <p>variable BitDepth specifying the bit depth of the video picture samples.</p>
   </li>
 </ul>
 
-<p>The process modifies the arrays OutY, OutU, OutV to add film grain noise as follows:</p>
+<p>The process modifies the arrays OutY, OutU, and OutV to add film grain noise as follows:</p>
 
 <ol>
   <li>
@@ -2358,8 +2491,6 @@ intermediate values of video frames from the previous post-processing modules.</
 </ol>
 
 <h4 id="random-number-process">Random number process</h4>
-
-<p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (It is usually not recommended to define variables using a name used often in the document. “bits” for example can be problematic here since it makes it hard for someone to search for it in the document. The same for the output, which is here the variable “result”.)</p>
 
 <p>The input to this process is a variable bits specifying the number of random bits to return.</p>
 
@@ -2398,11 +2529,11 @@ intermediate values of video frames from the previous post-processing modules.</
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>where the function call get_random_number invokes the random number process specified in <a href="#random-number-process">section 8.2.2</a>.</p>
+<p>where the function call get_random_number() invokes the random number process specified in <a href="#random-number-process">section 8.2.2</a>.</p>
 
 <p>Then an auto-regressive filter is applied to the white noise as follows:</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="n">ar_coeff_shift_minus_6</span> <span class="o">+</span> <span class="mi">6</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="n">ar_coeff_shift_minus6</span> <span class="o">+</span> <span class="mi">6</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">73</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">82</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2411,7 +2542,7 @@ intermediate values of video frames from the previous post-processing modules.</
       <span class="k">for</span> <span class="p">(</span> <span class="n">deltaCol</span> <span class="o">=</span> <span class="o">-</span><span class="n">ar_coeff_lag</span><span class="p">;</span> <span class="n">deltaCol</span> <span class="o">&lt;=</span> <span class="n">ar_coeff_lag</span><span class="p">;</span> <span class="n">deltaCol</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span> <span class="n">deltaRow</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">deltaCol</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
           <span class="k">break</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">ar_coeffs_y_plus_128</span><span class="p">[</span> <span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="mi">128</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">ArCoeffsYPlus128</span><span class="p">[</span> <span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="mi">128</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="n">LumaGrain</span><span class="p">[</span> <span class="n">y</span> <span class="o">+</span> <span class="n">deltaRow</span> <span class="p">][</span> <span class="n">x</span> <span class="o">+</span> <span class="n">deltaCol</span> <span class="p">]</span> <span class="o">*</span> <span class="n">c</span>
         <span class="n">pos</span><span class="o">++</span>
       <span class="p">}</span>
@@ -2421,14 +2552,14 @@ intermediate values of video frames from the previous post-processing modules.</
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>If luma_only is equal to 0, the chroma grain is generated in a similar way, except the filtering includes a coefficient 
+<p>If luma_only_flag is equal to 0, the chroma grain is generated in a similar way, except the filtering includes a coefficient 
 that introduces a correlation with the luma grain.</p>
 
 <p>The variable chromaW (representing the width of the chroma noise array) is set equal to (SubX ? 44 : 82).</p>
 
 <p>The variable chromaH (representing the height of the chroma noise array) is set equal to (SubY ? 38 : 73).</p>
 
-<p>White noise arrays CbGrain and CrGrain chromaW samples wide and chromaH samples high are generated as follows:</p>
+<p>White noise arrays CbGrain and CrGrain, which are chromaW samples wide and chromaH samples high, are generated as follows:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">-</span> <span class="n">BitDepth</span> <span class="o">+</span> <span class="n">grain_scale_shift</span>
 <span class="n">RandomRegister</span> <span class="o">=</span> <span class="n">grain_seed</span> <span class="o">^</span> <span class="mh">0xb524</span>
@@ -2457,10 +2588,7 @@ that introduces a correlation with the luma grain.</p>
 
 <p>Then the auto-regressive filter is applied as follows:</p>
 
-<p><a href="# (Note that some specs may use different luma/chroma bitdepth and having this being independent also helps avoid confusion. )">AMT</a>: # (Should “is applied” be “can be applied”? Otherwise it sounds as if the process is “strict”)
-[AN]: This is a reference implementation. Using “is applied” wrt the reference implementation may be appropriate.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="n">ar_coeff_shift_minus_6</span> <span class="o">+</span> <span class="mi">6</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shift</span> <span class="o">=</span> <span class="n">ar_coeff_shift_minus6</span> <span class="o">+</span> <span class="mi">6</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">chromaH</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">chromaW</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">s0</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2468,8 +2596,8 @@ that introduces a correlation with the luma grain.</p>
     <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="p">(</span> <span class="n">deltaRow</span> <span class="o">=</span> <span class="o">-</span><span class="n">ar_coeff_lag</span><span class="p">;</span> <span class="n">deltaRow</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">deltaRow</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
       <span class="k">for</span> <span class="p">(</span> <span class="n">deltaCol</span> <span class="o">=</span> <span class="o">-</span><span class="n">ar_coeff_lag</span><span class="p">;</span> <span class="n">deltaCol</span> <span class="o">&lt;=</span> <span class="n">ar_coeff_lag</span><span class="p">;</span> <span class="n">deltaCol</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="n">c0</span> <span class="o">=</span> <span class="n">ar_coeffs_cb_plus_128</span><span class="p">[</span> <span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="mi">128</span>
-        <span class="n">c1</span> <span class="o">=</span> <span class="n">ar_coeffs_cr_plus_128</span><span class="p">[</span> <span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="mi">128</span>
+        <span class="n">c0</span> <span class="o">=</span> <span class="n">ArCoeffsCbPlus128</span><span class="p">[</span> <span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="mi">128</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">ArCoeffsCrPlus128</span><span class="p">[</span> <span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="mi">128</span>
         <span class="k">if</span> <span class="p">(</span> <span class="n">deltaRow</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">deltaCol</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span> <span class="n">num_y_points</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
             <span class="n">luma</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2495,7 +2623,7 @@ that introduces a correlation with the luma grain.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p class="alert alert-info"><strong>Note:</strong> When num_y_points is equal to 0, this process may use uninitialized values within ar_coeffs_y_plus_128 to compute LumaGrain.
+<p class="alert alert-info"><strong>Note:</strong> When num_y_points is equal to 0, this process may use uninitialized values within ArCoeffsYPlus128 to compute LumaGrain.
 However, LumaGrain will never be read in this case so it does not matter what values are constucted.
 Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_from_luma_flag is equal to 0, the CbGrain/CrGrain arrays will never be read.</p>
 
@@ -2536,7 +2664,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>where the functions get_x and get_y return the coordinates for a specific point and are specified as:</p>
+<p>where the functions get_x() and get_y() return the coordinates for a specific point and are specified as:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">get_x</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">i</span> <span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span>
@@ -2566,7 +2694,7 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
     <p>variables w and h specifying the width and height of the picture,</p>
   </li>
   <li>
-    <p>variables SubX and SubY specifying the subsampling parameters of the frame.</p>
+    <p>variables SubX and SubY specifying the subsampling parameters of the picture.</p>
   </li>
 </ul>
 
@@ -2670,7 +2798,7 @@ and 1 line buffer for each chroma component.</p>
 
 <p>Finally, the noise is blended with the original image data as follows:</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span> <span class="n">clip_to_restricted_range</span> <span class="p">)</span> <span class="p">{</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span> <span class="n">clip_to_restricted_range_flag</span> <span class="p">)</span> <span class="p">{</span>
   <span class="n">minValue</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">BitDepth</span> <span class="o">-</span> <span class="mi">8</span><span class="p">)</span>
   <span class="n">maxLuma</span> <span class="o">=</span> <span class="mi">235</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">BitDepth</span> <span class="o">-</span> <span class="mi">8</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span> <span class="n">matrix_coefficients</span> <span class="o">==</span> <span class="n">MC_IDENTITY</span> <span class="p">)</span>
@@ -2682,7 +2810,7 @@ and 1 line buffer for each chroma component.</p>
   <span class="n">maxLuma</span> <span class="o">=</span> <span class="p">(</span><span class="mi">256</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">BitDepth</span> <span class="o">-</span> <span class="mi">8</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
   <span class="n">maxChroma</span> <span class="o">=</span> <span class="n">maxLuma</span>
 <span class="p">}</span>
-<span class="n">ScalingShift</span> <span class="o">=</span> <span class="n">grain_scaling_minus_8</span> <span class="o">+</span> <span class="mi">8</span>
+<span class="n">ScalingShift</span> <span class="o">=</span> <span class="n">grain_scaling_minus8</span> <span class="o">+</span> <span class="mi">8</span>
 <span class="k">for</span> <span class="p">(</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">SubY</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">SubY</span><span class="p">)</span> <span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">SubX</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">SubX</span><span class="p">)</span> <span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
     <span class="n">lumaX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">SubX</span>
