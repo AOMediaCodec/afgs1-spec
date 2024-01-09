@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2024-01-06 20:26 PT</em></p>
+<p><em>Last modified: 2024-01-08 17:32 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -125,8 +125,8 @@ Signaling of the film grain parameters can be done using ITU-T T.35 registered u
 <h2 id="scope">Scope</h2>
 
 <p>This document specifies the syntax, semantics, and decoding process for the AOMedia Film Grain 
-Synthesis process. The process can be used with any video coding or transport mechanism. This includes
-the use of ITU-T T.35 based signaling, and this use is also specified in this document. Alternatively, the payload 
+Synthesis process. This process can be used and indicated with any video coding or transport mechanism. This includes
+the use of ITU-T T.35 based signaling, which is also specified in this document. Alternatively, the payload 
 can be carried by other suitable transport mechanisms.</p>
 
 <p>This specification is based on the film grain modeling process that is specified 
@@ -1009,7 +1009,7 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td> </td>
     </tr>
     <tr>
-      <td>    / * Zero pad (and byte align) to the payload size</td>
+      <td>    / * Zero pad (and byte align) to the payload size */</td>
       <td> </td>
     </tr>
     <tr>
@@ -1236,10 +1236,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td>f(9)</td>
     </tr>
     <tr>
-      <td>        <b class="syntax-element">num_y_points_in_ref</b></td>
-      <td>f(4)</td>
-    </tr>
-    <tr>
       <td>        <b class="syntax-element">bits_per_y_scaling_res</b></td>
       <td>f(3)</td>
     </tr>
@@ -1250,6 +1246,10 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     <tr>
       <td>              bitsRes = bits_per_y_scaling_res</td>
       <td> </td>
+    </tr>
+    <tr>
+      <td>              <b class="syntax-element">num_y_points_in_ref</b></td>
+      <td>f(4)</td>
     </tr>
     <tr>
       <td>              for ( i = 0; i &lt; num_y_points_in_ref; i++ )</td>
@@ -1285,10 +1285,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     </tr>
     <tr>
       <td>            bitsIncr = point_y_value_increment_bits_minus1 + 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>            point_y_value[ -1 ] = 0</td>
       <td> </td>
     </tr>
     <tr>
@@ -1388,10 +1384,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td>f(9)</td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">num_cb_points_in_ref</b></td>
-      <td>f(4)</td>
-    </tr>
-    <tr>
       <td>            <b class="syntax-element">bits_per_cb_scaling_res</b></td>
       <td>f(3)</td>
     </tr>
@@ -1402,6 +1394,10 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     <tr>
       <td>                bitsRes = bits_per_cb_scaling_res</td>
       <td> </td>
+    </tr>
+    <tr>
+      <td>                <b class="syntax-element">num_cb_points_in_ref</b></td>
+      <td>f(4)</td>
     </tr>
     <tr>
       <td>                for ( i = 0; i &lt; num_cb_points_in_ref; i++ )</td>
@@ -1437,10 +1433,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     </tr>
     <tr>
       <td>                bitsIncr = point_cb_value_increment_bits_minus1 + 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>                point_cb_value[ -1 ] = 0</td>
       <td> </td>
     </tr>
     <tr>
@@ -1508,10 +1500,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td>f(9)</td>
     </tr>
     <tr>
-      <td>            <b class="syntax-element">num_cr_points_in_ref</b></td>
-      <td>f(4)</td>
-    </tr>
-    <tr>
       <td>            <b class="syntax-element">bits_per_cr_scaling_res</b></td>
       <td>f(3)</td>
     </tr>
@@ -1522,6 +1510,10 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     <tr>
       <td>                bitsRes = bits_per_cr_scaling_res</td>
       <td> </td>
+    </tr>
+    <tr>
+      <td>                <b class="syntax-element">num_cr_points_in_ref</b></td>
+      <td>f(4)</td>
     </tr>
     <tr>
       <td>                for ( i = 0; i &lt; num_cr_points_in_ref; i++ )</td>
@@ -1557,10 +1549,6 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     </tr>
     <tr>
       <td>                bitsIncr = point_cr_value_increment_bits_minus1 + 1</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>                point_cr_value[ -1 ] = 0</td>
       <td> </td>
     </tr>
     <tr>
@@ -1708,7 +1696,7 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td>f(2)</td>
     </tr>
     <tr>
-      <td>    if ( num_cb_points ) {</td>
+      <td>    if ( num_cb_points &amp;&amp; !predict_cb_scaling_flag) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1728,7 +1716,7 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
       <td> </td>
     </tr>
     <tr>
-      <td>    if ( num_cr_points ) {</td>
+      <td>    if ( num_cr_points &amp;&amp; !predict_cr_scaling_flag ) {</td>
       <td> </td>
     </tr>
     <tr>
@@ -1754,6 +1742,10 @@ each of the syntax elements is presented in <a href="#syntax-structures-semantic
     <tr>
       <td>    <b class="syntax-element">clip_to_restricted_range_flag</b></td>
       <td>f(1)</td>
+    </tr>
+    <tr>
+      <td>    process_grain_params( film_grain_param_set_idx )</td>
+      <td> </td>
     </tr>
     <tr>
       <td>    save_grain_params( film_grain_param_set_idx )</td>
@@ -1871,6 +1863,12 @@ decoded picture resolution, there shall not be more than one film grain paramete
 correspond to the same resolution, and film grain parameter sets related to the same
 decoded picture shall each use a unique of film_grain_param_set_idx.</p>
 
+<p class="alert alert-info"><strong>Note:</strong> The conformance statements above mean that if multiple distinct decoded pictures could be generated from
+the same bitstream (for example, when scalable layers are present with operating points
+which produce different resolutions) and film grain parameter sets are present, then
+a film grain parameter set must be available matching the parameters of each possible
+decoded picture.</p>
+
 <h3 id="film-grain-parameter-payload-semantics">Film grain parameter payload semantics</h3>
 <p><strong>payload_less_than_4byte_flag</strong> equal to 1 specifies that the number of bytes used by the data in the current
 av1_film_grain_payload is less than four bytes.  payload_less_than_4byte_flag equal to 0 specifies that the number of
@@ -1913,6 +1911,10 @@ sets can be simultaneously stored by the film grain processing module.</p>
 determined in the current av1_film_grain_params function are selected.  apply_grain_flag equal to 0 specifies that the 
 film grain synthesis process is enabled when the film grain parameters are selected.</p>
 
+<p><strong>process_grain_params( idx )</strong> is a function call that specifies that all variables beginning with upper case specified in the 
+current section are obtained by running the corresponding code specified in the current section. This typically requires 
+processing the syntax elements parsed from the syntax tables.</p>
+
 <p><strong>save_grain_params( idx )</strong> is a function call that specifies that all syntax elements determined in the 
 av1_film_grain_params function and all variables beginning with upper case determined in the 
 av1_film_grain_params function shall be stored in the memory location denoted by idx.</p>
@@ -1923,25 +1925,25 @@ av1_film_grain_params function shall be stored in the memory location denoted by
 specifies that a set of film grain parameters corresponding to the film_grain_param_set_idx value should be used.</p>
 
 <p>It is a requirement of the specification conformance that for every distinct value of film_grain_param_set_idx used in a coded video
-sequence, the first frame in the decoding order with that value of film_grain_param_set_idx that has apply_grain_flag flag equal to 1
+sequence, the first picture in the decoding order with that value of film_grain_param_set_idx that has apply_grain_flag flag equal to 1
 have update_grain_flag equal to 1.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with a particular film_grain_param_set_idx value can only
-be inferred from previously signaled parameters in the frame decoding order with the same value of film_grain_param_set_idx
+be inferred from previously signaled parameters in the picture decoding order with the same value of film_grain_param_set_idx
 in the current coded video sequence.</p>
 
 <p>It is a requirement of the specification conformance that if (i) update_grain_flag is equal to zero, (ii) apply_horz_resolution equal to 
-the luma horizontal resolution of the decoded frame » apply_units_resolution_log2, and (iii) apply_vert_resolution equal to the luma 
-vertical resolution of the decoded frame » apply_units_resolution_log2 then the film_grain_param_set_idx shall reference the 
-film grain parameters set that when the save_grain_params( film_grain_param_set_idx ) function was called, the following conditions were true
+the luma horizontal resolution of the decoded picture » apply_units_resolution_log2, and (iii) apply_vert_resolution equal to the luma 
+vertical resolution of the decoded picture » apply_units_resolution_log2 then the film_grain_param_set_idx shall reference the 
+film grain parameter set that when the save_grain_params( film_grain_param_set_idx ) function was called, the following conditions were true
 (i) update_grain_flag was equal to 1, (ii) apply_horz_resolution was equal to 
-the luma horizontal resolution of the decoded frame » apply_units_resolution_log2, and (iii) apply_vert_resolution was equal to the luma 
-vertical resolution of the decoded frame » apply_units_resolution_log2.</p>
+the luma horizontal resolution of the decoded picture » apply_units_resolution_log2, and (iii) apply_vert_resolution was equal to the luma 
+vertical resolution of the decoded picture » apply_units_resolution_log2.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> This requirement means that film grain parameters associated with the decoded picture resolution can only
 be inferred from previously signaled parameters that corresponded to the decoded picture resolution. This requirement is 
 intended to make sure that bitstreams that exercise variable decoded picture resolution do not copy the film grain parameters
-for the decoded picture resolutions from frames that were not at a decoded picture resolutions. This requirements helps
+for the decoded picture resolutions from pictures that were not at a decoded picture resolutions. This requirements helps
 decoders that only use (and store) film grain parameter sets that correspond to the decoded picture resolution.</p>
 
 <p><strong>tempGrainSeed</strong> is a temporary variable that is used to preserve the value of grain_seed when load_grain_params is called.</p>
@@ -2013,6 +2015,10 @@ that bit_depth_minus8, color_primaries, transfer_characteristics, and matrix_coe
 When bit_depth_minus8 is not present, the variable BitDepth is derived from the decoded video picture that is associated
 with the current film grain parameters.</p>
 
+<p>It is a requirement of conformance to this specification that the value of bit_depth_minus8 is less or equal to 4.</p>
+
+<p class="alert alert-info"><strong>Note:</strong> The reference decoding process is described with the assumption that the bit depth of the decoded picture does not exceed 12 bits.</p>
+
 <p><strong>cicp_info_present_flag</strong> equal to 1 specifies that color_primaries, transfer_characteristics, and matrix coefficients
 are present.  cicp_info_present_flag equal to 0 specifies that color_primaries, transfer_characteristics, and matrix
 coefficients are not present.</p>
@@ -2064,9 +2070,11 @@ decoded picture resolution for each decoded picture has the predict_scaling_flag
 <p><strong>film_grain_param_set_idx_for_prediction</strong> specifies the index of a film grain parameter set that is used
 for prediction of scaling functions of the current film grain parameter set.</p>
 
-<p>It is a requirement of conformance to this specification that the values of the film grain parameter
-set with index film_grain_param_set_idx_for_prediction have been initialized with values of the scaling functions
-that are in the current coded video sequence. It is also a requirement of conformance to this specification that the 
+<p>It is a requirement of conformance to this specification that the value of film_grain_param_set_idx_for_prediction 
+is equal to the film_grain_param_set_idx associated with the first call of the 
+av1_film_grain_params( ) function in the current av1_film_grain_payload( ) function.</p>
+
+<p>It is also a requirement of conformance to this specification that the 
 value of film_grain_param_set_idx_for_prediction is different from the value of film_grain_param_set_idx for the 
 current film grain parameter set.</p>
 
@@ -2093,22 +2101,6 @@ in the film grain parameter set referenced by film_grain_param_set_idx_for_predi
 
 <p><strong>y_scaling_res_granularity</strong> specifies the granularity with which the difference values for the predicted scaling function are encoded.</p>
 
-<p>When predict_y_scaling_flag is equal to 1, the luma scaling function values are derived as follows:</p>
-
-<p>Values of point_y_value_ref [i] are equal to the values point_y_value [i] in the film grain parameters set referenced by 
-film_grain_param_set_idx_for_prediction. Values of point_y_scaling_ref [i] are equal to point_y_scaling [i]
-in the film grain parameters set referenced by film_grain_param_set_idx_for_prediction.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_y_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_y_value_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
-    <span class="n">point_y_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
-        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">point_y_scaling_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
-        <span class="o">+</span> <span class="p">(</span><span class="n">point_y_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_y_scaling_res</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="p">)</span> <span class="p">)</span><span class="o">*</span> <span class="n">y_scaling_res_granularity</span> <span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p class="alert alert-info"><strong>Note:</strong> y_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. y_scaling_add represents an integer value of intercept in the range between [ -256, 255].</p>
-
 <p><strong>num_y_points</strong> specifies the number of points for the piece-wise linear
 scaling function of the luma component.</p>
 
@@ -2118,25 +2110,40 @@ scaling function of the luma component.</p>
 
 <p><strong>point_y_scaling_bits_minus5</strong> plus 5 specifies the number of bits used for encoding point_y_scaling[ i ].</p>
 
-<p><strong>point_y_value_increment[ i ]</strong> is the increment of point_y_value[ i ] relative to the point_y_value[ i - 1 ].
-point_y_value[ i ] represents the x (luma value) coordinate for the i-th point of the piecewise linear scaling function for the luma component. The values are signaled in the scale of 0 to 255. In the case of 10-bit video, these values correspond to luma values divided by 4. In the case of 12-bit video, these values correspond to luma values divided by 16.</p>
+<p><strong>point_y_value_increment[ i ]</strong> is the increment of PointYValue[ i ] relative to the PointYValue[ i - 1 ].</p>
 
-<p>The values of point_y_value[ i ] are obtained as follows:</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_y_value</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_y_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_y_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">].</span>
+<p><strong>point_y_scaling[ i ]</strong> represents the scaling (output) value for the i-th point of the piecewise
+linear scaling function for the luma component.</p>
+
+<p>When predict_y_scaling_flag is equal to 1, the luma scaling function values are derived as follows:</p>
+
+<p>The values of PointYValueRef[ i ] and PointYScalingRef[ i ] for all instances of index i are equal to PointYValue[ i ] and PointYScaling[ i ], 
+respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_y_points_in_ref</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">PointYValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PointYValueRef</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+    <span class="n">PointYScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
+        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">PointYScalingRef</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">point_y_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_y_scaling_res</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="p">)</span> <span class="p">)</span><span class="o">*</span> <span class="n">y_scaling_res_granularity</span> <span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
-<p>point_y_value[ i ] represents the x (luma value) coordinate for the i-th point of the piecewise
-linear scaling function for the luma component. The values are signaled in the scale of
-0 to 255. In the case of 10 bit video, these values correspond to luma values divided by 4.
-In the case of 12 bit video, these values correspond to luma values divided by 16.</p>
+<p class="alert alert-info"><strong>Note:</strong> y_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. y_scaling_add represents an integer value of intercept in the range between [ -256, 255].</p>
 
-<p>If i is greater than 0, it is a requirement of conformance to this specification that point_y_value[ i ] is greater than point_y_value[ i - 1 ], which
- ensures that the x coordinates are specified in increasing order.</p>
+<p>When predict_y_scaling_flag is equal to 0, the luma scaling function values PointYValue[ i ] and PointYScaling[ i ] are obtained as follows:</p>
 
-<p>point_y_scaling[ i ] represents the scaling (output) value for the i-th point of the piecewise
-linear scaling function for the luma component.</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_y_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">i</span> <span class="p">)</span>
+        <span class="n">PointYValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PointYValue</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_y_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+    <span class="k">else</span>
+        <span class="n">PointYValue</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_y_value_increment</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+    <span class="n">PointYScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_y_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>PointYValue[ i ] represents the x (luma value) coordinate for the i-th point of the piecewise linear scaling function for the luma component. 
+The values are signaled in the scale of 0 to 255. In the case of 10-bit video, these values correspond to luma values divided by 4. 
+In the case of 12-bit video, these values correspond to luma values divided by 16.</p>
 
 <p><strong>chroma_scaling_from_luma_flag</strong> equal to 1 specifies that the chroma scaling is inferred from the luma scaling.
 chroma_scaling_from_luma_flag equal to 0 specifies that the chroma scaling is signaled independently.</p>
@@ -2168,21 +2175,6 @@ using bits_per_cb_scaling_res bits and is in the [-2 * bits_per_cb_value_res - 1
 <p><strong>cb_scaling_res_granularity</strong> specifies the granularity with which the difference values for
 the predicted scaling function for the Cb component are encoded.</p>
 
-<p>When predict_cb_scaling_flag parameters is equal to 1, the Cb scaling function values are derived as follows:</p>
-
-<p>The values of point_cb_value_ref[ i ] and point_cb_scaling_ref[ i ] for all instances of index i are equal to point_cb_value[ i ] and point_cb_scaling[ i ], 
-respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">point_cb_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_value_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
-    <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
-        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">point_cb_scaling_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">cb_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">cb_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
-        <span class="o">+</span> <span class="p">(</span><span class="n">point_cb_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_cb_scaling_res</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">cb_scaling_res_granularity</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p class="alert alert-info"><strong>Note:</strong> cb_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. cb_scaling_add represents an integer value of intercept in the range [-256, 255].</p>
-
 <p><strong>num_cb_points</strong> specifies the number of points for the piece-wise linear scaling function of the Cb component.</p>
 
 <p>It is a requirement of conformance to this specification that num_cb_points is less than or equal to 10.</p>
@@ -2198,22 +2190,37 @@ This means that the chroma scaling also needs to support up to 14 points.</p>
 
 <p><strong>point_cb_value_increment[ i ]</strong> specifies the increment of point_cb_value[ i ] relative to the point_cb_value[ i - 1 ].</p>
 
-<p>point_cb_value[ i ] represents the x coordinate for the i-th point of the piece-wise linear
-scaling function for the Cb component. The values are signaled on the scale of 0..255.</p>
-
-<p>The values of point_cb_value[ i ] are obtained as follows.</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_cb_value</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">point_cb_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_value</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_cb_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">].</span>
-</code></pre></div></div>
-
-<p>point_cb_scaling[ i ]  represents the scaling (output) value for the i-th point of the piecewise
+<p><strong>point_cb_scaling[ i ]</strong>  represents the scaling (output) value for the i-th point of the piecewise
 linear scaling function for the Cb component.</p>
 
-<p>The values of point_cb_scaling[ i ] are obtained as follows.</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cb_scaling_offset</span><span class="p">.</span>
+<p>When predict_cb_scaling_flag parameters is equal to 1, the Cb scaling function values are obtained as follows:</p>
+
+<p>The values of PointCbValueRef[ i ] and PointCbScalingRef[ i ] for all instances of index i are equal to PointCbValue[ i ] and PointCbScaling[ i ], 
+respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points_in_ref</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">PointCbValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PointCbValueRef</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+    <span class="n">PointCbScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
+        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">PointCbScalingRef</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">cb_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">cb_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">point_cb_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_cb_scaling_res</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="n">cb_scaling_res_granularity</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div></div>
+
+<p class="alert alert-info"><strong>Note:</strong> cb_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. cb_scaling_add represents an integer value of intercept in the range [-256, 255].</p>
+
+<p>When predict_cb_scaling_flag parameters is equal to 0, the Cb scaling function values PointCbValue[ i ] and PointCbScaling[ i ] are derived as follows:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cb_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">i</span> <span class="p">)</span>
+        <span class="n">PointCbValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PointCbValue</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_cb_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+    <span class="k">else</span>
+        <span class="n">PointCbValue</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_value_increment</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+    <span class="n">PointCbScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cb_scaling_offset</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>PointCbValue[ i ] represents the x coordinate for the i-th point of the piece-wise linear
+scaling function for the Cb component. The values are signaled on the scale of 0..255.</p>
 
 <p><strong>predict_cr_scaling_flag</strong> equal to 0 specifies that the Cr component scaling functions in the current film grain
 parameter set are not predicted from a different film grain parameter set. predict_cr_scaling_flag equal
@@ -2241,21 +2248,6 @@ is signaled using  bits_per_cr_scaling_res bits and is in the [-2 * bits_per_cr_
 
 <p><strong>cr_scaling_res_granularity</strong> specifies the granularity with which the difference values for the
 predicted scaling function are encoded.</p>
-
-<p>When predict_cr_scaling_flag parameters is equal to 1, the Cr scaling function values are derived as follows:</p>
-
-<p>The values of point_cr_value_ref[ i ] and point_cr_scaling_ref[ i ] for all instances of index i are equal to point_cr_value[ i ] and point_cr_scaling[ i ], 
-respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points_in_ref</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">point_cr_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_value_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
-    <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
-        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">point_cr_scaling_ref</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">cr_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">cr_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
-        <span class="o">+</span> <span class="p">(</span><span class="n">point_cr_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_cr_scaling_res</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="p">))</span> <span class="o">*</span> <span class="n">cr_scaling_res_granularity</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p class="alert alert-info"><strong>Note:</strong> cr_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. cr_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
 
 <p>It is a requirement of conformance to this specification that when film_grain_param_set_idx_for_prediction is present, it shall be 
 equal to the value of film_grain_param_set_idx that is determined in the first call to av1_film_grain_params( ) 
@@ -2287,22 +2279,37 @@ There is no restriction for 4:2:2 or 4:4:4 chroma subsampling.</p>
 
 <p><strong>point_cr_value_increment[ i ]</strong> specifies the increment of point_cr_value[ i ] relative to the point_cr_value[ i - 1 ].</p>
 
-<p>point_cr_value[ i ]  represents the x coordinate for the i-th point of the piece-wise linear
-scaling function for the Cr component. The values are signaled in the range of 0 to 255.</p>
-
-<p>The values of point_cr_value[ i ] are obtained as follows.</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_cr_value</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">point_cr_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_value</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_cr_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">].</span>
-</code></pre></div></div>
-
-<p>point_cr_scaling[ i ] represents the scaling (output) value for the i-th point of the piecewise
+<p><strong>point_cr_scaling[ i ]</strong> represents the scaling (output) value for the i-th point of the piecewise
 linear scaling function for the Cr component.</p>
 
-<p>The values of point_cr_scaling[ i ] are obtained as follows.</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cr_scaling_offset</span><span class="p">.</span>
+<p>When predict_cr_scaling_flag parameters is equal to 1, the Cr scaling function values are derived as follows:</p>
+
+<p>The values of PointCrValueRef[ i ] and PointCrScalingRef[ i ] for all instances of index i are equal to PointCrValue[ i ] and PointCrScaling[ i ], 
+respectively, in the film grain parameter set with film_grain_param_set_idx equal to film_grain_param_set_idx_for_prediction.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points_in_ref</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">PointCrValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PointCrValueRef</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+    <span class="n">PointCrScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span>
+        <span class="n">Clip3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">PointCrScalingRef</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">cr_scaling_mult</span> <span class="o">-</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">cr_scaling_add</span> <span class="o">-</span> <span class="mi">256</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">point_cr_scaling_res</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">-</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bits_per_cr_scaling_res</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="p">))</span> <span class="o">*</span> <span class="n">cr_scaling_res_granularity</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div></div>
+
+<p class="alert alert-info"><strong>Note:</strong> cr_scaling_mult represents a value of a multiplier from -16 to +15.9375 with a value granularity of 1/16. cr_scaling_add represents an integer value of intercept in the range between [ - 256, 255].</p>
+
+<p>When predict_cr_scaling_flag parameters is equal to 0, the Cr scaling function values PointCrValue[ i ] and PointCrScaling[ i ] are obtained as follows:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_cr_points</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">i</span> <span class="p">)</span>
+        <span class="n">PointCrValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PointCrValue</span><span class="p">[</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span> <span class="o">+</span> <span class="n">point_cr_value_increment</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+    <span class="k">else</span>
+        <span class="n">PointCrValue</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_value_increment</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+    <span class="n">PointCrScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">=</span> <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="o">+</span> <span class="n">cr_scaling_offset</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>PointCrValue[ i ]  represents the x coordinate for the i-th point of the piece-wise linear
+scaling function for the Cr component. The values are signaled in the range of 0 to 255.</p>
 
 <p><strong>grain_scaling_minus8</strong> plus 8 specifies the shift applied to the values of the chroma
 component. The grain_scaling_minus8 can take values of 0 to 3 and determines the
@@ -2668,20 +2675,20 @@ Similarly, when num_cr_points/num_cb_points are equal to 0 and chroma_scaling_fr
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">get_x</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">i</span> <span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="n">point_y_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="n">PointYValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="n">point_cb_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="n">PointCbValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="k">else</span>
-        <span class="k">return</span> <span class="n">point_cr_value</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="n">PointCrValue</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
 <span class="p">}</span>
 
 <span class="n">get_y</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">i</span> <span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">chroma_scaling_from_luma_flag</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="n">point_y_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="n">PointYScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">plane</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="n">point_cb_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="n">PointCbScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
     <span class="k">else</span>
-        <span class="k">return</span> <span class="n">point_cr_scaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="n">PointCrScaling</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
