@@ -38,7 +38,7 @@
 
 <h1 class="no_toc" id="aomedia-film-grain-synthesis-1-afgs1-specification-draft">AOMedia Film Grain Synthesis 1 (AFGS1) specification (Draft)</h1>
 
-<p><em>Last modified: 2024-01-08 17:32 PT</em></p>
+<p><em>Last modified: 2024-01-08 21:23 PT</em></p>
 
 <p><strong>Editor</strong><br />
 Andrey Norkin (Netflix)</p>
@@ -1907,9 +1907,9 @@ sets can be simultaneously stored by the film grain processing module.</p>
 
 <p class="alert alert-info"><strong>Note:</strong> An encoder may use film_grain_param_set_idx to differentiate between up to 8 separate film grain models.</p>
 
-<p><strong>apply_grain_flag</strong> equal to 1 specifies that the film grain synthesis process is disabled when the film grain parameters 
-determined in the current av1_film_grain_params function are selected.  apply_grain_flag equal to 0 specifies that the 
-film grain synthesis process is enabled when the film grain parameters are selected.</p>
+<p><strong>apply_grain_flag</strong> equal to 1 specifies that the film grain synthesis process is enabled when the film grain parameters 
+specified in the current av1_film_grain_params function are selected.  apply_grain_flag equal to 0 specifies that the 
+film grain synthesis process is disabled when the film grain parameters specified in the current av1_film_grain_params function are selected.</p>
 
 <p><strong>process_grain_params( idx )</strong> is a function call that specifies that all variables beginning with upper case specified in the 
 current section are obtained by running the corresponding code specified in the current section. This typically requires 
